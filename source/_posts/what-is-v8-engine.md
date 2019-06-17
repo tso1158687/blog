@@ -1,5 +1,20 @@
 ---
-title: what-is-v8-engine
+title: 什麼是V8引擎
 date: 2019-06-17 22:46:25
-tags:
+tags: [nodejs]
 ---
+{% asset_img v8.png %}
+
+人類只看得懂自然語言，而機器只看得懂二進位的機器語言。如何讓機器看得懂使用自然語言撰寫的 javascript ，就需要 javascript 引擎轉換成機器看得懂的二進位機器語言，而 V8 引擎就是眾多 javascript 引擎其中之一的引擎，目前由 google 維護。Chrome 目前就是使用 V8 引擎。
+
+除了 V8 引擎之外，還有其他知名的引擎，例如:
+
+- Quantum 引擎 (Firefox 使用)
+- Nitro (Safari 使用)
+- Chakra (IE 使用，脈輪的意思，印度哲學中表示身體的能量，類似道家的氣。或是直接音譯就是--查克拉)
+
+NodeJS 選擇使用 V8 引擎作為 javascript 引擎，因為 V8 引擎有以下這些優點:
+
+- V8 引擎是開源的
+- V8 引擎有專門的團隊在維護，不必擔心更不上時代的腳步
+- V8 引擎的速度非常快 (想想當年還是 IE8 的時代，每開一個網頁都要等一段時間，Chrome 一推出大家才發現原來開網頁也可以很快)
