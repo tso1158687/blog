@@ -54,8 +54,8 @@ page_titles:
 # Social media links
 socials:
   github: "https://github.com/tso1158687"
-  twitter: "https://twitter.com/TriDiamond6"
-  stackoverflow: "https://stackoverflow.com/users/7602324/tridiamond?tab=profile"
+  # twitter: "https://twitter.com/TriDiamond6"
+  # stackoverflow: "https://stackoverflow.com/users/7602324/tridiamond?tab=profile"
 
 # Enable table of content
 TOC: true
@@ -73,7 +73,7 @@ avatar: https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamon
 scrollbar: true
 
 # Website keywords used for SEO
-keywords: TriDiamond Obsidian
+keywords: jason's blog
 
 # Website slogans
 descriptionOne: "Think like an artist, develop like an artisan"
@@ -106,7 +106,7 @@ mp3:
 # Gitalk comment plugin
 # see https://github.com/gitalk/gitalk
 gitalk:
-  enable: true
+  enable: false
   autoExpand: true
   clientID: 'ec894e2b66f752e8b7fb'
   clientSecret: '3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
