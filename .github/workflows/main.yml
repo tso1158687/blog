@@ -1,0 +1,33 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: "10.x"
+    - name: Setup Hexo env
+      env:
+        HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
+      run: |
+        # set up private key for deploy
+        mkdir -p ~/.ssh/
+        echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        git config --global user.name 'tso1158687'
+        git config --global user.email '101104044@nccu.edu.tw'
+        # install dependencies
+        npm i -g hexo-cli
+        npm i
+    - name: Deploy
+      run: |
+        # generate and depoly
+        hexo g -d
