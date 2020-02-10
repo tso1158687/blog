@@ -1,7 +1,7 @@
 ---
-title: 2019ithomeday2
-date: 2020-02-10 23:22:08
-tags:
+title: (DAY-1) 為什麼選擇Angular 與Nestjs-Angular 與 Nestjs 共舞
+date: 2019-09-18 23:22:08
+tags: [angular,nestjs]
 ---
 # 為什麼選擇Angular與Nestjs?
 在前端的世界有很多的框架可以幫助開發者快速實現或完成某些功能，讓開發者可以不用自己造輪子，而是站在巨人的肩膀上面，跟著巨人一起前進。前端目前有三大主流框架`Angular`、`React`、`Vue`，每一個框架都有各自的擁護者，可以常常在網路上看到大家在激辯哪個框架比較好用、哪個框架比較厲害等話題。
