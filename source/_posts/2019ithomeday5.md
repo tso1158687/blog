@@ -3,7 +3,7 @@ title: (DAY-5) Angular元件資料的顯示與應用- ngFor, ngIf-Angular 與 Ne
 date: 2019-09-21 23:54:39
 tags: [angular]
 ---
-在上一篇有提到，可以使用花括號(`{{ }}`)綁定值，這個有正式的名稱，稱為`插值法(Interpolation)`
+在上一篇有提到，可以使用花括號綁定值，這個有正式的名稱，稱為`插值法(Interpolation)`
 花括號裡面寫的屬性，Angular會搜尋對應的內容並且替換
 # 插值法(Interpolation)
 ## 插值法的基本用法
