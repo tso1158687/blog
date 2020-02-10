@@ -1,5 +1,5 @@
 ---
-title: (DAY-1) 為什麼選擇Angular 與Nestjs-Angular 與 Nestjs 共舞
+title: (DAY-2) 為什麼選擇Angular 與Nestjs-Angular 與 Nestjs 共舞
 date: 2019-09-18 23:22:08
 tags: [angular,nestjs]
 ---
