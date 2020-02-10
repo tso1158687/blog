@@ -1,5 +1,5 @@
 ---
-title: (DAY-4) 建立元件與認識元件
+title: (DAY-4) 建立元件與認識元件-Angular 與 Nestjs 共舞
 date: 2019-09-20 23:33:21
 tags: [angular]
 ---
