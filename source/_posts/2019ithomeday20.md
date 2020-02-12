@@ -1,5 +1,5 @@
 ---
-title: (DAY-120) Typescript 介紹-型別(Type)與介面(Interface)-Angular 與 Nestjs 共舞
+title: (DAY-20) Typescript 介紹-型別(Type)與介面(Interface)-Angular 與 Nestjs 共舞
 date: 2019-10-05 16:40:12
 tags: [typescript]
 ---
@@ -68,21 +68,21 @@ let n: null = null;
 ```
 `undefined` 和 `null` 是`所有類別的子型別`。
 ```
-let x: string = "foo”; 
+let x: string = 'foo'; 
 x = null; // error 
-let y: string | null = "foo”; 
+let y: string | null = 'foo'; 
 y = null; // ok
 ```
 ## 任意型別推導
 如果在宣告的時候沒有特別指定型別，那麼Typescript會自動推導出型別（除非指定型別為any）
 ```
-let food = ‘apple’
+let food = 'apple'
 apple = 7
 // Type 'number' is not assignable to type 'string' 
 ```
 因為在宣告food變數的時候，實際上等同於
 ```
-let food:string = ‘apple'
+let food:string = 'apple'
 ```
 會自動依照宣告的類型推導出宣告的內容為字串型別。
 
@@ -102,7 +102,7 @@ interface Person {
 
 
 let jason: Person = {
-    name: ‘jason',
+    name: 'jason',
     age: 25
 };
 ```
@@ -111,7 +111,7 @@ let jason: Person = {
 因此如果如果宣告的時候少了任一個就會報錯
 ```
 let eric: Person = {
-    name: ‘eric',
+    name: 'eric',
 };
 // Property 'age' is missing in type '{ name: string; }'.
 ```
