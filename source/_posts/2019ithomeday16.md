@@ -1,5 +1,5 @@
 ---
-title: (DAY-15) Angular的資料轉換-管道(pipe)-自訂管道-Angular 與 Nestjs 共舞
+title: (DAY-16) Angular的資料轉換-管道(pipe)-自訂管道-Angular 與 Nestjs 共舞
 date: 2019-10-02 16:40:12
 tags: [angular]
 ---
