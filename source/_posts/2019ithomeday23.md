@@ -1,6 +1,6 @@
 ---
 title: (DAY-23) Nestjs 控制器 (Controller)-Angular 與 Nestjs 共舞
-date: 2019-10-08 16:40:12
+date: 2019-10-09 16:40:12
 tags: [nestjs]
 ---
 # 什麼是控制器(Controller)

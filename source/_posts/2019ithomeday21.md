@@ -1,6 +1,6 @@
 ---
 title: (DAY-21) Typescript 介紹-列舉(Enum)-Angular 與 Nestjs 共舞
-date: 2019-10-06 16:40:12
+date: 2019-10-07 16:40:12
 tags: [typescript]
 ---
 這一篇要來介紹Typescript的實用功能 - `列舉(Enum)`

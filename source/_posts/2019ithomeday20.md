@@ -1,6 +1,6 @@
 ---
 title: (DAY-20) Typescript 介紹-型別(Type)與介面(Interface)-Angular 與 Nestjs 共舞
-date: 2019-10-05 16:40:12
+date: 2019-10-06 16:40:12
 tags: [typescript]
 ---
 Angular的介紹到此告一段落了。Angular與Typescript有非常深度的整合。因此Typescript也是必須要認識的相關基礎。現在要來介紹- Typescript

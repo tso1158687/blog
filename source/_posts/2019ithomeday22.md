@@ -1,6 +1,6 @@
 ---
 title: (DAY-22) 建立 Nestjs 環境與專案-Angular 與 Nestjs 共舞
-date: 2019-10-07 16:40:12
+date: 2019-10-08 16:40:12
 tags: [nestjs]
 ---
 Nestjs 安裝環境非常簡單，就和Angular 一樣，擁有一套完整的CLI處理大小事，可以快速產生專案，並且設定好所有的配置，直接進入開發。
