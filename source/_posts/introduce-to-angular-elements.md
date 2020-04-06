@@ -1,5 +1,5 @@
 ---
-title: 使用Angular自訂元素! Angular Elements使用教學與心得
+title: 使用Angular自訂元素製作通用的元件! Angular Elements使用教學與心得
 date: 2020-04-06 21:02:20
 tags: [angular]
 ---
