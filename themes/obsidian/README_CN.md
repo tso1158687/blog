@@ -1,17 +1,25 @@
-# Hexo-theme-obsidian
-v1.x | ᴅᴇsɪɢɴᴇᴅ & ᴄᴏᴅᴇᴅ ʙʏ ᴛʀɪᴅɪᴀᴍᴏɴᴅ
+<p align="center"><a href="https://tridiamond.tech" target="_blank" rel="noopener noreferrer"><img width="100" src="https://img-blog.csdnimg.cn/20200930013332450.png" alt="TriDiamond logo"></a></p>
 
-> 一款暗色的Hexo主题, 拥有响应式布局, 简约而优雅.
+<h1 align="center">Hexo Theme: Obsidian</h1>
 
-![Latest Release Version](https://img.shields.io/github/v/release/TriDiamond/hexo-theme-obsidian)
-![Latest Release Date](https://img.shields.io/github/release-date/TriDiamond/hexo-theme-obsidian)
-![License](https://img.shields.io/github/license/TriDiamond/hexo-theme-obsidian)
-[![Join the chat at https://gitter.im/TriDiamond/hexo-theme-obsidian](https://badges.gitter.im/TriDiamond/hexo-theme-obsidian.svg)](https://gitter.im/TriDiamond/hexo-theme-obsidian?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<div align="center">
 
-**[预览](http://tridiamond.me)** | **[更变日志](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG_CN.md)**
+v1.x | ᴅᴇsɪɢɴᴇᴅ & ᴄᴏᴅᴇᴅ ʙʏ ᴛʀɪᴅɪᴀᴍᴏɴᴅ <br>
+一款暗色的 Hexo 主题, 拥有响应式布局, 简约而优雅.
+
+  <p align="center">
+    <img src="https://img.shields.io/github/v/release/TriDiamond/hexo-theme-obsidian">
+    <img src="https://img.shields.io/github/release-date/TriDiamond/hexo-theme-obsidian">
+    <img src="https://img.shields.io/github/license/TriDiamond/hexo-theme-obsidian">
+    <a href="https://gitter.im/TriDiamond/hexo-theme-obsidian?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/TriDiamond/hexo-theme-obsidian.svg"></a>
+  </p>
+
+**[预览](http://tridiamond.tech)** | **[更变日志](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG_CN.md)**
 
 🇺🇸 **[English Doc](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/README.md)** |
 **[ChangeLog](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md)**
+
+</div>
 
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573323147/blog/A-Obsidian-full_ubmo0d.png)
 
@@ -19,21 +27,26 @@ v1.x | ᴅᴇsɪɢɴᴇᴅ & ᴄᴏᴅᴇᴅ ʙʏ ᴛʀɪᴅɪᴀᴍᴏɴᴅ
 <summary>更多主题展示</summary>
 
 ## 分类页
+
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573148012/blog/A-Obsidian-categories_mgdti7.png)
 
 ## 多级分类
+
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573148016/blog/A-Obsidian-categories-level_xtxty9.png)
 
 ## 归档页
+
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573323148/blog/A-Obsidian-archives_ffpwf9.png)
 
 ## 文章页
+
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573148016/blog/A-Obsidian-articles_wlsu2v.png)
+
 </details>
 
 ## 安装
 
-``` bash
+```bash
 $ git clone https://github.com/TriDiamond/hexo-theme-obsidian.git obsidian
 ```
 
@@ -43,10 +56,23 @@ $ git clone https://github.com/TriDiamond/hexo-theme-obsidian.git obsidian
 
 打开 `Hexo` 配置文件 `_config.yml`, 设置主题为 `obsidian`
 
-``` yaml
-...
+```yaml
+---
 theme: obsidian
-...
+```
+
+### 安装主题需要的 NPM 依赖
+
+首先打开你的终端，并且 `cd` 到主题 `themes/obsidian` 目录
+
+```shell
+cd themes/obsidian
+```
+
+然后执行 `npm` 命令，安装所有主题需要的依赖包
+
+```shell
+npm install
 ```
 
 ### 主题配置
@@ -56,11 +82,11 @@ theme: obsidian
 <details>
 <summary>详细配置文件，点击展开</summary>
 
-``` yaml
+```yaml
 #! ---------------------------------------------------------------
 #! 版本`v1.3.5`开始代码高亮已经用`codemirror`替换了`highlight.js`，
 #! 但是Hexo默认的highlight配置还是需要关闭的。
-#! ！！所以无比把Hexo默认的highlight配置改为`enable: flase` ！！
+#! ！！所以务必把Hexo默认的highlight配置改为`enable: false` ！！
 #! ---------------------------------------------------------------
 #! highlight:
 #!  enable: false
@@ -79,9 +105,9 @@ menu:
 
 # 分类页和标签页自定义标题配置
 page_titles:
-  categories: "Categories"
-  tags: "Tags"
-  archives: "Archived"
+  categories: 'Categories'
+  tags: 'Tags'
+  archives: 'Archived'
 
 # 是否启用目录
 TOC: true
@@ -102,8 +128,8 @@ scrollbar: true
 keywords: TriDiamond Obsidian
 
 # 网站口号
-descriptionOne: "Think like an artist, develop like an artisan"
-descriptionTwo: "艺术家思维去思考问题，工匠创造精神去开发"
+descriptionOne: 'Think like an artist, develop like an artisan'
+descriptionTwo: '艺术家思维去思考问题，工匠创造精神去开发'
 
 # 如果使用google analytics, 请填写ID
 google_analytics:
@@ -202,8 +228,8 @@ codemirror:
 
 # 启用 mathjax 支持
 mathjax: true
-
 ```
+
 </details>
 
 ### 评论插件
@@ -216,26 +242,23 @@ mathjax: true
 ### 代码块样式
 
 > 版本`v1.3.5`开始代码高亮已经用`codemirror`替换了`highlight.js`，
->  但是Hexo默认的highlight配置还是需要关闭的。
->  ！！所以无比把Hexo默认的highlight配置改为`enable: flase` ！！
+> 但是 Hexo 默认的 highlight 配置还是需要关闭的。
+> ！！所以无比把 Hexo 默认的 highlight 配置改为`enable: flase` ！！
 
 在博客根目录的`_config.yml`修改
 
 > ⚠️ 注意不是主题里面的`_config.yml`，在主题里面加这个是无效的哦
 
 ```yaml
-...
-
+---
 highlight:
   enable: false
   line_number: true
   auto_detect: true
   tab_replace:
-
-...
 ```
 
-Codemirror代码高亮配置
+Codemirror 代码高亮配置
 
 ```yaml
 # 使用了codemirror替换了highlight.js，代码高亮更加完善，也更接近IDE的高亮样式
@@ -247,7 +270,7 @@ codemirror:
   modes: ['javascript', 'css', 'xml', 'htmlmixed', 'clike', 'php', 'shell', 'python']
 ```
 
-修改了默认highlight配置后需要重新生成文件
+修改了默认 highlight 配置后需要重新生成文件
 
 ```bash
 hexo clean && hexo g
@@ -257,39 +280,27 @@ hexo clean && hexo g
 
 文章里面的参数`preview`控制在首页展示时保留的字符数
 
-``` markdown
-
+```markdown
 title: My awesome title
 date: 2019-07-14 18:38:45
-categories:
-    - Category1
-    - Category2
-tags:
-    - Tag1
-    - Tag2
+categories: - Category1 - Category2
+tags: - Tag1 - Tag2
 mp3: http://domain.com/awesome.mp3
 cover: http://domain.com/awesome.jpg
 preview: 300
-
 ```
 
 ### 文章模版
 
 文章模版设置
 
-``` markdown
-
+```markdown
 title: My awesome title
 date: 2019-07-14 18:38:45
-categories:
-    - 分类1
-    - 分类2
-tags:
-    - 标签1
-    - 标签2
+categories: - 分类 1 - 分类 2
+tags: - 标签 1 - 标签 2
 mp3: http://domain.com/awesome.mp3
 cover: http://domain.com/awesome.jpg
-
 ```
 
 ### 创建分类页
@@ -305,7 +316,7 @@ hexo new page categories
 ```yaml
 title: categories
 date: 2019-07-14 12:39:04
-type: "categories"
+type: 'categories'
 ```
 
 > 主题会自动生成分类内容，模版里面留空不用改动就可以了。
@@ -323,14 +334,14 @@ hexo new page tags
 ```yaml
 title: tags
 date: 2014-12-22 12:39:04
-type: "tags"
+type: 'tags'
 ```
 
 > 主题会自动生成标签内容，模版里面留空不用改动就可以了。
 
 ### MathJax 支持
 
-默认是启用MathJax支持的, 如果需要关闭改变主题配置为 `false`。
+默认是启用 MathJax 支持的, 如果需要关闭改变主题配置为 `false`。
 
 ```yaml
 # 启用 mathjax 支持
@@ -341,7 +352,7 @@ mathjax: true
 
 > 更新前请先备份主题里的 `_config.yml` 文件
 
-``` bash
+```bash
 cd themes/osidian
 git pull
 ```
@@ -350,13 +361,13 @@ git pull
 
 ### 安装说明
 
-NPM安装
+NPM 安装
 
 ```bash
 $ npm install hexo-generator-search --save
 ```
 
-在你的根目录配置 `_config.yml` 里面添加hexo-generator-search的配置
+在你的根目录配置 `_config.yml` 里面添加 hexo-generator-search 的配置
 
 ```yaml
 search:
@@ -378,9 +389,10 @@ hexo clean && hexo g
 ## 反馈
 
 > 大家记得先看一下[ISSUE](https://github.com/TriDiamond/hexo-theme-obsidian/issues)里面有没有你的问题，已经解答了的。
-> 很有可能你的问题已经被问过了，或者可以在Issue里面就找到答案了！谢谢配合！
+> 很有可能你的问题已经被问过了，或者可以在 Issue 里面就找到答案了！谢谢配合！
 
 可以通过以下方式反馈问题：
 
 - [创建新 issue!](https://github.com/TriDiamond/hexo-theme-obsidian/issues/new)
-- 加入QQ群 `909955326`
+- 加入 QQ 群 `909955326`
+- [加入 Telegram 群](https://t.me/joinchat/R2m4eho2lbcHLR7nDvxd6A)

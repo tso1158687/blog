@@ -1,7 +1,7 @@
 #! ---------------------------------------------------------------
-#! ▄▀▄ █▀▄ ▄▀▀ ▀ █▀▄ ▀ ▄▀▄ █▄░█ 
-#! █░█ █▀█ ░▀▄ █ █░█ █ █▀█ █░▀█ 
-#! ░▀░ ▀▀░ ▀▀░ ▀ ▀▀░ ▀ ▀░▀ ▀░░▀ 
+#!  ▄▀▄ █▀▄ ▄▀▀ ▀ █▀▄ ▀ ▄▀▄ █▄░█
+#! █░█ █▀█ ░▀▄ █ █░█ █ █▀█ █░▀█
+#!░▀░ ▀▀░ ▀▀░ ▀ ▀▀░ ▀ ▀░▀ ▀░░▀
 #! ᴅᴇsɪɢɴᴇᴅ & ᴄᴏᴅᴇᴅ ʙʏ ᴛʀɪᴅɪᴀᴍᴏɴᴅ
 #! ---------------------------------------------------------------
 #! Theme Obsidian - A dark Hexo theme, it's responsive, simple but elegant.
@@ -13,9 +13,9 @@
 #! ---------------------------------------------------------------
 
 #! ---------------------------------------------------------------
-#! █▄░█ ▄▀▄ ▀█▀ █▀▀ ▄▀▀
-#! █░▀█ █░█ ░█░ █▀▀ ░▀▄ 
-#! ▀░░▀ ░▀░ ░▀░ ▀▀▀ ▀▀░ v1.x
+#!  █▄░█ ▄▀▄ ▀█▀ █▀▀ ▄▀▀
+#! █░▀█ █░█ ░█░ █▀▀ ░▀▄
+#!▀░░▀ ░▀░ ░▀░ ▀▀▀ ▀▀░ v1.x
 #! ---------------------------------------------------------------
 #! Since version `v1.3.5` code block highlight has changed from `highlight.js` to
 #! `codemirror`, but the Hexo default highlight still need to be disabled to take affect.
@@ -32,7 +32,8 @@
 #! ---------------------------------------------------------------
 
 # Theme version
-version: "1.4.3"
+# !! DO NOT EDIT THIS !!
+version: '1.4.4'
 
 # ---------------------------------------------------------------
 # Theme default settings
@@ -47,27 +48,27 @@ menu:
 
 # Page custom titles
 page_titles:
-  categories: "Categories"
-  tags: "Tags"
-  archives: "Archived"
+  categories: 'Categories'
+  tags: 'Tags'
+  archives: 'Archived'
 
 # Social media links
 socials:
-  github: "https://github.com/tso1158687"
-  # twitter: "https://twitter.com/TriDiamond6"
-  # stackoverflow: "https://stackoverflow.com/users/7602324/tridiamond?tab=profile"
+  github: 'https://github.com/tso1158687'
+  # twitter: 'https://twitter.com/TriDiamond6'
+  # stackoverflow: 'https://stackoverflow.com/users/7602324/tridiamond?tab=profile'
 
 # Enable table of content
 TOC: true
 
 # Home page first post default cover image, default use cover
-welcome_cover: /img/cover.jpg
+welcome_cover: /blog/img/cover.jpg
 
 # Article default cover image
-cover: /img/welcome-cover.jpg
+cover: /blog/img/welcome-cover.jpg
 
 # Avatar
-avatar: https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg
+avatar: /blog/img/dora.jpg
 
 # Disable default scrollbar
 scrollbar: true
@@ -76,8 +77,8 @@ scrollbar: true
 keywords: jason's blog
 
 # Website slogans
-descriptionOne: "Think like an artist, develop like an artisan"
-descriptionTwo: "當我和世界不一樣，那就讓我不一樣"
+descriptionOne: '不積跬步，無以致千里'
+descriptionTwo: '當我和世界不一樣，那就讓我不一樣'
 
 # If you use google analytics, please fill in the ID
 google_analytics: 'UA-5114057-4'
@@ -163,7 +164,7 @@ busuanzi:
 #Enable social media sharing
 sharejs:
   enable: true
-  disabled: 'douban,diandian,tencent'
+  disabled: 'facebook,google'
 
 # Use codemirror instead of highlight js for better colors
 # if you want more language support check the modes list at official website
@@ -174,3 +175,20 @@ codemirror:
 
 # Enabling mathjax support
 mathjax: true
+
+# custom header HTML
+header_html: ''
+
+# custom footer HTML
+footer_html: '
+<!-- 例：百度统计 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?your_code";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+'

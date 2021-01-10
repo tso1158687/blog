@@ -1,17 +1,25 @@
-# Hexo-theme-obsidian
-v1.x | ᴅᴇsɪɢɴᴇᴅ & ᴄᴏᴅᴇᴅ ʙʏ ᴛʀɪᴅɪᴀᴍᴏɴᴅ
+<p align="center"><a href="https://tridiamond.tech" target="_blank" rel="noopener noreferrer"><img width="100" src="https://img-blog.csdnimg.cn/20200930013332450.png" alt="TriDiamond logo"></a></p>
 
-> A dark Hexo theme, it's responsive, simple but elegant.
+<h1 align="center">Hexo Theme: Obsidian</h1>
 
-![Latest Release Version](https://img.shields.io/github/v/release/TriDiamond/hexo-theme-obsidian)
-![Latest Release Date](https://img.shields.io/github/release-date/TriDiamond/hexo-theme-obsidian)
-![License](https://img.shields.io/github/license/TriDiamond/hexo-theme-obsidian)
-[![Join the chat at https://gitter.im/TriDiamond/hexo-theme-obsidian](https://badges.gitter.im/TriDiamond/hexo-theme-obsidian.svg)](https://gitter.im/TriDiamond/hexo-theme-obsidian?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<div align="center">
 
-**[PREVIEW](http://tridiamond.me)** | **[CHANGES](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md)**
+v1.x | ᴅᴇsɪɢɴᴇᴅ & ᴄᴏᴅᴇᴅ ʙʏ ᴛʀɪᴅɪᴀᴍᴏɴᴅ <br>
+A dark Hexo theme, it's responsive, simple but elegant.
+
+  <p align="center">
+    <img src="https://img.shields.io/github/v/release/TriDiamond/hexo-theme-obsidian">
+    <img src="https://img.shields.io/github/release-date/TriDiamond/hexo-theme-obsidian">
+    <img src="https://img.shields.io/github/license/TriDiamond/hexo-theme-obsidian">
+    <a href="https://gitter.im/TriDiamond/hexo-theme-obsidian?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/TriDiamond/hexo-theme-obsidian.svg"></a>
+  </p>
+
+**[PREVIEW](http://tridiamond.tech)** | **[CHANGES](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md)**
 
 🇨🇳 **[中文文档](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/README_CN.md)** |
-   **[更变日志](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG_CN.md)**
+**[更变日志](https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG_CN.md)**
+
+</div>
 
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573323147/blog/A-Obsidian-full_ubmo0d.png)
 
@@ -19,21 +27,26 @@ v1.x | ᴅᴇsɪɢɴᴇᴅ & ᴄᴏᴅᴇᴅ ʙʏ ᴛʀɪᴅɪᴀᴍᴏɴᴅ
 <summary>More screen shots</summary>
 
 ## Categories Page
+
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573148012/blog/A-Obsidian-categories_mgdti7.png)
 
 ## Categories Leveled
+
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573148016/blog/A-Obsidian-categories-level_xtxty9.png)
 
 ## Archives
+
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573323148/blog/A-Obsidian-archives_ffpwf9.png)
 
 ## Articles
+
 ![screenshot](https://res.cloudinary.com/tridiamond/image/upload/v1573148016/blog/A-Obsidian-articles_wlsu2v.png)
+
 </details>
 
 ## Install
 
-``` bash
+```bash
 git clone https://github.com/TriDiamond/hexo-theme-obsidian.git obsidian
 ```
 
@@ -43,10 +56,23 @@ git clone https://github.com/TriDiamond/hexo-theme-obsidian.git obsidian
 
 Open `Hexo` config file `_config.yml`, set theme to `obsidian`
 
-``` yaml
-...
+```yaml
+---
 theme: obsidian
-...
+```
+
+### Installing required packages
+
+First open your terminal, and `cd` in the theme folder `obsidian`.
+
+```shell
+cd themes/obsidian
+```
+
+Then run `npm` to install all required packages for the theme.
+
+```shell
+npm install
 ```
 
 ### Theme settings
@@ -56,7 +82,7 @@ Open `/themes/obsidian/_config.yml` can change the theme configs
 <details>
 <summary>Full detail config</summary>
 
-``` yaml
+```yaml
 #! ---------------------------------------------------------------
 #! Since version `v1.3.5` code block highlight has changed from `highlight.js` to
 #! `codemirror`, but the Hexo default highlight still need to be disabled to take affect.
@@ -82,9 +108,9 @@ menu:
 
 # Page custom titles
 page_titles:
-  categories: "Categories"
-  tags: "Tags"
-  archives: "Archived"
+  categories: 'Categories'
+  tags: 'Tags'
+  archives: 'Archived'
 
 # Enable table of content
 TOC: true
@@ -105,8 +131,8 @@ scrollbar: true
 keywords: TriDiamond Obsidian
 
 # Website slogans
-descriptionOne: "Think like an artist, develop like an artisan"
-descriptionTwo: "艺术家思维去思考问题，工匠创造精神去开发"
+descriptionOne: 'Think like an artist, develop like an artisan'
+descriptionTwo: '艺术家思维去思考问题，工匠创造精神去开发'
 
 # If you use google analytics, please fill in the ID
 google_analytics:
@@ -204,8 +230,8 @@ codemirror:
 
 # Enabling mathjax support
 mathjax: true
-
 ```
+
 </details>
 
 ### Comments
@@ -228,15 +254,12 @@ Hexo configuration file `_config.yml` located at the ROOT path of your blog.
 > will not work properly.
 
 ```yaml
-...
-
+---
 highlight:
   enable: false
   line_number: true
   auto_detect: true
   tab_replace:
-
-...
 ```
 
 Codemirror settings
@@ -261,19 +284,13 @@ hexo clean && hexo g
 This post parameter changes how many characters are kept for the preview at home page.
 
 ```markdown
-
 title: My awesome title
 date: 2019-07-14 18:38:45
-categories:
-    - Category1
-    - Category2
-tags:
-    - Tag1
-    - Tag2
+categories: - Category1 - Category2
+tags: - Tag1 - Tag2
 mp3: http://domain.com/awesome.mp3
 cover: http://domain.com/awesome.jpg
 preview: 300
-
 ```
 
 ### Post template
@@ -281,18 +298,12 @@ preview: 300
 Post template settings
 
 ```markdown
-
 title: My awesome title
 date: 2019-07-14 18:38:45
-categories:
-    - Category1
-    - Category2
-tags:
-    - Tag1
-    - Tag2
+categories: - Category1 - Category2
+tags: - Tag1 - Tag2
 mp3: http://domain.com/awesome.mp3
 cover: http://domain.com/awesome.jpg
-
 ```
 
 ### Create categories page
@@ -308,7 +319,7 @@ Categories template
 ```yaml
 title: categories
 date: 2019-07-14 12:39:04
-type: "categories"
+type: 'categories'
 ```
 
 > Theme will auto generate categories contents.
@@ -344,7 +355,7 @@ mathjax: true
 
 > Please backup your `_config.yml` file before update
 
-``` bash
+```bash
 cd themes/osidian
 git pull
 ```
@@ -368,7 +379,7 @@ search:
   content: true
 ```
 
-Regenrate files
+Regenerate files
 
 ```bash
 hexo clean && hexo g
@@ -380,10 +391,11 @@ I have made a [`Typro`](https://typora.io/) theme [`Obsidian`](https://github.co
 
 ## Feedback
 
-> Please check the [ISSUES](https://github.com/TriDiamond/hexo-theme-obsidian/issues) before try to use the following contact methods! 
+> Please check the [ISSUES](https://github.com/TriDiamond/hexo-theme-obsidian/issues) before try to use the following contact methods!
 > Maybe the question you have had being asked by others or it's already being answered. Thanks!
 
 You can give me feedback or issue you have through the following methods:
 
 - [Create a issue!](https://github.com/TriDiamond/hexo-theme-obsidian/issues/new)
 - Joint QQGroup `909955326`
+- [Join Telegram Group](https://t.me/joinchat/R2m4eho2lbcHLR7nDvxd6A)

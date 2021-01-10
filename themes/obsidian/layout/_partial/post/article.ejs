@@ -5,7 +5,7 @@
             animation-duration: 1.2s;
             background-image: 
                 radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-                url(<%- page.cover || theme.welcome_cover %>);">
+                url(<%- url_for(page.cover || theme.welcome_cover) %>) ">
         </div>
         <div class="else">
             <p class="animated fadeInDown">
@@ -110,16 +110,16 @@
                     <dl>
                         <dd><a href="<%- theme.socials.github %>" target="_blank"><span
                                     class=" iconfont icon-github"></span></a></dd>
-                        <!-- <dd><a href="<%- theme.socials.twitter %>" target="_blank"><span
+                        <dd><a href="<%- theme.socials.twitter %>" target="_blank"><span
                                     class=" iconfont icon-twitter"></span></a></dd>
                         <dd><a href="<%- theme.socials.stackoverflow %>" target="_blank"><span
-                                    class=" iconfont icon-stack-overflow"></span></a></dd> -->
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/blog"><%- site.posts.length %> <p><%= __('articles') %></p></a></li>
-                    <li><a href="/blog/categories"><%- site.categories.length %> <p><%= __('categories') %></p></a></li>
-                    <li><a href="/blog/tags"><%- site.tags.length %> <p><%= __('tags') %></p></a></li>
+                    <li><a href="/"><%- site.posts.length %> <p><%= __('articles') %></p></a></li>
+                    <li><a href="/categories"><%- site.categories.length %> <p><%= __('categories') %></p></a></li>
+                    <li><a href="/tags"><%- site.tags.length %> <p><%= __('tags') %></p></a></li>
                 </ul>
             </div>
             <% if (theme.TOC == true) { %>
