@@ -27,6 +27,8 @@ jobs:
         # install dependencies
         npm i -g hexo-cli
         npm i
+        cd themes/obsidian
+        npm install
     - name: Deploy
       run: |
         # generate and depoly
