@@ -1,0 +1,98 @@
+::selection {
+    color: #fff;
+    background-color: #47d6c7;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-y: overlay;
+}
+
+body {
+    margin: 0;
+    color: #ddd;
+    font-size: 15px;
+    line-height: 1.6;
+    background-color: #293749;
+    font-family:  'sourcesanspro', 'Noto Sans', 'Segoe UI', 'PingFang TC', 'Noto Sans CJK TC', '微軟正黑體', Arial, sans-serif;
+    font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-weight: 600;
+}
+
+ul.nav,
+ul.post-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+ul {
+    margin: 1rem 0;
+}
+
+a, a:active {
+    color: #ddd;
+    text-decoration: none;
+}
+
+a.nav-list-link.active,
+a.nav-list-link:hover,
+a.post-title-link:hover {
+    border-bottom: 2px solid #47d6c7;
+}
+
+hr {
+    border: 0;
+}
+
+code {
+    padding: 0.2em 0.4em;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.125)
+}
+
+iframe, video {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}
+
+table {
+    padding: 0;
+    th {
+        font-weight: 500;
+        border: 2px solid #293749;
+        text-align: left;
+        margin: 0;
+        padding: 6px 13px;
+    }
+    thead {
+        background-color: #475667;
+    }
+    tbody {
+        tr {
+            border-top: 2px solid #293749;
+            background-color: #364658;
+        }
+        tr:nth-child(2n) {
+            background-color: #475667;
+        }
+        td {
+            border: 2px solid #293749;
+            text-align: left;
+            margin: 0;
+            padding: 6px 13px;
+        }
+        th :first-child,
+        td :first-child {
+            margin-top: 0;
+        }
+        th :last-child,
+        td :last-child {
+            margin-bottom: 0;
+        }
+    }
+}

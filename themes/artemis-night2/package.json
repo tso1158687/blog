@@ -1,0 +1,28 @@
+{
+  "name": "hexo-theme-artemis",
+  "version": "1.0.0",
+  "description": "A dark Hexo theme inspired by the Apollo theme",
+  "main": "index.js",
+  "scripts": {
+    "watch": "grunt dev",
+    "build": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yuugou727/hexo-theme-artemis"
+  },
+  "keywords": [
+    "hexo",
+    "theme",
+    "artemis"
+  ],
+  "author": "Ronnie Chang",
+  "license": "MIT",
+  "homepage": "https://github.com/yuugou727/hexo-theme-artemis#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-sass": "^2.0.0",
+    "load-grunt-tasks": "^3.5.2"
+  }
+}

@@ -1,0 +1,124 @@
+code,
+pre {
+    font-size: 0.8em;
+    background-color: #2b303b;
+    color: #F6E9B8;
+    font-family: 'Roboto Mono', monospace, Monaco, courier;
+}
+
+.highlight {
+    position: relative;
+    margin: 1em 0;
+    border-radius: 2px;
+    line-height: 1.1em;
+    background-color: #2b303b;
+    color: #c0c5ce;
+    overflow-x: auto;
+    table, tbody, tr, td {
+        width: 100%;
+        border-collapse: collapse;
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+    .gutter {
+        display: none;
+    }
+    .code pre {
+        padding: 1.2em 1.4em;
+        line-height: 1.5em;
+        margin: 0;
+        .line {
+            width: auto;
+            height: 18px;
+        }  
+
+        color: #c0c5ce;
+
+        .comment,
+        .quote {
+            color: #65737e
+        }
+    
+        .variable,
+        .template-variable,
+        .tag,
+        .name,
+        .selector-id,
+        .selector-class,
+        .regexp,
+        .deletion {
+            color: #bf616a
+        }
+    
+        .number,
+        .built_in,
+        .builtin-name,
+        .literal,
+        .type,
+        .params,
+        .meta,
+        .link {
+            color: #d08770
+        }
+    
+        .attribute {
+            color: #ebcb8b
+        }
+    
+        .string,
+        .symbol,
+        .bullet,
+        .addition {
+            color: #a3be8c
+        }
+    
+        .title,
+        .section {
+            color: #8fa1b3
+        }
+    
+        .keyword,
+        .selector-tag {
+            color: #b48ead
+        }
+    
+        .emphasis {
+            font-style: italic
+        }
+    
+        .strong {
+            font-weight: bold
+        }
+    
+    }
+}
+
+%code-base {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #c0c5ce;
+    text-align: right;
+    font-size: 0.75em;
+    padding: 5px 10px 0;
+    line-height: 15px;
+    height: 15px;
+    font-weight: 600;
+}
+
+@mixin code-signs($keys) {
+    @each $key in $keys {
+        .highlight.#{$key} .code:after {
+            content: to-upper-case($key);
+            @extend %code-base;
+        }
+    }
+}
+
+$signs: ("sql", "ini", "conf", "html", "javascript", "js", "bash", "css", "scss","diff", "java", "xml", "python", "json", "swift", "ruby", "perl", "php", "c", "java", "cpp", "ts");
+@include code-signs($signs);
+
+.highlight.cpp .code:after {
+    content: 'C++';
+}
