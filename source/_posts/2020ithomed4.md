@@ -77,7 +77,7 @@ mySet.clear(); // Set []
 
 既然是集合，就有兩個集合之間的比較應用，分別是交集、對稱差、聯集、差集
 
-![DAY4-Javascript%20Set%E5%92%8CMap%20(%E4%B8%8A)%20c10e1fcac83c47bc85da739181788b43/Untitled.png](<DAY4-Javascript%20Set%E5%92%8CMap%20(%E4%B8%8A)%20c10e1fcac83c47bc85da739181788b43/Untitled.png>)
+{% asset_img 1.png %}
 
 以下範例都以這兩個集合為範例
 
@@ -154,9 +154,3 @@ console.log(difference(setA, setB)); //1,2
 ## 範例
 
 今天的範例[程式碼](https://stackblitz.com/edit/typescript-ystqju)
-
-[https://ithelp.ithome.com.tw/articles/10214228](https://ithelp.ithome.com.tw/articles/10214228)
-
-[https://pjchender.github.io/2018/07/30/js-javascript-map/](https://pjchender.github.io/2018/07/30/js-javascript-map/)
-
-[https://pjchender.github.io/2018/07/30/js-javascript-es6-中的箭頭函式-arrow-function-和它對-this-的影響/](https://pjchender.github.io/2018/07/30/js-javascript-es6-%E4%B8%AD%E7%9A%84%E7%AE%AD%E9%A0%AD%E5%87%BD%E5%BC%8F-arrow-function-%E5%92%8C%E5%AE%83%E5%B0%8D-this-%E7%9A%84%E5%BD%B1%E9%9F%BF/)

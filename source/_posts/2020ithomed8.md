@@ -21,11 +21,11 @@ tags: [vscode]
 
 在windows中，只要檔案總管在 `code .` 就可以快速在這個目錄打開VS Code
 
-![DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled.png](DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled.png)
+{% asset_img 1.png %}
 
 在Terminal也可以中，也可以到目錄下輸入 `code .` ，在該目錄打開VS Code
 
-![DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%201.png](DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%201.png)
+{% asset_img 2.png %}
 
 ## VS Code Insider
 
@@ -58,13 +58,13 @@ VS Code Insider下載
 
 在Javascript或Typescript中，對function按 `F2`，可以重新命名，並且會自動將所有用到的也一併重新命名。
 
-![DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%202.png](DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%202.png)
+{% asset_img 3.png %}
 
 ### F12-尋找使用function的地方
 
 在Javascript或Typescript中，對function點 `F12` 可以找到使用這個方法的function
 
-![DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%203.png](DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%203.png)
+{% asset_img 4.png %}
 
 ## 實用的套件
 
@@ -82,7 +82,7 @@ l[ive share連結](https://marketplace.visualstudio.com/items?itemName=MS-vslive
 
 ### Tech Debt Metrics
 
-![DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%204.png](DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%204.png)
+{% asset_img 5.png %}
 
 這個套件可以告訴你的程式碼哪裡有壞味道，安裝完之後，在每個函式上面就會有關於這個函式的評分，會分別給予A、B、C、D等分數，點下去之後，就可以看到評分的細節，它會告訴你他基於什麼理由給予這樣的評分。雖然說不是絕對的標準，但是可以讓自己心裡有個底，這裡可能有些壞味道
 
@@ -90,7 +90,7 @@ l[ive share連結](https://marketplace.visualstudio.com/items?itemName=MS-vslive
 
 寫程式的時候總有一些還未完成的事項要提醒自己未完成。就可以加上TODO，提醒自己要做，這個套件會加上螢光色，讓你更好找到
 
-![DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%205.png](DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%205.png)
+{% asset_img 6.png %}
 
 [TODO Highlight連結](https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight)
 
@@ -98,13 +98,13 @@ l[ive share連結](https://marketplace.visualstudio.com/items?itemName=MS-vslive
 
 將程式碼的縮排加上不同顏色，除了美觀外，更是為了可以清楚看見結構的層次
 
-![DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%206.png](DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%206.png)
+{% asset_img 7.png %}
 
 ### GitLens — Git supercharged
 
 Gitlens是一套強大的git工具，可以追蹤這段程式碼最後誰修改過，總共有多少人修改過。這樣發生問題的時候，會更容易知道發生什麼問題，這個問題要問誰等等。
 
-![DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%207.png](DAY8-%20%E5%B7%A5%E6%AC%B2%E5%96%84%E5%85%B6%E4%BA%8B%EF%BC%8C%E5%BF%85%E5%85%88%E5%88%A9%E5%85%B6%E5%99%A8%E3%80%82%E5%BC%84%E5%80%8B%E8%88%92%E6%9C%8D%E7%9A%84VS%20Code%201e3fc59108294ef794625463ef549086/Untitled%207.png)
+{% asset_img 8.png %}
 
 ### 常用熱鍵
 
