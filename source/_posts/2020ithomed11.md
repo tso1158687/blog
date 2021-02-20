@@ -1,7 +1,7 @@
 ---
 title: DAY11-git cherry-pick和revert
 date: 2021-01-11 21:24:07
-tags: [git]
+tags: [git,鐵人賽2020]
 ---
 # DAY11-git cherry-pick和revert
 
@@ -23,7 +23,7 @@ cherry-pick翻譯成中文就是撿櫻桃。撿櫻桃這個詞對我們中文使
 
 將一個或多個commit提取到現有的分支
 
-![DAY11-git%20cherry-pick%E5%92%8Crevert%20e069514d7fed49c8b722d63ef88536f3/Untitled.png](DAY11-git%20cherry-pick%E5%92%8Crevert%20e069514d7fed49c8b722d63ef88536f3/Untitled.png)
+{% asset_img 1.png %}
 
 以上圖為例。假設在master新開一個dev分支，開發某個新功能。在dev分支分別提交了兩個點:99daed2...和08084a5...(以下分別簡稱為d1和d2)。兩個點分別代表不同的小功能。最後可能某些關係，dev的功能尚未開發完，還沒有辦法合併，但是要讓d1的功能先進去master。這時候就是使用cherry-pick最佳時機了。
 
@@ -50,7 +50,7 @@ cherry-pick的使用時機很常發生在開發新功能或是修復bug趕不上
 
 ## revert使用說明
 
-![DAY11-git%20cherry-pick%E5%92%8Crevert%20e069514d7fed49c8b722d63ef88536f3/Untitled%201.png](DAY11-git%20cherry-pick%E5%92%8Crevert%20e069514d7fed49c8b722d63ef88536f3/Untitled%201.png)
+{% asset_img 2.png %}
 
 同樣以上取為例，上圖有四個commit，這四個點分別稱為m1、m2、m3、m4。如果想要把m3的內容剔除，就可以對m3使用revert，創造一個新的commit去刪除m3的內容
 

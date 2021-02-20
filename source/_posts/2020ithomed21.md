@@ -1,7 +1,7 @@
 ---
 title: DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function
 date: 2021-01-11 21:24:49
-tags: [javascript]
+tags: [javascript,鐵人賽2020]
 ---
 # DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function
 
@@ -17,7 +17,7 @@ pure function不是一個手法，而是一個觀念
 
 先來看看一個反面例子
 
-![DAY21-%E5%B8%B8%E5%B8%B8%E6%9C%89%E8%8E%AB%E5%90%8D%E5%85%B6%E5%A6%99%E7%9A%84bug%E5%97%8E%20%E8%A6%81%E4%B8%8D%E8%A6%81%E8%A9%A6%E8%A9%A6%E7%9C%8Bpure%20function%20d5bb2ac41ab0467285cb6f08b8cce791/Untitled.png](DAY21-%E5%B8%B8%E5%B8%B8%E6%9C%89%E8%8E%AB%E5%90%8D%E5%85%B6%E5%A6%99%E7%9A%84bug%E5%97%8E%20%E8%A6%81%E4%B8%8D%E8%A6%81%E8%A9%A6%E8%A9%A6%E7%9C%8Bpure%20function%20d5bb2ac41ab0467285cb6f08b8cce791/Untitled.png)
+![Untitled.png](Untitled.png)
 
 連續呼叫三次 `sayHello` 的方法，都輸入同樣的參數 `1`  三次所得到的結果都不一樣，而且在sayHello方法外的變數 `number` 被修改成 3
 

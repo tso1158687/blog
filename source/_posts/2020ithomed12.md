@@ -1,7 +1,7 @@
 ---
 title: DAY12-用Verdaccio自己建一個私有的NPM
 date: 2021-01-11 21:24:11
-tags: [npm]
+tags: [npm,鐵人賽2020]
 ---
 
 # DAY12-用 Verdaccio 自己建一個私有的 NPM
@@ -24,7 +24,7 @@ npm install --global verdaccio
 verdaccio
 ```
 
-![DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled.png](DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled.png)
+![Untitled.png](Untitled.png)
 
 輸入完就會看到 Verdaccio
 
@@ -36,7 +36,7 @@ verdaccio
 http://localhost:4873/
 ```
 
-![DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%201.png](DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%201.png)
+![Untitled%201.png](Untitled%201.png)
 
 這樣就完成私有的 NPM 架設了！
 
@@ -84,15 +84,15 @@ npm init
 npm publish --registry http://localhost:4873
 ```
 
-![DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%202.png](DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%202.png)
+![Untitled%202.png](Untitled%202.png)
 
 發布成功後，重新整理一下網頁看看結果
 
-![DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%203.png](DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%203.png)
+![Untitled%203.png](Untitled%203.png)
 
 點進去就可以看到套件的詳細資訊和使用資訊
 
-![DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%204.png](DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%204.png)
+![Untitled%204.png](Untitled%204.png)
 
 # 搬移 NPM 套件
 
@@ -109,6 +109,6 @@ npm publish --registry http://localhost:4873
 
 # 推廣一下中文版
 
-![DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%205.png](DAY12-%E7%94%A8Verdaccio%E8%87%AA%E5%B7%B1%E5%BB%BA%E4%B8%80%E5%80%8B%E7%A7%81%E6%9C%89%E7%9A%84NPM%205bda084996854c26b0501adfb9c4b73a/Untitled%205.png)
+![Untitled%205.png](Untitled%205.png)
 
 Verdaccio 內建多國語言，包含台灣人用的正體中文。這個版本是筆者使用後覺得非常好用，發現有多國語言版本，但是沒有正體中文的版本。所以自己翻譯請他們的開發團隊合併回去的。全部都是依字一句自己翻譯的，推薦大家使用

@@ -1,7 +1,7 @@
 ---
 title: DAY9-git在commit的時候，到底commit了什麼(原理篇)
 date: 2021-01-11 21:23:59
-tags: [git]
+tags: [git,鐵人賽2020]
 ---
 # DAY9-git在commit的時候，到底commit了什麼(原理篇)
 
@@ -76,13 +76,15 @@ git cat-file -t <commitId>
 git cat-file -s <commitId>
 ```
 
-![DAY9-git%E5%9C%A8commit%E7%9A%84%E6%99%82%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95commit%E4%BA%86%E4%BB%80%E9%BA%BC(%E5%8E%9F%E7%90%86%E7%AF%87)%20a2053bcc146a41ccb5fea648adacdccd/Untitled.png](DAY9-git%E5%9C%A8commit%E7%9A%84%E6%99%82%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95commit%E4%BA%86%E4%BB%80%E9%BA%BC(%E5%8E%9F%E7%90%86%E7%AF%87)%20a2053bcc146a41ccb5fea648adacdccd/Untitled.png)
+
+{% asset_img 1.png %}
 
 # git檔案存在哪
 
 當你執行 `git init` 的時候，等同於幫你建立一個預設隱藏起來的 `.git` 資料夾，記錄所有跟git有關的資訊。
 
-![DAY9-git%E5%9C%A8commit%E7%9A%84%E6%99%82%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95commit%E4%BA%86%E4%BB%80%E9%BA%BC(%E5%8E%9F%E7%90%86%E7%AF%87)%20a2053bcc146a41ccb5fea648adacdccd/Untitled%201.png](DAY9-git%E5%9C%A8commit%E7%9A%84%E6%99%82%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95commit%E4%BA%86%E4%BB%80%E9%BA%BC(%E5%8E%9F%E7%90%86%E7%AF%87)%20a2053bcc146a41ccb5fea648adacdccd/Untitled%201.png)
+
+{% asset_img 2.png %}
 
 也就是說，只要有了這個 `.git` 的檔案，你就算把資料夾下面所有的檔案刪光光，也可以透過git馬上全部恢復回來。
 
@@ -90,7 +92,8 @@ git cat-file -s <commitId>
 
 # git三大區域
 
-![DAY9-git%E5%9C%A8commit%E7%9A%84%E6%99%82%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95commit%E4%BA%86%E4%BB%80%E9%BA%BC(%E5%8E%9F%E7%90%86%E7%AF%87)%20a2053bcc146a41ccb5fea648adacdccd/Untitled%202.png](DAY9-git%E5%9C%A8commit%E7%9A%84%E6%99%82%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95commit%E4%BA%86%E4%BB%80%E9%BA%BC(%E5%8E%9F%E7%90%86%E7%AF%87)%20a2053bcc146a41ccb5fea648adacdccd/Untitled%202.png)
+
+{% asset_img 3.png %}
 
 ## 工作區
 
@@ -144,7 +147,8 @@ git刪除分支或是刪除某個點的概念是這樣的。例如有個分支�
 
 換句話說，凡是曾經commit過的東西，永遠不會消失。就算已經把分支刪除或合併，一定都可以找的回來。
 
-![DAY9-git%E5%9C%A8commit%E7%9A%84%E6%99%82%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95commit%E4%BA%86%E4%BB%80%E9%BA%BC(%E5%8E%9F%E7%90%86%E7%AF%87)%20a2053bcc146a41ccb5fea648adacdccd/Untitled%203.png](DAY9-git%E5%9C%A8commit%E7%9A%84%E6%99%82%E5%80%99%EF%BC%8C%E5%88%B0%E5%BA%95commit%E4%BA%86%E4%BB%80%E9%BA%BC(%E5%8E%9F%E7%90%86%E7%AF%87)%20a2053bcc146a41ccb5fea648adacdccd/Untitled%203.png)
+
+{% asset_img 4.png %}
 
 所以只要有壞味道的感覺，不論是程式碼快要寫壞了或是電腦快要當機了，甚至是地震來了，只要commit下去，就不必怕東西不見。
 
@@ -179,7 +183,3 @@ npx @willh/git-setup
 GUI工具的本質還是指令，GUI只是幫你用圖像化的方式執行指令，所以只要懂GIT基本原理不管要打指令或GUI都可以很順利地使用
 
 所以如果選擇使用GUI工具的朋友們在使用的時候不彷在操作的時候先停下來一下，想想看你知道這個按鈕幫你執行了什麼git的指令嗎?如果知道，代表對git的認識是足夠的。如果不知道可以試著用用看如何用指令解決這個問題。
-
-[octtree](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc?hl=en-US)
-
-[保哥的git設定](https://github.com/doggy8088/git-setup)

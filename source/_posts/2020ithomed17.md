@@ -1,7 +1,7 @@
 ---
 title: Day17-SOLID原則-開閉原則(Open–closed Principle)
 date: 2021-01-11 21:24:31
-tags: [solid]
+tags: [solid,鐵人賽2020]
 ---
 # Day17-SOLID原則-開閉原則(Open–closed Principle)
 

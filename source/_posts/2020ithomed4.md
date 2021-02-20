@@ -1,7 +1,7 @@
 ---
 title: DAY4-Javascript Set和Map (上)
 date: 2021-01-11 21:23:39
-tags: [javascript, es6]
+tags: [javascript, es6,鐵人賽2020]
 ---
 
 # DAY4-Javascript Set 和 Map (上)

@@ -1,7 +1,7 @@
 ---
 title: DAY22-如何描述問題與問問題
 date: 2021-01-11 21:24:52
-tags: [溝通]
+tags: [溝通,鐵人賽2020]
 ---
 # DAY22-如何描述問題與問問題
 
@@ -63,7 +63,7 @@ tags: [溝通]
 
 [StackBlitz](https://stackblitz.com/)
 
-![DAY22-%E5%A6%82%E4%BD%95%E6%8F%8F%E8%BF%B0%E5%95%8F%E9%A1%8C%E8%88%87%E5%95%8F%E5%95%8F%E9%A1%8C%20dbf786d3395d464899bc8b442e32f3c7/Untitled.png](DAY22-%E5%A6%82%E4%BD%95%E6%8F%8F%E8%BF%B0%E5%95%8F%E9%A1%8C%E8%88%87%E5%95%8F%E5%95%8F%E9%A1%8C%20dbf786d3395d464899bc8b442e32f3c7/Untitled.png)
+![Untitled.png](Untitled.png)
 
 一個強大的網站，可以馬上套用各種框架，不用煩惱環境的問題。
 
@@ -73,7 +73,7 @@ tags: [溝通]
 
 [CodePen](https://codepen.io/pen/)
 
-![DAY22-%E5%A6%82%E4%BD%95%E6%8F%8F%E8%BF%B0%E5%95%8F%E9%A1%8C%E8%88%87%E5%95%8F%E5%95%8F%E9%A1%8C%20dbf786d3395d464899bc8b442e32f3c7/Untitled%201.png](DAY22-%E5%A6%82%E4%BD%95%E6%8F%8F%E8%BF%B0%E5%95%8F%E9%A1%8C%E8%88%87%E5%95%8F%E5%95%8F%E9%A1%8C%20dbf786d3395d464899bc8b442e32f3c7/Untitled%201.png)
+![Untitled%201.png](Untitled%201.png)
 
 相較於StackBlitz有豐富的框架可以選擇，CodePen就比較陽春許多。不過功能比較單純正是其優點。
 

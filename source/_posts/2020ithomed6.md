@@ -1,7 +1,7 @@
 ---
 title: DAY6-寫CSS很痛苦嗎?SCSS快速入門介紹
 date: 2021-01-11 21:23:47
-tags: [CSS,SCSS]
+tags: [CSS,SCSS,鐵人賽2020]
 ---
 # DAY6-寫CSS很痛苦嗎?SCSS快速入門介紹
 

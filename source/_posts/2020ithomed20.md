@@ -1,7 +1,7 @@
 ---
 title: DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle)
 date: 2021-01-11 21:24:44
-tags: [solid]
+tags: [solid,鐵人賽2020]
 ---
 # DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle )
 
@@ -15,7 +15,7 @@ tags: [solid]
 
 ## 要如何從台北到板橋
 
-![DAY20-SOLID%E5%8E%9F%E5%89%87-%E4%BE%9D%E8%B3%B4%E5%8F%8D%E5%90%91%E5%8E%9F%E5%89%87(Dependency%20Inversion%20Principl%20f93ab3da5e1c494ebd8d135cbf501bcc/Untitled.png](DAY20-SOLID%E5%8E%9F%E5%89%87-%E4%BE%9D%E8%B3%B4%E5%8F%8D%E5%90%91%E5%8E%9F%E5%89%87(Dependency%20Inversion%20Principl%20f93ab3da5e1c494ebd8d135cbf501bcc/Untitled.png)
+![Untitled.png](Untitled.png)
 
 根據google map的建議，從台北到板橋站可以搭乘台北捷運板南線。
 
@@ -25,7 +25,7 @@ tags: [solid]
 
 看看台北地區軌道路網圖，從台北到板橋不只有搭捷運一種方法而已。除了搭捷運外，還可以搭乘台鐵、高鐵
 
-![DAY20-SOLID%E5%8E%9F%E5%89%87-%E4%BE%9D%E8%B3%B4%E5%8F%8D%E5%90%91%E5%8E%9F%E5%89%87(Dependency%20Inversion%20Principl%20f93ab3da5e1c494ebd8d135cbf501bcc/Untitled%201.png](DAY20-SOLID%E5%8E%9F%E5%89%87-%E4%BE%9D%E8%B3%B4%E5%8F%8D%E5%90%91%E5%8E%9F%E5%89%87(Dependency%20Inversion%20Principl%20f93ab3da5e1c494ebd8d135cbf501bcc/Untitled%201.png)
+![Untitled%201.png](Untitled%201.png)
 
 ```tsx
 class Mrt {

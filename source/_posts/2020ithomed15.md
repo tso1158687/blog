@@ -1,7 +1,7 @@
 ---
 title: DAY15-postman的分享與匯入
 date: 2021-01-11 21:24:24
-tags: [tool]
+tags: [tool,鐵人賽2020]
 ---
 # DAY15-postman的分享與匯入
 
@@ -19,15 +19,15 @@ postman系列文的最後一篇，如何分享postman的collection或匯入別�
 
 點擊collection旁邊的"..."按鈕，可以看到 `Share Collection`的選項
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled.png)
+![Untitled.png](Untitled.png)
 
 點擊之後，會跳出一個視窗問你要以何種方式分享，點選 `Get public link` 的頁籤
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%201.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%201.png)
+![Untitled%201.png](Untitled%201.png)
 
 點Get public link的按鈕之後，就可以看到分享的連結。就可以將這個連結分享給其他人囉
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%202.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%202.png)
+![Untitled%202.png](Untitled%202.png)
 
 ### 使用連結分享的注意事項
 
@@ -38,21 +38,21 @@ postman系列文的最後一篇，如何分享postman的collection或匯入別�
 
 點擊collection旁邊的"..."按鈕，可以看到 `Export`的選項
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%203.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%203.png)
+![Untitled%203.png](Untitled%203.png)
 
 接著就會彈出一個視窗問你要以什麼格式匯出，基本上不用修改設定，就用最新的格式就好了
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%204.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%204.png)
+![Untitled%204.png](Untitled%204.png)
 
 點擊 `Export` 後，就會問你要儲存在哪裡，儲存好之後就可以看到檔案匯出完成囉。
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%205.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%205.png)
+![Untitled%205.png](Untitled%205.png)
 
 # 匯入collection
 
 在左上角的地方有 `import` 的按鈕
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%206.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%206.png)
+![Untitled%206.png](Untitled%206.png)
 
 點擊之後可以看到好多頁籤
 
@@ -60,10 +60,10 @@ postman系列文的最後一篇，如何分享postman的collection或匯入別�
 
 點擊 `File` 頁籤，點 `Upload Files` 按鈕即可匯入檔案，匯入之後就成功囉
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%207.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%207.png)
+![Untitled%207.png](Untitled%207.png)
 
 ## 匯入連結
 
 點擊 `Link` 頁籤，可以看到輸入框，將URL貼上之後，點擊 `Continue` 之後，就匯入成功囉
 
-![DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%208.png](DAY15-postman%E7%9A%84%E5%88%86%E4%BA%AB%E8%88%87%E5%8C%AF%E5%85%A5%20957541044f1a47379160e5ae2301e077/Untitled%208.png)
+![Untitled%208.png](Untitled%208.png)

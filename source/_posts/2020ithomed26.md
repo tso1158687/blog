@@ -1,7 +1,7 @@
 ---
 title: DAY26-如何與人協同工作與好好溝通-後端工程師篇
 date: 2021-01-11 21:25:07
-tags: [溝通]
+tags: [溝通,鐵人賽2020]
 ---
 # DAY26-如何與人協同工作與好好溝通-後端工程師篇
 
@@ -46,7 +46,7 @@ API的開發流程究竟是要前端主導還是後端主導呢?
 
 以下面的表格為例:
 
-![DAY26-%E5%A6%82%E4%BD%95%E8%88%87%E4%BA%BA%E5%8D%94%E5%90%8C%E5%B7%A5%E4%BD%9C%E8%88%87%E5%A5%BD%E5%A5%BD%E6%BA%9D%E9%80%9A-%E5%BE%8C%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%AB%E7%AF%87%20a0ac358346b2444d91ede639ca592a87/Untitled.png](DAY26-%E5%A6%82%E4%BD%95%E8%88%87%E4%BA%BA%E5%8D%94%E5%90%8C%E5%B7%A5%E4%BD%9C%E8%88%87%E5%A5%BD%E5%A5%BD%E6%BA%9D%E9%80%9A-%E5%BE%8C%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%AB%E7%AF%87%20a0ac358346b2444d91ede639ca592a87/Untitled.png)
+![Untitled.png](Untitled.png)
 
 一個表格有四個欄位，後端開給我五支API。一支API取得資料的ID，再用ID去分別查詢四個欄位的API，查完之後，再用ID去對應資料把一列的資料分別聚合起來成一筆。
 

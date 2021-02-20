@@ -1,7 +1,7 @@
 ---
 title: Day16-SOLID原則-單一職責原則(Single Responsibility Principle)
 date: 2021-01-11 21:24:28
-tags: [solid]
+tags: [solid,鐵人賽2020]
 ---
 # Day16-SOLID原則-單一職責原則(Single Responsibility Principle)
 

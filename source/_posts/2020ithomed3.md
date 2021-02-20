@@ -1,7 +1,7 @@
 ---
 title: DAY3-常見的Javascript使用技巧與情境
 date: 2021-01-11 21:23:35
-tags: [javascript, es6]
+tags: [javascript, es6,鐵人賽2020]
 ---
 
 # DAY3-常見的 Javascript 使用技巧與情境

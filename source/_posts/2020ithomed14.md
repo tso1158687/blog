@@ -1,7 +1,7 @@
 ---
 title: DAY14- postman環境設定與API授權設定
 date: 2021-01-11 21:24:21
-tags: [tool]
+tags: [tool,鐵人賽2020]
 ---
 # DAY-14- postman環境設定與API授權設定
 
@@ -31,11 +31,11 @@ tags: [tool]
 
 在postman的右上角，有環境變數的地方可以設定，點擊最右邊的按鈕可以管理環境變數
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled.png)
+![Untitled.png](Untitled.png)
 
 如果沒有使用過，列表應該是空的，點選右下角橘色的按鈕新增環境變數
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%201.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%201.png)
+![Untitled%201.png](Untitled%201.png)
 
 環境變數也是以組為概念，一組環境變數裡面可以設定不同的變數。
 
@@ -43,21 +43,21 @@ tags: [tool]
 
 可以看到欄位有分 `INITIAL VALUE` 和 `CURRENT VALUE` 兩種。可以暫時不用去管他，都填一樣的就好了。
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%202.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%202.png)
+![Untitled%202.png](Untitled%202.png)
 
 新增完之後，就可以從環境變數的列表上面選擇環境，在此選擇剛剛建立好的新環境
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%203.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%203.png)
+![Untitled%203.png](Untitled%203.png)
 
 ## 套用環境變數
 
 在網址區，使用兩個中括號代表變數，使用剛剛設定好的變數local，發送出去，可以看到請求依然成功
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%204.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%204.png)
+![Untitled%204.png](Untitled%204.png)
 
 如果變數有套用成功，滑鼠移到變數上面，就可以看到變數代表的值是什麼
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%205.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%205.png)
+![Untitled%205.png](Untitled%205.png)
 
 變數這樣就設定成功了。
 
@@ -71,7 +71,7 @@ postman也可以幫你加上API的授權資訊
 
 選擇Authorization的頁籤，然後可以選擇授權的種類，選擇好之後，在Token的欄位貼上token就完成囉
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%206.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%206.png)
+![Untitled%206.png](Untitled%206.png)
 
 # API自動取得認證資訊
 
@@ -81,11 +81,11 @@ postman也可以幫你加上API的授權資訊
 
 在Collection的右下角，有"..."的按鈕，點下去之後，選擇Edit
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%207.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%207.png)
+![Untitled%207.png](Untitled%207.png)
 
 可以看到有很多頁籤，其中有一個頁籤是 `Pre-request Scripts`
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%208.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%208.png)
+![Untitled%208.png](Untitled%208.png)
 
 `Pre-request Scripts` 的意思就是在發出API請求之前，可以先執行某些功能，我們利用此功能，來寫一段幫我們取得授權資訊並且幫我們填上的功能。
 
@@ -120,4 +120,4 @@ pm.sendRequest(apiRequest, function(err, res) {
 
 再到Authorization的頁籤，將 `{{access_token}}` 的變數放上去，就可以自動取得授權資訊並且貼上囉
 
-![DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%209.png](DAY-14-%20postman%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A%E8%88%87API%E6%8E%88%E6%AC%8A%E8%A8%AD%E5%AE%9A%20359e785fbf7046a49a0212cc055438fb/Untitled%209.png)
+![Untitled%209.png](Untitled%209.png)

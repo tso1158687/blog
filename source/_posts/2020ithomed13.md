@@ -1,13 +1,13 @@
 ---
 title: DAY13-前端測試API的利器-postman
 date: 2021-01-11 21:24:16
-tags: [tool]
+tags: [tool,鐵人賽2020]
 ---
 # DAY13-前端測試API的利器-postman
 
 # 什麼是postman
 
-![DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled.png](DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled.png)
+![Untitled.png](Untitled.png)
 
 postman是一個測試API的工具。前端不論要取得或是傳送資料是，都必須頻繁地不斷透過API作為更通的橋樑。而將API串起來讓網頁可以順利運行是前端很重要的工作之一。
 
@@ -35,15 +35,15 @@ Collection是一堆API request的集合，可以看作是存放一堆API request
 
 點New Collection按鈕建立新的collection，輸入名稱和敘述
 
-![DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%201.png](DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%201.png)
+![Untitled%201.png](Untitled%201.png)
 
 建立好後，可以看到collection是空白的。來建立第一個request，點擊Add requests，一樣輸入名稱和敘述
 
-![DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%202.png](DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%202.png)
+![Untitled%202.png](Untitled%202.png)
 
 # Request建立與使用
 
-![DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%203.png](DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%203.png)
+![Untitled%203.png](Untitled%203.png)
 
 操作區域主要可以分為三區
 
@@ -79,7 +79,7 @@ Collection是一堆API request的集合，可以看作是存放一堆API request
 
 純粹取得資料，輸入API位置之後，直接按Send，看見API回應
 
-![DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%204.png](DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%204.png)
+![Untitled%204.png](Untitled%204.png)
 
 ## get with parameters
 
@@ -87,13 +87,13 @@ Collection是一堆API request的集合，可以看作是存放一堆API request
 
 可以看到API的回應結果，有收到查詢的參數age等於24
 
-![DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%205.png](DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%205.png)
+![Untitled%205.png](Untitled%205.png)
 
 ## post
 
 post方法通常會加上傳送資料，傳送資料通常包在body資訊裡面。因此切換到body頁籤，可以看到不同的傳送資料的方法。依API的設計有不同的方法。目前大部分json格式都選擇 `x-www-form-urlencoded` 格式，填好資料傳送出去，可以從回應結果看到正確傳送資料到後端
 
-![DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%206.png](DAY13-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6API%E7%9A%84%E5%88%A9%E5%99%A8-postman%209801bf238d874e659290054d3a3068ad/Untitled%206.png)
+![Untitled%206.png](Untitled%206.png)
 
 ## 常見的http狀態碼
 

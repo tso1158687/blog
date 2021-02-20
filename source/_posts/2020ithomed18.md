@@ -1,7 +1,7 @@
 ---
 title: Day18-SOLID原則-里氏替換原則(Liskov Substitution Principle)
 date: 2021-01-11 21:24:36
-tags: [solid]
+tags: [solid,鐵人賽2020]
 ---
 # Day18-SOLID原則-里氏替換原則(Liskov Substitution Principle)
 

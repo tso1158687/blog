@@ -1,7 +1,7 @@
 ---
 title: DAY8- 工欲善其事，必先利其器。弄個舒服的VS Code
 date: 2021-01-11 21:23:56
-tags: [vscode]
+tags: [vscode,鐵人賽2020]
 ---
 # DAY8- 工欲善其事，必先利其器。弄個舒服的VS Code
 

@@ -1,7 +1,7 @@
 ---
 title: DAY25-如何與人協同工作與好好溝通-設計師篇
 date: 2021-01-11 21:25:03
-tags: [溝通]
+tags: [溝通,鐵人賽2020]
 ---
 # DAY25-如何與人協同工作與好好溝通-設計師篇
 
@@ -11,11 +11,11 @@ tags: [溝通]
 
 例如以製做登入頁面為例，我想的登入頁面是這樣:
 
-![DAY25-%E5%A6%82%E4%BD%95%E8%88%87%E4%BA%BA%E5%8D%94%E5%90%8C%E5%B7%A5%E4%BD%9C%E8%88%87%E5%A5%BD%E5%A5%BD%E6%BA%9D%E9%80%9A-%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%AF%87%20c7662eec4fed4a39bf3d7be0e6c3985a/Untitled.png](DAY25-%E5%A6%82%E4%BD%95%E8%88%87%E4%BA%BA%E5%8D%94%E5%90%8C%E5%B7%A5%E4%BD%9C%E8%88%87%E5%A5%BD%E5%A5%BD%E6%BA%9D%E9%80%9A-%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%AF%87%20c7662eec4fed4a39bf3d7be0e6c3985a/Untitled.png)
+![Untitled.png](Untitled.png)
 
 而設計師想的登入頁面是這樣:
 
-![DAY25-%E5%A6%82%E4%BD%95%E8%88%87%E4%BA%BA%E5%8D%94%E5%90%8C%E5%B7%A5%E4%BD%9C%E8%88%87%E5%A5%BD%E5%A5%BD%E6%BA%9D%E9%80%9A-%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%AF%87%20c7662eec4fed4a39bf3d7be0e6c3985a/Untitled%201.png](DAY25-%E5%A6%82%E4%BD%95%E8%88%87%E4%BA%BA%E5%8D%94%E5%90%8C%E5%B7%A5%E4%BD%9C%E8%88%87%E5%A5%BD%E5%A5%BD%E6%BA%9D%E9%80%9A-%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%AF%87%20c7662eec4fed4a39bf3d7be0e6c3985a/Untitled%201.png)
+![Untitled%201.png](Untitled%201.png)
 
 ## 前端工程師想的登入畫面
 
