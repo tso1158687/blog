@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Day16-SOLID原則-單一職責原則(Single Responsibility Principle) | Jason's BLOG</title><meta name="description" content="Day16-SOLID原則-單一職責原則(Single Responsibility Principle) - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Day16-SOLID原則-單一職責原則(Single Responsibility Principle)</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/solid/">solid</a></li></ul></div><div class="post-content"><h1 id="Day16-SOLID原則-單一職責原則-Single-Responsibility-Principle"><a href="#Day16-SOLID原則-單一職責原則-Single-Responsibility-Principle" class="headerlink" title="Day16-SOLID原則-單一職責原則(Single Responsibility Principle)"></a>Day16-SOLID原則-單一職責原則(Single Responsibility Principle)</h1><h1 id="什麼是SOLID原則"><a href="#什麼是SOLID原則" class="headerlink" title="什麼是SOLID原則"></a>什麼是SOLID原則</h1><p>SOLID原則分別是針對物件導向的五個設計原則取其第一個字母的縮略詞</p>
+<ul>
+<li>Single-responsibility principle (SRP) 單一職責原理</li>
+<li>Open–closed principle (OCP) 開閉原則</li>
+<li>Liskov substitution principle (LSP) 里氏替換原則</li>
+<li>Interface segregation principle (ISP) 介面隔離原則</li>
+<li>Dependency inversion principle (DIP) 依賴反向原則</li>
+</ul>
+<h1 id="為什麼需要SOLID原則"><a href="#為什麼需要SOLID原則" class="headerlink" title="為什麼需要SOLID原則:"></a>為什麼需要SOLID原則:</h1><p>工程師的職責就是把指定的功能使用程式碼去實現。雖然很多時候迫於時間的壓力或是其他外部因素，可能都是先求有再求好。先求可以實現功能，再求可穩定運作且可維護。</p>
+<p>一開始的時候，對於求有這件事情或許多工程師不會太難。但是對於求好這件事情就會感到比較困難。畢竟什麼是好，這個好的不同人有不同的想法。</p>
+<p>但大抵而言，大家追求的好差不多就是這幾件事情:</p>
+<ul>
+<li>程式碼功能清晰</li>
+<li>程式碼架構清晰</li>
+<li>程式碼易於維護</li>
+<li>程式碼易於修改</li>
+</ul>
+<p>針對求好這件事，可以參考SOLID原則，提出一點想法。</p>
+<h1 id="單一職責原理"><a href="#單一職責原理" class="headerlink" title="單一職責原理"></a>單一職責原理</h1><blockquote>
+<p>一個功能類別應該只有單一職責</p>
+</blockquote>
+<p>假設有一個功能是要寄信有啟用的客戶。</p>
+<p>程式碼如下:</p>
+<pre><code class="jsx">function sendMailToActiveClients(clients) &#123;
+   clients.forEach(client=&gt;&#123;
+        if(client.isActive)&#123;
+            sendMail(client)
+        &#125;
+   &#125;)
+&#125;</code></pre>
+<p>上面的程式碼用白話文來說就是: <code>對客戶列表跑迴圈，如果客戶是有啟用的，則寄信給客戶</code></p>
+<p>從白話文可以知道這個功能做了這幾件事情:</p>
+<ul>
+<li>尋找有啟用的客戶</li>
+<li>寄信給客戶</li>
+</ul>
+<p>這個功能做了兩件事情，和單一職責原則不符合，應該讓一個功能只有一個職責，所以依照單一職責原則重新改寫一下程式碼:</p>
+<pre><code class="jsx">function sendMailToActiveClients(clients) &#123;
+    const activeClients=getActiveClient(clients)
+    activeClients.forEach(client=&gt;&#123;
+        snedMail(client)
+    &#125;)
+&#125;
+
+function getActiveClient(clients) &#123;
+    const activeClient=clients.filter(client=&gt;client.isActive)
+    return activeClient
+&#125;</code></pre>
+<p>改寫過後的程式碼將尋找有啟用的客戶和寄信給客戶兩件事情分開。一次只做一件職責的事情</p>
+<h1 id="單一職責原則的優點"><a href="#單一職責原則的優點" class="headerlink" title="單一職責原則的優點"></a>單一職責原則的優點</h1><h2 id="提升可讀性與維護性"><a href="#提升可讀性與維護性" class="headerlink" title="提升可讀性與維護性"></a>提升可讀性與維護性</h2><p>因為一個功能只做一件事情，所以可以很清楚明白這個功能在做什麼事情。也因為只做一件事情，所以程式碼可以縮短許多，比較簡短也更容易閱讀。</p>
+<p>更容易閱讀也意味著更容易維護，因為知道在做什麼，目的也很明確</p>
+<h2 id="減少修改影響的範圍"><a href="#減少修改影響的範圍" class="headerlink" title="減少修改影響的範圍"></a>減少修改影響的範圍</h2><p>因為職責單一，功能也就單一，所以修改的時候可以更清楚影響的範圍在哪裡，影響的範圍也比較小。</p>
+<p>如果職責不夠單一，裡面包含一個以上的功能，常常會發生很多不在預期範圍內的影響，例如改A功能影響B功能，修改好B功能後，反而換C、D功能壞掉。</p>
+<p>只要職責更單一，就可以大幅降低修改的成本和影響</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed17/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed15/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

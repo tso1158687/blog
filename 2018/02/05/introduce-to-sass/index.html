@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>SASS入門 | Jason's BLOG</title><meta name="description" content="SASS入門 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">SASS入門</h1><div class="post-info"><a></a>2018-02-05<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/css/">css</a></li><li><a class="post-tag" href="/blog/tags/sass/">sass</a></li></ul></div><div class="post-content"><h2 id="什麼是-SASS"><a href="#什麼是-SASS" class="headerlink" title="什麼是 SASS?"></a>什麼是 SASS?</h2><p>SASS 是一種 CSS 擴充，為 CSS 的超集合。SASS 的優點是可以解決在開發大型專案時，CSS 常常會遇到層級不明，或是不能用變數定義讓整個架構可維護性變得很差的問題。開發者只要眼睛沒有問題的話，SASS 可以將 CSS 模組化，只要修改一些變數，讓原有的模組可以有更多延伸的變化，不僅減少開發的時間，也可以增加維護時的彈性，應付更多需求。</p>
+<h2 id="SASS-的使用技巧"><a href="#SASS-的使用技巧" class="headerlink" title="SASS 的使用技巧"></a>SASS 的使用技巧</h2><h3 id="1-使用變數，方便重複利用"><a href="#1-使用變數，方便重複利用" class="headerlink" title="1.使用變數，方便重複利用"></a>1.使用變數，方便重複利用</h3><p>例如風險雲的黑色標準色碼是#393B3E，就可以用變數儲存起來</p>
+<pre><code class="bash">$riskBlack:#393B3E;</code></pre>
+<p>如此一來，只要我需要用到黑色，我就只需要打變數，而不需要再打色碼</p>
+<pre><code class="bash">body &#123;
+  color: $riskBlack;
+&#125;
+.menu-item &#123;
+  color: $riskBlack;
+&#125;</code></pre>
+<p>這樣做的好處是，如果有一天，春節來了，我成功地說服 PM 大大，為了增添一點喜氣，把所有的字改成紅色的時候，我就不必一個一個改到都老了，只要改 $riskBlack:red，這樣就改完了。</p>
+<h3 id="2-巢狀寫法，讓層級更分明"><a href="#2-巢狀寫法，讓層級更分明" class="headerlink" title="2.巢狀寫法，讓層級更分明"></a>2.巢狀寫法，讓層級更分明</h3><p>CSS 沒有巢狀的寫法，常常看不出彼此之間的關聯性，而且還要浪費時間重複寫同樣的東西</p>
+<pre><code class="bash">.parent &#123;
+  color: blue;
+&#125;
+
+.parent .child &#123;
+  font-size: 12px;
+&#125;
+
+.parent .child .grandson&#123;
+  border:1px solid #fff
+&#125;</code></pre>
+<p>SASS 可以使用巢狀的寫法，不但層級更明確，也不需要撰寫同樣的東西</p>
+<pre><code class="bash">.parent&#123;
+  color:blue;
+  .child&#123;
+    font-size:12px;
+    .grandson&#123;
+      border: 1px solid #fff;
+    &#125;
+  &#125;
+&#125;</code></pre>
+<h3 id="3-降低-pseudo-元素撰寫的重複性，如：-before、-after、-hover，在-SASS-中使用-amp-代表父元素"><a href="#3-降低-pseudo-元素撰寫的重複性，如：-before、-after、-hover，在-SASS-中使用-amp-代表父元素" class="headerlink" title="3.降低 pseudo 元素撰寫的重複性，如：::before、::after、:hover，在 SASS 中使用 &amp; 代表父元素"></a>3.降低 pseudo 元素撰寫的重複性，如：::before、::after、:hover，在 SASS 中使用 &amp; 代表父元素</h3><pre><code class="bash">//星期二
+.kayoubi &#123;
+  // 星期三
+  &amp;:after &#123;
+    content: &quot;suiyoubi&quot;;
+  &#125;
+  // 星期一
+  &amp;:before &#123;
+    content: &quot;getsuyoubi&quot;;
+  &#125;
+&#125;</code></pre>
+<h3 id="4-Mixin-是一段-SASS-程式碼，可以直接一整包放到別人身上"><a href="#4-Mixin-是一段-SASS-程式碼，可以直接一整包放到別人身上" class="headerlink" title="4.Mixin 是一段 SASS 程式碼，可以直接一整包放到別人身上"></a>4.Mixin 是一段 SASS 程式碼，可以直接一整包放到別人身上</h3><pre><code class="bash">@mixin table-base &#123;
+  th &#123;
+    text-align: center;
+    font-weight: bold;
+  &#125;
+  td,
+  th &#123;
+    padding: 2px;
+  &#125;
+&#125;
+
+#data &#123;
+  @include table-base;
+&#125;</code></pre>
+<p>轉譯後的結果如下</p>
+<pre><code class="bash">#data th &#123;
+  text-align: center;
+  font-weight: bold;
+&#125;
+#data td,
+#data th &#123;
+  padding: 2px;
+&#125;</code></pre>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2018/03/15/fix-footer-trick/">prev</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

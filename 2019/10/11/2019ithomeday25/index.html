@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-25) Nestjs 管道(Pipe) - 驗證資料-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-25) Nestjs 管道(Pipe) - 驗證資料-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-25) Nestjs 管道(Pipe) - 驗證資料-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nestjs/">nestjs</a></li></ul></div><div class="post-content"><h1 id="Nestjs的管道和Angular的管道之間的差異"><a href="#Nestjs的管道和Angular的管道之間的差異" class="headerlink" title="Nestjs的管道和Angular的管道之間的差異"></a>Nestjs的管道和Angular的管道之間的差異</h1><p>在Angular當中，管道(pipe)的功用是在不更動原始資料的情況下，轉換資料顯示的樣子。一來可以不更動資料的原始狀態，二來可以將資料轉換成比較容易閱讀的形式。<br>但在Nestjs裡面，因為沒有頁面必須要處理，但是管道的功能非常類似：能轉換輸入的資料，使其符合需要的格式，同時也能驗證是否傳入需要的資料。</p>
+<h1 id="如何建立管道"><a href="#如何建立管道" class="headerlink" title="如何建立管道"></a>如何建立管道</h1><p>建立管道的指令和Angular的指令一模樣</p>
+<pre><code>nest generate pipe &lt;pipeName&gt;</code></pre><p>現在建立一個名為document的管道</p>
+<pre><code>nest generate pipe document</code></pre><p>這樣就建立一個空白的管道了</p>
+<pre><code>import &#123; ArgumentMetadata, Injectable, PipeTransform &#125; from &#39;@nestjs/common&#39;;
+
+
+
+
+@Injectable()
+export class DocumentPipe implements PipeTransform &#123;
+  transform(value: any, metadata: ArgumentMetadata) &#123;
+    return value;
+  &#125;
+&#125;</code></pre><p>在管道轉換資料的時候，有兩個參數</p>
+<ul>
+<li>value:傳送進來要轉換的資料</li>
+<li>metadata:資料的型別，例如：數字、字串等等</li>
+</ul>
+<h1 id="使用管道驗證資料"><a href="#使用管道驗證資料" class="headerlink" title="使用管道驗證資料"></a>使用管道驗證資料</h1><p>管道可以用來驗證是否有傳送必須的資料。管道可以在客戶端傳送過來的資料進入控制器之前，先驗證資料是否有齊全。如果不齊全，就直接拋出錯誤，不會進入到控制器。一來是為了避免浪費時間，二來避免不齊全的資料進來讓控制器運作遇到死路，發生不可預期的錯誤。</p>
+<h2 id="安裝驗證套件"><a href="#安裝驗證套件" class="headerlink" title="安裝驗證套件"></a>安裝驗證套件</h2><p>如果要驗證資料，得先安裝另外的套件：<code>class-validator</code></p>
+<pre><code>npm i --save class-validator class-transformer</code></pre><p>這個套件可以取得metatype，驗證資料的型別。因為要驗證資料的型別，所以這個功能僅適用於<code>Typescript</code>，不適用於<code>Javascript</code></p>
+<p>安裝好之後，在管道裡面引入這兩個套件</p>
+<pre><code>import &#123; validate &#125; from &#39;class-validator&#39;;
+import &#123; plainToClass &#125; from &#39;class-transformer&#39;;</code></pre><p>另外還要引入Nestjs的錯誤處理的模組</p>
+<pre><code>import &#123; ArgumentMetadata, Injectable, PipeTransform, BadRequestException  &#125; from &#39;@nestjs/common’; // 引入BadRequestException</code></pre><h2 id="使用套件來驗證資料"><a href="#使用套件來驗證資料" class="headerlink" title="使用套件來驗證資料"></a>使用套件來驗證資料</h2><p>接下來修改管道的內容，使用這個套件來驗證資料</p>
+<pre><code>export class DocumentPipe implements PipeTransform &#123;
+  async transform(value, metadata: ArgumentMetadata) &#123;
+    const &#123; metatype &#125; = metadata;
+    if (!metatype || !this.toValidate(metatype)) &#123;
+        return value;
+    &#125;
+    const object = plainToClass(metatype, value);
+    const errors = await validate(object);
+    if (errors.length &gt; 0) &#123;
+        throw new BadRequestException(&#39;資料格式錯誤&#39;);
+    &#125;
+    return value;
+  &#125;
+
+
+
+
+  private toValidate(metatype): boolean &#123;
+    const types = [String, Boolean, Number, Array, Object];
+    return !types.find((type) =&gt; metatype === type);
+  &#125;
+&#125;</code></pre><p>關於驗證的方法：</p>
+<ol>
+<li>驗證的方法<code>transform</code>:是非同步的處理方法</li>
+<li>還有一個輔助的方法 toValidate()，負責驗證過程中排除原生 Javascript 類型</li>
+<li>如果在驗證的過程中驗證錯誤，就會拋出錯誤，並且附上錯誤訊息<code>資料格式錯誤</code></li>
+<li>如果驗證成功，將會將原本的資料原封不動傳送回去，讓控制器去處理資料</li>
+</ol>
+<h2 id="定義驗證資料"><a href="#定義驗證資料" class="headerlink" title="定義驗證資料"></a>定義驗證資料</h2><p>安裝完成之後，手動新增一個檔案，定義要驗證的資料，在這裡定義這個資料為create-document.dto.ts<br>要來驗證新增檔案的時候，是否有輸入name和author</p>
+<pre><code>import &#123; IsString &#125; from &#39;class-validator&#39;;
+
+
+
+
+export class CreateCatDto &#123;
+    @IsString()
+    readonly name: string;
+
+
+
+
+    @IsString()
+    readonly author: string;
+&#125;
+</code></pre><h2 id="在控制器使用管道驗證資料"><a href="#在控制器使用管道驗證資料" class="headerlink" title="在控制器使用管道驗證資料"></a>在控制器使用管道驗證資料</h2><p><code>document.controller.ts</code><br>使用管道之前，先引入處理管道的模組<code>UsePipes</code></p>
+<pre><code>import &#123; Controller, Get, Post, Patch, Delete, Param, Body, Response, HttpStatus,UsePipes &#125; from &#39;@nestjs/common’; // 引入UsePipes</code></pre><p>在新增資料資料之前，先驗證資料有沒有符合格式</p>
+<pre><code>@Post()
+@UsePipes(DocumentPipe)
+addDocument(@Response() res, @Body() document: AddDocumentDto) &#123;
+    this.documentService.getDocumentData().subscribe(data =&gt; &#123;
+        // 做些什麼
+        res.status(HttpStatus.CREATED).json(document);
+    &#125;)
+
+&#125;</code></pre><ul>
+<li>使用<code>@UsePipes</code>裝飾器，並且指定使用剛剛建立的DocumentPipe</li>
+<li>在傳入資料的Body參數裡面，必須指令傳送資料的型別AddDocumentDto，這樣管道才會驗證</li>
+</ul>
+<p>使用postman測試<br><img src="https://ithelp.ithome.com.tw/upload/images/20191011/20120107cwYL73taVu.png" alt="https://ithelp.ithome.com.tw/upload/images/20191011/20120107cwYL73taVu.png"></p>
+<p>輸入資料的時候，故意不輸入作者的名稱，回傳就拋出錯誤</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20191011/20120107z2YbTsc46U.png" alt="https://ithelp.ithome.com.tw/upload/images/20191011/20120107z2YbTsc46U.png"><br>如果輸入正確資料，就不會拋出錯誤</p>
+<h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><p>今天的範例內容可以githib上面看到:<a target="_blank" rel="noopener" href="https://github.com/tso1158687/hello-nest-iron">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>Nestjs的管道和Angular的管道之間的差異</li>
+<li>如何建立管道</li>
+<li>如何使用管道驗證資料</li>
+</ul>
+<p>明天將會來談談如何使用管道轉換資料</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/12/2019ithomeday26/">prev</a><a class="next" href="/blog/2019/10/10/2019ithomeday24/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

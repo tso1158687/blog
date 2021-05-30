@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY5-Javascript Set和Map (下) | Jason's BLOG</title><meta name="description" content="DAY5-Javascript Set和Map (下) - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY5-Javascript Set和Map (下)</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/javascript/">javascript</a></li><li><a class="post-tag" href="/blog/tags/es6/">es6</a></li></ul></div><div class="post-content"><h1 id="DAY5-Javascript-Set-和-Map-下"><a href="#DAY5-Javascript-Set-和-Map-下" class="headerlink" title="DAY5-Javascript Set 和 Map (下)"></a>DAY5-Javascript Set 和 Map (下)</h1><h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>Map 是一種資料結構，和前一天所介紹的加工資料的方法 map()是完全不一樣的東西喔。</p>
+<p>和 Set 不一樣，Map 重視鍵和值(key/value)之間的關係，對於兩者之間關係的操作是使用 Map 的重點。</p>
+<p>Map 的用法基本上和 Set 差不多，一樣都有新增、取得、刪除、數量、是否存在、清除等用法，只不過 Set 新增內容是 add；而 Map 新增內容是 set，其他方法基本上大同小異。</p>
+<h3 id="建立-Map"><a href="#建立-Map" class="headerlink" title="建立 Map"></a>建立 Map</h3><pre><code class="tsx">let fruitMap = new Map();</code></pre>
+<p>在建立的時候，可以給予初始值，使用陣列</p>
+<pre><code class="tsx">let fruitMap = new Map([
+  [&#39;a&#39;, &#39;apple&#39;],
+  [&#39;b&#39;, &#39;banana&#39;],
+  [&#39;c&#39;, &#39;cherry&#39;],
+]);</code></pre>
+<h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><p>新鍵與增(key/value)值到 Map 中</p>
+<pre><code class="tsx">let fruitMap = new Map();
+fruitMap.set(&#39;a&#39;, &#39;apple&#39;);
+fruitMap.set(&#39;b&#39;, &#39;banana&#39;);
+fruitMap.set(&#39;c&#39;, &#39;cherry&#39;);</code></pre>
+<h3 id="get"><a href="#get" class="headerlink" title="get"></a>get</h3><p>取得鍵相對應的值</p>
+<pre><code class="tsx">let fruitMap = new Map();
+fruitMap.set(&#39;a&#39;, &#39;apple&#39;);
+fruitMap.get(&#39;a&#39;); // apple</code></pre>
+<h3 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h3><p>從 Map 中刪除某一對鍵與值</p>
+<pre><code class="tsx">let fruitMap = new Map();
+fruitMap.set(&#39;a&#39;, &#39;apple&#39;);
+fruitMap.set(&#39;b&#39;, &#39;banana&#39;);
+fruitMap.set(&#39;c&#39;, &#39;cherry&#39;);
+fruitMap.delete(&#39;c&#39;); // 刪除c和cherry這組</code></pre>
+<h3 id="size"><a href="#size" class="headerlink" title="size"></a>size</h3><p>取得 Map 中的數量</p>
+<pre><code class="tsx">let fruitMap = new Map();
+fruitMap.set(&#39;a&#39;, &#39;apple&#39;);
+fruitMap.set(&#39;b&#39;, &#39;banana&#39;);
+fruitMap.set(&#39;c&#39;, &#39;cherry&#39;);
+fruitMap.size; // 3</code></pre>
+<h3 id="has"><a href="#has" class="headerlink" title="has"></a>has</h3><p>取得 Map 中，某個鍵是否存在。如果存在返回 <code>true</code> ，反之返回 <code>false</code></p>
+<pre><code class="tsx">let fruitMap = new Map();
+fruitMap.set(&#39;a&#39;, &#39;apple&#39;);
+fruitMap.has(&#39;a&#39;); // true
+fruitMap.has(&#39;f&#39;); // false</code></pre>
+<h3 id="clear"><a href="#clear" class="headerlink" title="clear"></a>clear</h3><p>清空 Map 所有東西</p>
+<pre><code class="tsx">let fruitMap = new Map();
+fruitMap.set(&#39;a&#39;, &#39;apple&#39;);
+fruitMap.set(&#39;b&#39;, &#39;banana&#39;);
+fruitMap.set(&#39;c&#39;, &#39;cherry&#39;); // []</code></pre>
+<h2 id="實用例子-取代-switch-case"><a href="#實用例子-取代-switch-case" class="headerlink" title="實用例子-取代 switch case"></a>實用例子-取代 switch case</h2><p>switch case 方便的地方在於，可以依照各種不同的情境去寫不同的對應情況，如果對應不到，也會有預設情況。但是缺點在於如果情境很多的時候，程式碼會很長一串，極為冗長，而且不好管理。</p>
+<p>以下是一個輸入水果種類，就會告訴告訴你現在一斤多少錢。如果沒有販售，則會告訴你現在無販售的方法。</p>
+<h3 id="取得水果的價錢-switch-case-版本"><a href="#取得水果的價錢-switch-case-版本" class="headerlink" title="取得水果的價錢-switch case 版本"></a>取得水果的價錢-switch case 版本</h3><pre><code class="jsx">function getFruitPriceBySwicth(fruit) &#123;
+  switch (fruit) &#123;
+    case &#39;橘子&#39;:
+      console.log(&#39;橘子一斤200元&#39;);
+      break;
+    case &#39;蘋果&#39;:
+      console.log(&#39;蘋果一斤100元&#39;);
+      break;
+    case &#39;香蕉&#39;:
+      console.log(&#39;香蕉一斤80元&#39;);
+      break;
+    default:
+      console.log(`不好意思，我們沒有賣$&#123;fruit&#125;`);
+  &#125;
+&#125;
+getFruitPriceBySwicth(&#39;西瓜&#39;); // 不好意思，我們沒有賣西瓜
+getFruitPriceBySwicth(&#39;橘子&#39;); // 橘子一斤200元</code></pre>
+<h3 id="取得水果的價錢-map-版本"><a href="#取得水果的價錢-map-版本" class="headerlink" title="取得水果的價錢-map 版本"></a>取得水果的價錢-map 版本</h3><pre><code class="jsx">function getFruitPriceByMap(fruit) &#123;
+  let fruitPriceMap = new Map([
+    [&#39;橘子&#39;, 200],
+    [&#39;蘋果&#39;, 100],
+    [&#39;香蕉&#39;, 80],
+  ]);
+  let price = fruitPriceMap.get(fruit);
+  let result = price
+    ? `$&#123;fruit&#125;一斤$&#123;price&#125;元`
+    : `不好意思，我們沒有賣$&#123;fruit&#125;`;
+  console.log(result);
+&#125;
+getFruitPriceByMap(&#39;西瓜&#39;); // 不好意思，我們沒有賣西瓜
+getFruitPriceByMap(&#39;橘子&#39;); // 橘子一斤200元</code></pre>
+<p>兩個方法的結果都是一樣的。</p>
+<p>使用 map 的好處就是，程式碼明顯短多了，而且更加容易維護。如果未來要增加或減少水果的種類，只要修改 friutPriceMap 這個物件，其他的地方都不需要修改。</p>
+<p>但是如果使用 switch case 不論增加或減少都要修改 case，要修改的地方就不只一行了。</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed6/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed4/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-7) Angular的事件綁定介紹與應用-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-7) Angular的事件綁定介紹與應用-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-7) Angular的事件綁定介紹與應用-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-23<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>在前幾邊介紹到<code>插值法</code>、<code>ngFor</code>、<code>ngIf</code>、<code>ngSwitch</code>等等方法，最主要都是顯示資料的應用。最後介紹到雙向綁定-ngModel，修改資料時會修改綁定的資料外，也會修改畫面顯示的資料。現在要更進一步，把<code>ngModel</code>修改的資料推送到原始的資料陣列，就要使用事件方法來修改</p>
+<h1 id="事件綁定"><a href="#事件綁定" class="headerlink" title="事件綁定"></a>事件綁定</h1><p>事件綁定會偵聽某些事件，比如按鍵、滑鼠移動、點選等等<br>下圖取自於Angular官網<br><img src="https://ithelp.ithome.com.tw/upload/images/20190923/20120107zZLJ4VI6vB.png" alt="https://ithelp.ithome.com.tw/upload/images/20190923/20120107zZLJ4VI6vB.png"></p>
+<p>事件綁定使用掛號（）表示綁定的事件，括號裡面表示綁定事件的類型，例如上圖為綁定點擊事件。右邊為事件應該出發的方法，方法會定義在ts檔案裡面的function裡面。<br>因此，上面這個圖片就是這樣子：<br>有一個Save的按鈕，綁定著click事件，如果使用者點擊這個按鈕，則會觸發onSave的function。</p>
+<p>Angular所綁定的事件，除了<code>點擊(click)</code>事件以外，支援<code>所有DOM事件</code>，像是：<code>失去焦點(blur)</code>、<code>滑鼠移入(mouseover)</code>、<code>滑鼠移出(mouseout)</code>等等事件。</p>
+<h1 id="事件綁定的應用"><a href="#事件綁定的應用" class="headerlink" title="事件綁定的應用"></a>事件綁定的應用</h1><p>了解事件綁定的用法之前，還是繼續之前的英雄的例子，再來看到昨天的英雄們：</p>
+<pre><code>  heros = [
+    &#123; name: &#39;兩津勘吉&#39;, age: 35 &#125;,
+    &#123; name: &#39;秋本麗子&#39;, age: 25 &#125;,
+    &#123; name: &#39;野比大雄&#39;, age: 12 &#125;,
+    &#123; name: &#39;江戶川柯南&#39;, age: 8 &#125;
+  ];</code></pre><p>昨天還有使用ngModel，做一個雙向綁定的輸入框：<br><img src="https://ithelp.ithome.com.tw/upload/images/20190923/20120107u8BRUWZ5ZH.png" alt="https://ithelp.ithome.com.tw/upload/images/20190923/20120107u8BRUWZ5ZH.png"></p>
+<p>今天要來為輸入框新增一個”加入英雄”按鈕，將新的英雄加入英雄列表當中。</p>
+<h2 id="加入新的英雄"><a href="#加入新的英雄" class="headerlink" title="加入新的英雄"></a>加入新的英雄</h2><p>每個英雄的需要名字和年齡，因此我們新增兩個輸入框，一個填寫新英雄的姓名，一個填寫新英雄的年齡</p>
+<p>另外還要新增一個”加入英雄”的按鈕，準備透過點擊按鈕加入新英雄。<br><code>html</code></p>
+<pre><code>&lt;p&gt;
+加入新的英雄：
+&lt;/p&gt;
+姓名：&lt;input type=&quot;text&quot; [(ngModel)]=&#39;newHero.name&#39; &gt;
+年齡：&lt;input type=&quot;text&quot; [(ngModel)]=&#39;newHero.age&#39; &gt;
+&lt;button&gt;加入英雄&lt;/button&gt;</code></pre><p>在輸入框input裡面，利用上一篇所學到的<code>ngModel</code>綁定輸入的值。利用一個newHero的物件，去儲存新英雄的姓名和年齡。</p>
+<p>再來為按鈕加上click點擊事件，並且指定點擊之後，觸發addHero事件</p>
+<pre><code>&lt;p&gt;
+加入新的英雄：
+&lt;/p&gt;
+姓名：&lt;input type=&quot;text&quot; [(ngModel)]=&#39;newHero.name&#39; &gt;
+年齡：&lt;input type=&quot;text&quot; [(ngModel)]=&#39;newHero.age&#39; &gt;
+&lt;button (click)=&quot;addHero()&quot;&gt;加入英雄&lt;/button&gt; // 加入點擊事件，點擊後觸發addHero事件</code></pre><p>再來到元件的ts檔案事件<br><code>typescript</code></p>
+<p>新增事件之前，別忘記先定義我們用來新增英雄的物件newHero：</p>
+<pre><code>newHero=&#123;name:&#39;&#39;,age:&#39;&#39;&#125;</code></pre><p>新增事件：</p>
+<pre><code>addHero() &#123;
+    this.heros.push(this.newHero)
+    this.newHero=&#123;name:&#39;&#39;,age:&#39;&#39;&#125;
+&#125;</code></pre><p>addHero事件觸發之後，將newHero物件內容推到heros物件裡面，之後再將newHero物件的內容清空<br>hero物件裡面如果有新內容，ngFor的指令便會更新，將新內容顯示出來（ngFor檢測到新內容的機制稱為<code>ngZone</code>，不過這個不在我們的討論範圍</p>
+<p>如此一來，新增英雄的流程就完成了啦<br>輸入姓名及年齡，點擊加入英雄的按鈕之後，便會加入到列表之中。<br><img src="https://ithelp.ithome.com.tw/upload/images/20190923/20120107t6ToYvMNkk.png" alt="https://ithelp.ithome.com.tw/upload/images/20190923/20120107t6ToYvMNkk.png"></p>
+<h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1><p>今天的範例內容可以在這裡看到:<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-iron-jason-d7?file=src/app/app.component.ts">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>認識事件綁定</li>
+<li>事件綁定如何與ngModel 結合</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/24/2019ithomeday8/">prev</a><a class="next" href="/blog/2019/09/22/2019ithomeday6/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

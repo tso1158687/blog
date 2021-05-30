@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-27) Nestjs 異常過濾器(Exception filters)-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-27) Nestjs 異常過濾器(Exception filters)-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-27) Nestjs 異常過濾器(Exception filters)-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-13<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nestjs/">nestjs</a></li></ul></div><div class="post-content"><h1 id="什麼是異常過濾器"><a href="#什麼是異常過濾器" class="headerlink" title="什麼是異常過濾器"></a>什麼是異常過濾器</h1><p>Nestjs 有一個框架層級的異常處理機制，負責捕捉所有的異常狀態。如果有異常狀態沒有被處理的話，那麼Nestjs的異常處理器便會發出回應，說明某些地方異常出錯了。</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20191013/20120107EsMBXcVK6X.png" alt="https://ithelp.ithome.com.tw/upload/images/20191013/20120107EsMBXcVK6X.png"></p>
+<p>因此當有錯誤是沒有被處理的時候，就會回傳預設的錯誤訊息：</p>
+<pre><code>&#123;
+    &quot;statusCode&quot;: 500,
+    &quot;message&quot;: &quot;Internal server error&quot;
+&#125;</code></pre><p>當然，除非是預期之外的錯誤，不然基本上所有可以預期的錯誤都是要去處理的</p>
+<h1 id="使用異常處理器"><a href="#使用異常處理器" class="headerlink" title="使用異常處理器"></a>使用異常處理器</h1><p>Nestjs內建<code>HttpException</code>的class去處理捕捉到的異常，可以將捕捉到的異常轉換成相對應的錯誤訊息<br>如果要使用HttpException，則引入</p>
+<pre><code>import &#123;HttpException&#125; from &#39;@nestjs/common&#39;</code></pre><p>現在來測試異常處理器，修改一下取得所有文件的API，假設不管三七二十一，直接拋出錯誤</p>
+<pre><code>@Get()
+getAllDocuments(@Response() res) &#123;
+    throw new HttpException(&#39;禁止使用&#39;, HttpStatus.FORBIDDEN);
+&#125;</code></pre><p>測試一下，錯誤訊息如下</p>
+<pre><code>&#123;
+  &quot;statusCode&quot;: 403,
+  &quot;message&quot;: &quot;禁止使用&quot;
+&#125;</code></pre><p><img src="https://ithelp.ithome.com.tw/upload/images/20191013/20120107ihtRr7pHE9.png" alt="https://ithelp.ithome.com.tw/upload/images/20191013/20120107ihtRr7pHE9.png"></p>
+<p>這是最簡單的自訂錯誤的方法，也可以自訂更多的錯誤訊息</p>
+<pre><code>@Get()
+getAllDocuments(@Response() res) &#123;
+    throw new HttpException(&#123;
+        status: &#39;朕知道了&#39;,
+        error: &#39;錯誤訊息&#39;,
+    &#125;, 404);
+&#125;</code></pre><p>測試一下</p>
+<pre><code>&#123;
+  &quot;status&quot;: &quot;朕知道了&quot;,
+  &quot;error&quot;: &quot;錯誤訊息&quot;
+&#125;</code></pre><p><img src="http://" alt="![https://ithelp.ithome.com.tw/upload/images/20191013/20120107Xx7ZbN70TH.png](https://ithelp.ithome.com.tw/upload/images/20191013/20120107Xx7ZbN70TH.png)"></p>
+<p>如果覺得這樣的錯誤訊息還是不夠的話，那麼還可以更進階的自訂。因為HttpException是一個class，所以可以自己建立一個class使用<code>super</code>來擴充原本的HttpException</p>
+<pre><code>export class ForbiddenException extends HttpException &#123;
+  constructor() &#123;
+    super(&#39;Forbidden&#39;, HttpStatus.FORBIDDEN);
+  &#125;
+&#125;</code></pre><h1 id="更多的例外錯誤處理"><a href="#更多的例外錯誤處理" class="headerlink" title="更多的例外錯誤處理"></a>更多的例外錯誤處理</h1><p>除了HttpException之外，Nestjs還有內建很多常見的錯誤處理，減少自行處理的麻煩</p>
+<ul>
+<li>BadRequestException</li>
+<li>UnauthorizedException</li>
+<li>NotFoundException</li>
+<li>ForbiddenException</li>
+<li>NotAcceptableException</li>
+<li>RequestTimeoutException</li>
+<li>ConflictException</li>
+<li>GoneException</li>
+<li>PayloadTooLargeException</li>
+<li>UnsupportedMediaTypeException</li>
+<li>UnprocessableException</li>
+<li>InternalServerErrorException</li>
+<li>NotImplementedException</li>
+<li>BadGatewayException</li>
+<li>ServiceUnavailableException</li>
+<li>GatewayTimeoutException</li>
+</ul>
+<p>＃自訂異常過濾器</p>
+<p>如果不想使用內建的異常過濾器，想更擁有更多自訂的空間，那麼也可以自己做一個異常過濾器</p>
+<h2 id="建立自訂過濾器"><a href="#建立自訂過濾器" class="headerlink" title="建立自訂過濾器"></a>建立自訂過濾器</h2><pre><code>Nest generate filter &lt;filterName&gt;</code></pre><p>建立一個稱為custom的過濾器</p>
+<pre><code>nest generate filter custom</code></pre><p>自訂異常過濾器</p>
+<pre><code>import &#123; ExceptionFilter, Catch, ArgumentsHost &#125; from &#39;@nestjs/common&#39;;
+import &#123; HttpException &#125; from &#39;@nestjs/common&#39;;
+
+// 捕捉錯誤異常
+@Catch(HttpException)
+export class HttpExceptionFilter implements ExceptionFilter &#123;
+  catch(exception: HttpException, host: ArgumentsHost) &#123;
+    const ctx = host.switchToHttp(); // 取得內容
+    const response = ctx.getResponse(); // 取得回應
+    const request = ctx.getRequest(); // 取得請求
+    const status = exception.getStatus();
+
+
+
+
+    // 自訂回應內容
+    response
+      .status(status)
+      .json(&#123;
+        statusCode: exception.getStatus(),
+        timestamp: new Date().toISOString(),
+        path: request.url,
+      &#125;);
+  &#125;
+&#125;</code></pre><ul>
+<li><code>@Catch()</code>裝飾器可以告訴Nestjs這個過濾器的內容要綁定到HttpException上面</li>
+</ul>
+<h1 id="在控制器套用自訂異常過濾器"><a href="#在控制器套用自訂異常過濾器" class="headerlink" title="在控制器套用自訂異常過濾器"></a>在控制器套用自訂異常過濾器</h1><p>匯入<code>@UseFilters</code><br>再度測試取得所有文件的getAllDocuments方法</p>
+<pre><code>@Get()
+@UseFilters(CustomFilter)
+getAllDocuments(@Response() res) &#123;
+    throw new HttpException(&#39;Forbidden&#39;, HttpStatus.FORBIDDEN);
+&#125;</code></pre><p>使用postman測試<br><img src="https://ithelp.ithome.com.tw/upload/images/20191013/20120107dJgKQ0JGXL.png" alt="https://ithelp.ithome.com.tw/upload/images/20191013/20120107dJgKQ0JGXL.png"></p>
+<h1 id="在整個系統使用異常過濾器"><a href="#在整個系統使用異常過濾器" class="headerlink" title="在整個系統使用異常過濾器"></a>在整個系統使用異常過濾器</h1><p>如果不只在某個控制器使用自訂過濾器而是要在整個系統使用，也可以把自訂的異常過濾器拉到系統層級<br><code>main.ts</code></p>
+<pre><code>async function bootstrap() &#123;
+  const app = await NestFactory.create(ApplicationModule);
+  app.useGlobalFilters(new HttpExceptionFilter()); // 使用系統層級的過濾器
+  await app.listen(3000);
+&#125;
+bootstrap();</code></pre><h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><p>今天的範例內容可以github上面看到:<a target="_blank" rel="noopener" href="https://github.com/tso1158687/hello-nest-iron">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>什麼是異常過濾器</li>
+<li>如何使用內建的異常過濾器</li>
+<li>如何自訂異常過濾器</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/14/2019ithomeday28/">prev</a><a class="next" href="/blog/2019/10/12/2019ithomeday26/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

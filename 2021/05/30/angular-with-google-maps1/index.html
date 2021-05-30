@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Angular 如何整合 Google Maps - 比較篇 | Jason's BLOG</title><meta name="description" content="Angular 如何整合 Google Maps - 比較篇 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Angular 如何整合 Google Maps - 比較篇</h1><div class="post-info"><a></a>2021-05-30<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li><li><a class="post-tag" href="/blog/tags/google-maps/">google maps</a></li></ul></div><div class="post-content"><h1 id="Angular-如何整合-Google-Maps-比較篇"><a href="#Angular-如何整合-Google-Maps-比較篇" class="headerlink" title="Angular 如何整合 Google Maps - 比較篇"></a>Angular 如何整合 Google Maps - 比較篇</h1><p>Angular和Google Maps都是google推出的自家產品，一個是前端框架、一個是地圖服務。但是兩者一直沒有很好的結合，想要整合這兩者，必須自己想辦法、各顯神通去整合</p>
+<p>目前在Angular使用google maps有下列三個方法</p>
+<ul>
+<li>Maps Javascript API</li>
+<li>AGM (Angular Google Maps)</li>
+<li>Angular Google Maps component</li>
+</ul>
+<h1 id="三大套件比較"><a href="#三大套件比較" class="headerlink" title="三大套件比較"></a>三大套件比較</h1><p>以下以Angular的角度，來分析這幾個套件的優劣</p>
+<h2 id="Maps-Javascript-API"><a href="#Maps-Javascript-API" class="headerlink" title="Maps Javascript API"></a>Maps Javascript API</h2><h3 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h3><ul>
+<li>Google Maps 團隊原生支援，所有套件的基礎，都是包裝官方API整合而生</li>
+<li>最廣泛通用的格式，不限定 Angular，所有框架都可以使用，無痛轉換</li>
+<li>官方說明文件詳細豐富，基本上只要複製貼上都可以使用</li>
+</ul>
+<h3 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h3><ul>
+<li>為 Javascript ，非Typescript，如果要使用Typescript，享受Typescript的好處的話，需要自行額外整合</li>
+<li>沒有與Angular整合，如果要利用Angular生命週期或資料綁定等方法去操作的話，需要花額外大量時間整合</li>
+</ul>
+<h2 id="AGM-Angular-Google-Maps"><a href="#AGM-Angular-Google-Maps" class="headerlink" title="AGM (Angular Google Maps)"></a>AGM (Angular Google Maps)</h2><h3 id="優點-1"><a href="#優點-1" class="headerlink" title="優點"></a>優點</h3><ul>
+<li>整合了 Angular，並且封裝得很好，使用上友善方便</li>
+<li>大量利用 Angular 的特性，使用上幾乎沒有學習成本</li>
+<li>Typescript型別定義完整，對於開發速度很有幫助</li>
+</ul>
+<h3 id="缺點-1"><a href="#缺點-1" class="headerlink" title="缺點"></a>缺點</h3><ul>
+<li>基本用法很簡單，但是如果要深度客製化的話，因為文件稀少，難度會變得很高，需要自己去翻原始法，自己會意使用方法，難度會呈現指數成長</li>
+<li>此套件為開發者自行發起的專案，很難保證是否一直持續穩定更新，保證相容性。現在最新的版本已經幾乎快要一年沒有更新，跟 Angular Ivy 已經有相容性的問題了</li>
+</ul>
+<h2 id="Angular-Google-Maps-component"><a href="#Angular-Google-Maps-component" class="headerlink" title="Angular Google Maps component"></a>Angular Google Maps component</h2><h3 id="優點-2"><a href="#優點-2" class="headerlink" title="優點"></a>優點</h3><ul>
+<li>Angular 官方團隊開發，與AGM一樣，封裝良好，可以與Angular各種特性良好結合</li>
+<li>更新速度快，與新版本發布速度一致，不用擔心不相容或是成為孤兒版本</li>
+<li>文件齊全，客製化非常簡單</li>
+</ul>
+<h2 id="缺點-2"><a href="#缺點-2" class="headerlink" title="缺點"></a>缺點</h2><ul>
+<li>惰性載入 (Lazy Loading)有點麻煩也有點愚蠢</li>
+<li>不同環境的切換管理也很麻煩</li>
+</ul>
+<h1 id="套件選擇"><a href="#套件選擇" class="headerlink" title="套件選擇"></a>套件選擇</h1><p>介紹完三個套件的優缺點之後，如果要我推薦使用一套的話，我的推薦順序會是這樣:</p>
+<p>Angular Google Maps component &gt; Maps Javascript API &gt; AGM (Angular Google Maps)</p>
+<p>首先，我非常強烈推薦使用Angular官方的套件，原因非常簡單，就是他整合的非常好，安裝完就可以直接使用，幾乎沒有任何學習成本。唯一麻煩的地方就是，管理不同環境和惰性載入有點麻煩，但總體來說，瑕不掩瑜，不是致命的缺點，只是有點麻煩，也有辦法可以自己手動繞過去。</p>
+<p>再來會推薦使用地圖原生的 Maps Javascript API，原因是這是地圖團隊官方的套件，參考範例和文件是最豐富的，幾乎每一種客製化的範例都可以在上面找到並且直接複製使用。但有個明顯的缺點就是，Javascript與Angular並無整合，如果要使用各種生命周期或事件，需要自己另外花時間去整合，這個就很考驗開發者的功力</p>
+<p>最後比較不推薦的是 AGM，AGM雖然和angular整合程度很好，但是缺點很致命，並沒有持續在更新，與新版的Angular整合還有些問題，建議如果沒有使用過的話，那也不必使用了。但是，如果是舊版的Angular (Angular Ivy之前)，並且原本就有使用的話，那還是非常推薦使用。畢竟最麻煩的地方就是整合 Angular，如果已經有第三方整合好了，而且功能又完整的話，這還是一個很強大的套件。</p>
+<p>下一篇，將介紹如何安裝與使用 Angular Google Maps component ，並且如何自己管理不同環境的切換</p>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/maps/documentation/javascript/overview">Maps Javascript API</a></li>
+<li><a target="_blank" rel="noopener" href="https://angular-maps.com/">AGM (Angular Google Maps)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/angular/components/blob/master/src/google-maps/README.md">Angular Google Maps component</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/05/30/angular-with-google-maps2/">prev</a><a class="next" href="/blog/2021/05/14/depoly-nestjs-to-heroku/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-3) 建立Angular 環境-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-3) 建立Angular 環境-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-3) 建立Angular 環境-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-19<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>Angular 提供一套很完整的工具去建立各種angular會使用到的元件稱為Angular CLI，只要簡單的指令就可以將Angular的環境建立起來，馬上就可以進入開發</p>
+<h1 id="安裝Angular環境"><a href="#安裝Angular環境" class="headerlink" title="安裝Angular環境"></a>安裝Angular環境</h1><p>在安裝Angular CLI之前，要先確認有沒有安裝Nodejs ，如果沒有請先至官方網站安裝Nodejs，安裝完之後，輸入: </p>
+<pre><code>node --version</code></pre><p>即可看到Nodejs的版本號碼，就代表安裝成功<br><img src="https://ithelp.ithome.com.tw/upload/images/20190919/20120107OH31SeYiQi.png" alt="https://ithelp.ithome.com.tw/upload/images/20190919/20120107OH31SeYiQi.png"></p>
+<p>接下來就可以安裝Angular CLI，輸入</p>
+<pre><code>npm install @angular/cli -g</code></pre><p>安裝完成之後，輸入</p>
+<pre><code>ng --version</code></pre><p>檢視是否有安裝完成<br><img src="https://ithelp.ithome.com.tw/upload/images/20190919/20120107h1fPTHB47a.png" alt="https://ithelp.ithome.com.tw/upload/images/20190919/20120107h1fPTHB47a.png"></p>
+<p>看到大大的Angular CLI的紅字，代表安裝完成了啦，就可以馬上進入Angular的世界囉!</p>
+<p>註:Angular 從 8.0開始要求<code>Nodejs版本要在10以上才能使用</code>，本系列文章皆以最新的版本 Angular 8 撰寫。如果是新安裝的使用者就沒有任何問題。</p>
+<p>但是如果原本就有其他的Angular專案，且專案的Angular版本小於8(ex:7,6,5,4….)則需要Nodejs 8.x的版本才能運行。雖然版本更新總是要壯士斷腕拋棄過舊的版本，卻是對於維護不同版本Angular的來莫大的困擾。不過不用擔心，系列文最後，會寫一篇如何使用<code>NVM</code>快速地切換Nodejs版本。</p>
+<p>輸入指令讓Angular CLI自動幫你啟動一個全新的Angular專案</p>
+<pre><code>ng new &lt;project-name&gt;</code></pre><p>以我這次要分享的專案為例，我就稱為<code>todolist-iron</code>，因此我輸入:</p>
+<pre><code>ng new todolist-iron</code></pre><p>接下來Angular CLI 就會問你一些配置的問題，例如</p>
+<ol>
+<li><p>Would you like to add angular routing? (要不要先預先幫你建立好angular路由?) </p>
+</li>
+<li><p>Which style sheet format would like to use (喜歡使用哪一種格式的樣式?)<br><img src="https://ithelp.ithome.com.tw/upload/images/20190919/20120107gyhW13GOmO.png" alt="https://ithelp.ithome.com.tw/upload/images/20190919/20120107gyhW13GOmO.png"></p>
+</li>
+<li><p>router是SPA的框架切換頁面重要的工具，所以先讓Angular CLI建立好，節省之後自己建立的時間，在這邊我選擇 Yes。</p>
+</li>
+<li><p>問喜歡哪一種格式的樣式就是個人喜好的問題，你可以選擇最原始的CSS，也可以選擇其他樣式再讓Angular幫你轉譯成CSS，純粹憑習慣選擇。在此我選擇SCSS。</p>
+</li>
+</ol>
+<p>等到專案啟動完成之後，進入專案資料夾</p>
+<pre><code>cd todolist-iron</code></pre><p>啟動本機伺服器</p>
+<pre><code>ng serve</code></pre><p>啟動完成之後，在瀏覽器輸入:</p>
+<pre><code>http://localhost:4200/</code></pre><p>或是懶一點，輸入參數<code>-open</code> 啟動完成之後，自動打開網頁</p>
+<pre><code>ng serve -open</code></pre><p><img src="https://ithelp.ithome.com.tw/upload/images/20190919/20120107nkQShexDOx.png" alt="https://ithelp.ithome.com.tw/upload/images/20190919/20120107nkQShexDOx.png"></p>
+<p>看到Angular大大的標誌，代表我們的專案啟動成功，終於踏入Angular的世界啦，接下來我們將繼續探索Angular的世界!</p>
+<p>註:新版的CLI修改了起始頁，如果看到這個畫面，同樣也是踏入Angular的世界了!<br><img src="https://ithelp.ithome.com.tw/upload/images/20190919/20120107Tuh03hbimt.png" alt="https://ithelp.ithome.com.tw/upload/images/20190919/20120107Tuh03hbimt.png"></p>
+<h1 id="額外的設定-文字編輯器"><a href="#額外的設定-文字編輯器" class="headerlink" title="額外的設定-文字編輯器"></a>額外的設定-文字編輯器</h1><p>開發Angular專案，你可以使用任何一個文字編輯器，像是Sublime、Atom、Webstorm、Notepad++，甚至是windows內建的記事本都可以，只要用得順手的文字編輯器，都是適合的文字編輯器。</p>
+<p>但是如果你還沒有喜歡的文字編輯器或想試試看很強大的文字編輯器，那麼推薦使用:<a target="_blank" rel="noopener" href="https://code.visualstudio.com">Visual Studio Code</a> (簡稱VS Code)<br>VS code整合了很多前端開發很需要且常用的功能，如果功能不能的話，還可以安裝自己所需要的擴充功能。</p>
+<p>這裡推薦，可以安裝實用的Angular套件:<a target="_blank" rel="noopener" href="https://github.com/doggy8088/angular-extension-pack">angular-extension-pack</a><br>可以直接在VS Code裡面的擴充頁面搜尋Angular之後，看到作者為Will 保哥的套件之後點擊 <code>Install</code> 安裝，裡面整合很多開發Angular 非常好用的工具，可以加快開發的速度。</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20190919/20120107fT8ivKAwux.png" alt="https://ithelp.ithome.com.tw/upload/images/20190919/20120107fT8ivKAwux.png"></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/20/2019ithomeday4/">prev</a><a class="next" href="/blog/2019/09/18/2019ithomeday2/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

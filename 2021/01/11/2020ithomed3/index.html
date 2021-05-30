@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY3-常見的Javascript使用技巧與情境 | Jason's BLOG</title><meta name="description" content="DAY3-常見的Javascript使用技巧與情境 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY3-常見的Javascript使用技巧與情境</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/javascript/">javascript</a></li><li><a class="post-tag" href="/blog/tags/es6/">es6</a></li></ul></div><div class="post-content"><h1 id="DAY3-常見的-Javascript-使用技巧與情境"><a href="#DAY3-常見的-Javascript-使用技巧與情境" class="headerlink" title="DAY3-常見的 Javascript 使用技巧與情境"></a>DAY3-常見的 Javascript 使用技巧與情境</h1><p>Javascript ES6 帶來很多方便且實用的新語法(其實 ES6 也不新的，但是 IE 就是不支援 😢)，</p>
+<p>很多網站都有很詳細介紹新語法，筆者本人也是在各大網站看了好多關於新語法的介紹，每次看完都會有一種感覺:哇!好方便喔，太厲害了……但是，要用在哪呢?真的要使用的時候反而想不到到底要用什麼方法去處理，所以在此會以使用情境作為分類。</p>
+<p>本篇的介紹的例子都會以下列的範例做示範</p>
+<pre><code class="ts">let people = [
+  &#123;
+    name: &#39;哆啦A夢&#39;,
+    age: 10,
+    weight: 129,
+    height: 129,
+    favorite: &#39;銅鑼燒&#39;,
+    isStudent: false,
+  &#125;,
+  &#123;
+    name: &#39;葉大雄&#39;,
+    age: 11,
+    weight: 40,
+    height: 141,
+    favorite: &#39;睡午覺&#39;,
+    isStudent: true,
+  &#125;,
+  &#123;
+    name: &#39;靜香&#39;,
+    age: 11,
+    weight: 35,
+    height: 135,
+    favorite: &#39;銅鑼燒&#39;,
+    isStudent: true,
+  &#125;,
+];
+
+let people2 = [
+  &#123;
+    name: &#39;胖虎&#39;,
+    age: 12,
+    weight: 50,
+    height: 150,
+    favorite: &#39;看漫畫&#39;,
+    isStudent: true,
+  &#125;,
+  &#123;
+    name: &#39;小夫&#39;,
+    age: 11,
+    weight: 40,
+    height: 139,
+    favorite: &#39;玩遙控模型&#39;,
+    isStudent: true,
+  &#125;,
+];</code></pre>
+<p>資料說明：這裡有兩群人，分別是哆啦 A 夢、大雄、靜香一群。胖虎和小夫一群。每個人分別都有：姓名、年齡、體重、身高、喜好、是否是學生等資料。</p>
+<h2 id="every-如果想知道是不是所有人都是學生"><a href="#every-如果想知道是不是所有人都是學生" class="headerlink" title="every-如果想知道是不是所有人都是學生"></a>every-如果想知道是不是所有人都是學生</h2><p>情境翻譯：我想知道這群人裡面，是不是所有人都是學生。至於學生是誰並不重要，我只要知道是(<code>true</code>)或不是(<code>false</code>)</p>
+<pre><code class="ts">// 是否有人是學生
+let allStudents = people.every((e) =&gt; e.isStudent);
+console.log(&#39;是不是所有人都是學生:&#39;, allStudents); // false 哆啦A夢不是</code></pre>
+<h2 id="some-如果想要知道有沒有人是學生"><a href="#some-如果想要知道有沒有人是學生" class="headerlink" title="some-如果想要知道有沒有人是學生"></a>some-如果想要知道有沒有人是學生</h2><p>情境翻譯：我想知道這群人裡面，有沒有人是學生（至少有一個人是學生）。至於有幾個或是那個人是誰並不重要，我只要知道有(<code>true</code>)或沒有(<code>false</code>)</p>
+<pre><code class="ts">// 是否有人是學生
+let isSomeoneStudent = people.some((e) =&gt; e.isStudent);
+console.log(&#39;是否有人是學生:&#39;, isSomeoneStudent); // true 大雄和靜香是學生</code></pre>
+<h2 id="filter-如果想要找出體重小於一百公斤的人"><a href="#filter-如果想要找出體重小於一百公斤的人" class="headerlink" title="filter-如果想要找出體重小於一百公斤的人"></a>filter-如果想要找出體重小於一百公斤的人</h2><p>情境翻譯：如果今天去遊樂園玩，某項遊樂設施有限制體重，限制一百公斤，超過的人不能乘坐。那麼我想要知道誰的體重小於一百公斤。我需要體重小於一百公斤的人的名單（哆啦 A 夢 QQ）</p>
+<pre><code class="ts">let weightLessThanOneHundred = people.filter((e) =&gt; e.weight &lt; 100);
+// 哆啦A夢大於100，不應該出現哆啦A夢
+console.log(&#39;體重小於100的人：&#39;, weightLessThanOneHundred);</code></pre>
+<h2 id="find-如果想要喜歡睡午覺的人"><a href="#find-如果想要喜歡睡午覺的人" class="headerlink" title="find-如果想要喜歡睡午覺的人"></a>find-如果想要喜歡睡午覺的人</h2><p>情境翻譯：如果今天有一個特殊的才藝比賽，要比賽睡午覺。因此我要找出喜歡睡午覺的人去參加比賽。但是因為名額只有一名，所以我要找出第一個符合條件的人</p>
+<pre><code class="ts">let isSomeLikeSleep = people.find((e) =&gt; e.favorite === &#39;睡午覺&#39;);
+// 大雄喜歡睡午覺
+console.log(&#39;喜歡睡午覺的人：&#39;, isSomeLikeSleep);</code></pre>
+<h3 id="註：有沒有發現到，filter-和-find-都是找出某個條件後的結果"><a href="#註：有沒有發現到，filter-和-find-都是找出某個條件後的結果" class="headerlink" title="註：有沒有發現到，filter 和 find 都是找出某個條件後的結果"></a>註：有沒有發現到，filter 和 find 都是找出某個條件後的結果</h3><p>但是同樣都是過濾條件後的結果，還是有使用情境上的差別的</p>
+<ul>
+<li>filter:找出出所有符合條件的結果</li>
+<li>find:找出第一個符合條件的結果</li>
+</ul>
+<p>可以依照使用情境不同的需求，使用不同的方法</p>
+<h2 id="map-如果想要將每個人的年齡都增加一歲"><a href="#map-如果想要將每個人的年齡都增加一歲" class="headerlink" title="map-如果想要將每個人的年齡都增加一歲"></a>map-如果想要將每個人的年齡都增加一歲</h2><p>情境翻譯：如果一年過去了，每個人都長大一歲了，現在要將每個人的年齡資料都加加一歲</p>
+<pre><code class="ts">let newAge = people.map((e) =&gt; &#123;
+  e.age++;
+  return e;
+&#125;);
+console.log(&#39;增加一歲的年齡&#39;, newAge); //每個人的年寧都增加一歲</code></pre>
+<p>map 的特點就是可以加工每一筆資料</p>
+<h2 id="這些方法都有一個特點"><a href="#這些方法都有一個特點" class="headerlink" title="這些方法都有一個特點"></a>這些方法都有一個特點</h2><p>是否有發現到，這些方法的操作都會宣告一個新的變數去取得操作之後的結果。</p>
+<h1 id="其餘參數和展開運算子"><a href="#其餘參數和展開運算子" class="headerlink" title="其餘參數和展開運算子"></a>其餘參數和展開運算子</h1><p>ES6 新增的其餘參數和展開運算子是非常方便的功能，使用方法非常簡單就是三個點點點(…)</p>
+<h3 id="陣列合併-如果來了新同學…"><a href="#陣列合併-如果來了新同學…" class="headerlink" title="陣列合併-如果來了新同學…"></a>陣列合併-如果來了新同學…</h3><p>情境說明：原本只有哆啦 A 夢、大雄、靜香三人。現在又來了新同學胖虎和小夫。因此我要加入新同學的資料，取得最新的學生名單</p>
+<pre><code class="ts">let allPeople = [...people1, ...people2];
+// 哆啦A夢、大雄、靜香、胖虎、小夫的合併資料</code></pre>
+<p>展開運算子可以將陣列展開，如果同時展開兩個陣列，就等於將兩個陣列合併的意思，也等同 Javascript 的 <code>concat</code>方法。</p>
+<h2 id="陣列拷貝-如果需要一分新的名單又來了新的同學"><a href="#陣列拷貝-如果需要一分新的名單又來了新的同學" class="headerlink" title="陣列拷貝-如果需要一分新的名單又來了新的同學"></a>陣列拷貝-如果需要一分新的名單又來了新的同學</h2><p>情境說明：如果來了一個新同學-小衫，需要一份新的名單。但是不想要修改到舊的名單，這時候就可以使用其餘參數來拷貝陣列，避免修改到原本的資料</p>
+<pre><code class="ts">let newPerson = &#123;
+  name: &#39;小衫&#39;,
+  age: 11,
+  weight: 41,
+  height: 142,
+  favorite: &#39;睡午覺&#39;,
+  isStudent: true,
+&#125;;
+let people3 = [...people];
+people3.push(newPerson);
+console.log(&#39;拷貝過後的陣列&#39;);
+console.log(people); // 哆啦A夢、大雄、靜香
+console.log(people3); // 哆啦A夢、大雄、靜香、小衫</code></pre>
+<p>特別注意的是：這方法只能用在物件的淺拷貝，如果要使用深拷貝，就必須使用別的方法</p>
+<p>延伸閱讀：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://larry850806.github.io/2016/09/20/shallow-vs-deep-copy/">[Javascript] 關於 JS 中的淺拷貝和深拷貝</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/pvt5r486/javascript-weird-day-27-%E8%A7%80%E5%BF%B5%E5%B0%8F%E5%8F%AE%E5%9A%80-%E5%82%B3%E5%80%BC%E5%92%8C%E5%82%B3%E5%8F%83%E8%80%83-57d3b3798e06">[JavaScript Weird]Day 27 觀念小叮嚀：傳值和傳參考</a> （雖然傳值、傳參考、傳位置的話題爭論不休，但是可以了解在爭論什麼事情）</li>
+</ul>
+<h3 id="解構賦值-過濾物件的某些屬性"><a href="#解構賦值-過濾物件的某些屬性" class="headerlink" title="解構賦值-過濾物件的某些屬性"></a>解構賦值-過濾物件的某些屬性</h3><p>使用情境：假設今天要幫哆啦 A 夢報名吃銅鑼燒大賽，但是報名的時候不需要身高、體重等資料，那麼可以使用解構賦值的方法去剔除不需要的物件屬性</p>
+<pre><code class="ts">let student = &#123;
+  name: &#39;哆啦A夢&#39;,
+  age: 10,
+  weight: 129,
+  height: 129,
+  favorite: &#39;銅鑼燒&#39;,
+&#125;;
+
+const &#123; weight, height, ...data &#125; = student;
+console.log(data);
+// &#123; name: &#39;哆啦A夢&#39;, age: 10, favorite: &#39;銅鑼燒&#39; &#125;</code></pre>
+<p>以上是關於 Javascript ES6 依照使用情境分門別類，介紹各個方法的使用時機。希望當遇到這些使用情境的時候，可以想起：對！就是這個方法。</p>
+<p>今天的範例都會放在<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/typescript-4dy2zo">https://stackblitz.com/edit/typescript-4dy2zo</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed4/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed2/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

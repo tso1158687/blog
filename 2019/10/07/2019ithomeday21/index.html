@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-21) Typescript 介紹-列舉(Enum)-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-21) Typescript 介紹-列舉(Enum)-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-21) Typescript 介紹-列舉(Enum)-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-07<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/typescript/">typescript</a></li></ul></div><div class="post-content"><p>這一篇要來介紹Typescript的實用功能 - <code>列舉(Enum)</code></p>
+<h1 id="什麼是列舉-Enum"><a href="#什麼是列舉-Enum" class="headerlink" title="什麼是列舉(Enum)"></a>什麼是列舉(Enum)</h1><p>列舉可以轉換一組備有限範圍的資料，比如說日期、郵遞區號、星期等等。<br>列舉可以讓我們定義有名字意義的常數，讓我們很可以使用名字去對應那些常數，使那些常數的意義可以很輕易對應，也可以更容易維護</p>
+<h1 id="列舉使用方法"><a href="#列舉使用方法" class="headerlink" title="列舉使用方法"></a>列舉使用方法</h1><p>定義一個星期轉換的列舉</p>
+<pre><code>enum Days &#123;Sun, Mon, Tue, Wed, Thu, Fri, Sat&#125;;</code></pre><p>列舉和陣列一樣，<code>數字從0開始</code></p>
+<pre><code>console.log(Days.Sun) // 0
+console.log(Days.Fri) // 5</code></pre><h1 id="列舉自動賦值"><a href="#列舉自動賦值" class="headerlink" title="列舉自動賦值"></a>列舉自動賦值</h1><p>列舉也不一定要從0開始，可以賦予其中一個值，之後的屬性會<code>自動累加1</code></p>
+<pre><code>enum Days &#123; Mon = 1, Tue, Wed, Thu, Fri, Sat, Sun&#125;;</code></pre><p>定義星期一Mon等於1，之後其他的星期就會自動累加</p>
+<pre><code>console.log(Days.Mon) // 1
+console.log(Days.Sat) // 6</code></pre><h1 id="列舉手動賦值"><a href="#列舉手動賦值" class="headerlink" title="列舉手動賦值"></a>列舉手動賦值</h1><p>如果不想讓值從0開始，往後的值也沒有累加的關係，可以自行手動賦值<br>例如以下是台北市的郵遞區號:</p>
+<pre><code>100    中正區
+103    大同區
+104    中山區
+105    松山區
+106    大安區
+108    萬華區
+110    信義區
+111    士林區
+112    北投區
+114    內湖區
+115    南港區
+116    文山區</code></pre><p>假設有一個表單必須填寫郵遞區號，在填寫表單的時候會有兩個問題:</p>
+<ol>
+<li>使用者要看到的是地區名稱，不是郵遞區號</li>
+<li>伺服器要的資料是郵遞區號，而不是地區名稱<br>意思就是說:使用者看到的和伺服器要的是不一樣的東西，但是彼此之間有對應的關係，這時候就可以使用列舉來輕鬆轉換資料了。</li>
+</ol>
+<p>列舉使用 <code>enum</code> 關鍵字來定義</p>
+<pre><code>enum TaipeiZip &#123;
+    &#39;中正區&#39; = 100,
+    &#39;大同區&#39; = 103,
+    &#39;中山區&#39; = 104,
+    &#39;松山區&#39; = 105,
+    &#39;大安區&#39; = 106,
+    &#39;萬華區&#39; = 108,
+    &#39;信義區&#39; = 110,
+    &#39;士林區&#39; = 111,
+    &#39;北投區&#39; = 112,
+    &#39;內湖區&#39; = 114,
+    &#39;南港區&#39; = 115,
+    &#39;文山區&#39; = 116
+&#125;;</code></pre><p>定義完列舉的內容之後，就可以來使用列舉，測試一下<br>輸入地區後會輸出郵遞區號</p>
+<pre><code>console.log(TaipeiZip.中山區) // 104
+console.log(TaipeiZip.文山區) // 116</code></pre><p>當然也可以使用郵遞區號轉換成地區</p>
+<pre><code>console.log(TaipeiZip[TaipeiZip.中正區]) // 中正區
+console.log(TaipeiZip[TaipeiZip.內湖區]) // 內湖區</code></pre><h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>什麼是列舉</li>
+<li>如何使用列舉</li>
+<li>列舉自動賦值</li>
+<li>列舉手動賦值</li>
+</ul>
+<p>Typescript在此告一段落。明天將進入新的章節 - Nestjs</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/08/2019ithomeday22/">prev</a><a class="next" href="/blog/2019/10/06/2019ithomeday20/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

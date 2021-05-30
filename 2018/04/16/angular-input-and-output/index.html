@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>angular的input和output | Jason's BLOG</title><meta name="description" content="angular的input和output - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">angular的input和output</h1><div class="post-info"><a></a>2018-04-16<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>angular的基本精神就是就是把每個不同的功能都拆成一個個元件(component)，就像樂高積木一樣，不管要組成什麼模型，都是一塊一塊磚堆砌起來，最終再將不同部位組合成一個完善的成品。像這樣拆成一個個小的元件有很多好處，例如:每一個元件的東西都不多，因此維護的時候比較容易；另外，每一個元件都是獨立的，因此在修改元件時，不需要擔心會影響到其他的元件，唯一需要做的是，要讓各個元件之間的溝通管道暢通，因此元件之間如何傳遞資料就是一件非常重要的事情了。</p>
+<h3 id="範例說明"><a href="#範例說明" class="headerlink" title="範例說明"></a>範例說明</h3><p>本次範例以父元件<code>parent.html</code>和<code>parent.ts</code>與子元件<code>child.html</code>和<code>child.ts</code>兩個元件之間的資料傳遞做說明。</p>
+<h3 id="parent-ts"><a href="#parent-ts" class="headerlink" title="parent.ts"></a>parent.ts</h3><p>首先先搞定<code>parent.ts</code></p>
+<pre><code>import &#123; Component &#125; from &#39;@angular/core&#39;;
+
+@Component(&#123;
+    selector: &#39;app-root&#39;,
+    templateUrl: &#39;./app.component.html&#39;,
+    styleUrls: [&#39;./app.component.css&#39;]
+&#125;)
+export class AppComponent &#123;
+    // 設定初始值
+    showValueFromChild = &#39;如果子元件傳送資料出來就會改變&#39;;
+    parentValue = &#39;我是父元件&#39;;
+
+    // 父元件得到output資料要執行function
+    // event為output傳出的資料
+    getChildValue(event) &#123;
+    this.showValueFromChild = event;
+    &#125;
+&#125;</code></pre><p>首先先將初始值設定好<br>showValueFromChild:是從子元件獲得資料之後，將獲得的資料綁定在父元件上<br>parentValue:設定父元件的值，之後要傳到子元件裡面，供子元件接收使用</p>
+<p>另外還有一個function<br>getChildValue:子元件output出來的東西。子元件output出來的東西不成直接設定一個值綁定，而必須以<code>function</code>的形式處理。output出來的東西都會帶一個參數，裡面有傳送出來的資料，如果需要使用傳送出來的資料就可以帶一個<code>參數</code>在其中，例如本範例的event。只要有資料傳送出來，馬上就與showValueFromChild綁定，顯示子元件的資料。</p>
+<h2 id="parent-html"><a href="#parent-html" class="headerlink" title="parent.html"></a>parent.html</h2><pre><code>&lt;hr&gt;
+&lt;h1 style=&quot;color:red&quot;&gt;我是父元件&lt;/h1&gt;
+&lt;hr&gt;
+&lt;div&gt;
+    &lt;h3&gt;
+    在父元件輸入改變子元件的內容
+    &lt;/h3&gt;
+    &lt;input type=&quot;text&quot; [(ngModel)]=&quot;parentValue&quot;&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;div&gt;
+    &lt;h3&gt;
+    在父元件顯示子元件的內容
+    &lt;/h3&gt;
+&lt;/div&gt;
+
+&lt;div style=&quot;color:blue&quot;&gt;
+&#123;&#123;showValueFromChild&#125;&#125;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+    &lt;h1 style=&quot;color:red&quot;&gt;
+    我是子元件
+    &lt;/h1&gt;
+&lt;hr&gt;
+&lt;!-- $event可獲得output傳出來的資料 --&gt;
+&lt;app-child [valueFromParent]=&quot;parentValue&quot; (getOutputValueFromChild)=&quot;getChildValue($event)&quot;&gt;&lt;/app-child&gt;</code></pre><p>再來是parent.html，這一頁是我們最終要看到成果的頁面。<br>第一個26行最重要的就是引入子元件，有子元件才有辦法和父元件互動，先暫時不要理會app-child裡面的設定。<br>再來使用input，並且使用ngModel將輸入的資料綁定到剛剛設定的parentValue上面<br>最後div裡面放置為顯示子元件資料的地方</p>
+<h3 id="child-ts"><a href="#child-ts" class="headerlink" title="child.ts"></a>child.ts</h3><pre><code>import &#123; Component, OnInit, EventEmitter, Input, Output &#125; from &#39;@angular/core&#39;;
+
+@Component(&#123;
+     selector: &#39;app-child&#39;,
+    templateUrl: &#39;./child.component.html&#39;,
+    styleUrls: [&#39;./child.component.css&#39;]
+&#125;)
+export class ChildComponent implements OnInit &#123;
+    // 設定初始值
+    childOutputValue = &#39;我是子元件&#39;;
+    // 新增一個要傳送出去的發射器
+    @Output() getOutputValueFromChild = new EventEmitter();
+
+    // 獲得父元件input進來的資料
+    @Input() valueFromParent;
+
+    constructor() &#123;&#125;
+
+    ngOnInit() &#123;&#125;
+    getOut() &#123;
+        this.getOutputValueFromChild.emit(this.childOutputValue);
+    &#125;
+&#125;</code></pre><p>進入子元件的設定，首先是child.ts<br>同樣先設定初始值<br>childOutputValue:設定子元件的值，之後要output到父元件</p>
+<p>再來就是子元件跟父元件比起來比較不一樣的地方，有兩個特別的裝飾器<code>@Output</code>和<code>@Input</code><br>先從比較簡單的@Input談起<br>顧名思義，@Input就是把<code>外部的內容引進到該元件</code>，供該元件使用，如範例，將valueFromeParent引入使用。於是就可以在裡面操作valueFromChild。但是有時候引進來之後，可能不想使用原本命名的名稱，想幫他起一個新的名字，這個也是沒問題的。<br>同樣以範例為例，如果要起一個新的名字，只要把引入的東西寫在括號裡面，新的命名寫在括號之後就可以囉，如@Input(‘valueFromChild’) wow，於是引入的valueFromChild這個值在child.ts裡面就有一個全新的名字wow</p>
+<p>再來是比較複雜的@Output，Output比較特別，<code>必須要透過EventEmitter將資料傳送出去</code>，姑且就稱為發射器。用一個比較簡單的例子做比喻的話，發射器很像在送貨的宅配人員，主動把東西送到你家，並且在你家樓下呼喊通知你東西到了，你聽到宅配人員呼喊，你才知道東西到了，並且去領取你的東西。發射器就是一個通知父元件東西已經到了的角色。因此在例子當中，我們建立一個發射器叫作getOutputValueFromChild，並且利用getOut的function，將childOutputValue傳送出去。</p>
+<h3 id="child-html"><a href="#child-html" class="headerlink" title="child.html"></a>child.html</h3><pre><code>&lt;h3&gt;在子元件輸入改變父元件內容&lt;/h3&gt;
+&lt;input type=&quot;text&quot; [(ngModel)]=&quot;childOutputValue&quot;&gt;
+&lt;button (click)=&quot;getOut()&quot;&gt;出去!&lt;/button&gt;
+&lt;h3&gt;在子元件顯示父元件內容&lt;/h3&gt;
+&lt;div style=&quot;color:blue&quot;&gt;
+&#123;&#123;valueFromParent&#125;&#125;
+&lt;/div&gt;</code></pre><p>最後就是子元件的chid.html</p>
+<p>先建立input，並且利用ngModel綁定childOutputValue，然後在建立一個按鈕，綁定剛剛寫的getOut的function，只要點擊按鈕，就會觸發getOut的function，再觸發裡面的發射器，將input綁定的childOutputValue傳送出去。<br>再來下面就是顯示綁定從父元件進來資料valueFromParent</p>
+<h3 id="最重要的input-amp-output設定"><a href="#最重要的input-amp-output設定" class="headerlink" title="最重要的input&amp;output設定"></a>最重要的input&amp;output設定</h3><p>基本的設定完成之後，再來就是最重要、先前先忽略的在父元件引入子元件時的設定</p>
+<pre><code>&lt;app-child [valueFromParent]=&quot;parentValue&quot; (getOutputValueFromChild)=&quot;getChildValue($event)&quot;&gt;&lt;/app-child&gt;</code></pre><p>在這裡，有兩個重要的問題要釐清。<br>第一:input和output要如何表示、如何分辨?<br>第二:父元件和子元件的綁定要如何表示、如何分辨?</p>
+<p>第一個問題<br>還記得前面說到，input只能輸入數值，和某個資料綁定，因此必須使用<code>中括號-[...]</code>，來<code>綁定資料</code>，所以中括號代表input；相反的，output不能輸出數值，只能用發射器傳送出來，傳送出來必須以function的形式處理傳送出來的東西，因此必須以<code>小括號(...)</code>，來<code>處理事件</code>，所以小括號代表output</p>
+<p>第二個問題<br>還記得ngModel如何綁定元件嗎?</p>
+<pre><code>[(ngModel)]=&quot;xxxxx&quot;</code></pre><p>左邊是directive，右邊是要綁定在<code>該元件的內容</code>。<br>相同的原理，等號的右邊就是要綁定該元件的內容，而<code>此處所說的該元件，就是我們操作的父元件</code>，因此<code>等號的右邊的內容是針對父元件操作</code>；相反，<code>等號的左邊的內容是針對子元件的操作</code>。</p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>以上簡單幾個步驟，就可以完成angular最基本的input和output囉</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2018/04/23/javascript-array-method-1/">prev</a><a class="next" href="/blog/2018/04/03/custom-css-for-broswers/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-18) Angular的表單管理-響應式表單(Reactive Form)-建構篇-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-18) Angular的表單管理-響應式表單(Reactive Form)-建構篇-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-18) Angular的表單管理-響應式表單(Reactive Form)-建構篇-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-04<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>上一篇建立起響應式表單(Reactive Forms)，看起來和一般的表單沒有不一樣。這一篇將來實際應用，顯示響應式表單厲害之處。<br>在開始之前，先介紹表單控制元件(FormControl)的幾種狀態</p>
+<h1 id="表單控制元件的狀態"><a href="#表單控制元件的狀態" class="headerlink" title="表單控制元件的狀態"></a>表單控制元件的狀態</h1><p>依照元件的狀態:</p>
+<ul>
+<li>prisrine:原始狀態，沒有被修改過</li>
+<li>dirty:非原始狀態，有被修改過，即使修改成原始狀態的值也一樣</li>
+</ul>
+<p>依照元件的有效性:</p>
+<ul>
+<li>valid:如果有驗證條件，內容為有效的內容;如果沒有驗證條件，內容預設有效</li>
+<li>invalid:輸入內容為驗證不符合的內容</li>
+</ul>
+<p>依照元件的碰觸:</p>
+<ul>
+<li>touched:元件已經被碰觸過</li>
+<li>untouched:元件尚未被碰觸過</li>
+</ul>
+<p>透過以上三種狀態，可以取得元件的狀態，做出不同的變化。</p>
+<h1 id="表單設計目標解說"><a href="#表單設計目標解說" class="headerlink" title="表單設計目標解說"></a>表單設計目標解說</h1><p><img src="https://ithelp.ithome.com.tw/upload/images/20191005/20120107lOk8WWaUpL.jpg" alt="https://ithelp.ithome.com.tw/upload/images/20191005/20120107lOk8WWaUpL.jpg"></p>
+<p>這是今天的目標：</p>
+<ol>
+<li>帳號、密碼、信箱為必填欄位，如果沒有填寫，輸入框外框變成紅色，並且出現提示訊息</li>
+<li>密碼欄位除了必填以外，還至少填寫六個字元</li>
+<li>信箱必須符合、email的格式</li>
+<li>設計一個暗語的欄位，如果輸入對暗語”secret”，下方就會顯示一排藍色的秘密文字，如果輸入錯就會隱藏</li>
+<li>如果暗語輸入對，就會將想說的話清空。<h1 id="表單必填欄位的設定"><a href="#表單必填欄位的設定" class="headerlink" title="表單必填欄位的設定"></a>表單必填欄位的設定</h1>先設定CSS，如果表單驗證錯誤，將外框變成紅色</li>
+</ol>
+<p><code>css</code></p>
+<pre><code>input.ng-invalid.ng-touched&#123; //注意這行
+  border:1px solid red
+&#125;</code></pre><p>如果表單驗證錯誤，那麼一定符合以下條件：</p>
+<ul>
+<li>表單要被處碰過(ng-touched)</li>
+<li>表單內容為不合法的內容(ng-invalid)<br>表單控制元件的狀態改變的時候，會自動加上相對應的CSS屬性，因此可以用自動加上的屬性，幫輸入框加上紅框。</li>
+</ul>
+<p>再來設定驗證條件<br><code>ts</code><br>別忘記載入相關元件</p>
+<pre><code>import &#123; FormBuilder, FormGroup, Validators &#125; from &quot;@angular/forms&quot;;</code></pre><p>表單的設定</p>
+<pre><code>this.applyForm = this.fb.group(&#123;
+    userName: [&quot;可以預設資料&quot;, Validators.required],
+    password: [&quot;&quot;, [Validators.required, Validators.minLength(6)]],
+    secret: [&quot;&quot;],
+    talk: [&#39;說點什麼&#39;],
+    email: [&quot;&quot;, [Validators.required, Validators.email]]
+&#125;);</code></pre><p>還記得上一篇有提到，建立響應式表單的控制元件時使用陣列建立，陣列中的<code>第一個值為預設值</code>，如果沒有填寫的話為<code>null</code></p>
+<p>現在延續昨天的內容，陣列中的第二個值為控制元件的驗證規則。例如可以使用<code>Validators.required</code>表示為必填的欄位，如果驗證的規則不只一個，可以用陣列再將驗證規則包起來。<br>像是password密碼欄位，除了必填之外，還可以使用<code>Validators.minLength(6)</code>表示最少要六個位元，而email信箱欄位，則可以使用<code>Validators.email</code>表示填寫格式必須是電子郵件的格式</p>
+<p>加入驗證錯誤的訊息<br><code>html</code></p>
+<pre><code>&lt;div&gt;
+    帳號*: &lt;input type=&quot;text&quot; formControlName=&quot;userName&quot;&gt;
+    &lt;span *ngIf=&quot;applyForm.get(&#39;userName&#39;).invalid &amp;&amp; applyForm.get(&#39;userName&#39;).touched&quot;&gt;請輸入帳號&lt;/span&gt;
+&lt;/div&gt;</code></pre><p>以帳號欄位為例，在這裡使用span元素，並且搭配<code>ngIf</code>判斷式，如果控制元件驗證不通過，就會顯示帳號。條件是:此欄位為不合法，且此欄位已經被觸碰過</p>
+<p>在html頁面，取得表單的狀態為:</p>
+<pre><code>formGroup.get(&#39;formControl&#39;).xxxxx</code></pre><h1 id="取得控制元件的變化-valueChanges"><a href="#取得控制元件的變化-valueChanges" class="headerlink" title="取得控制元件的變化-valueChanges"></a>取得控制元件的變化-valueChanges</h1><p>今日的目標之一: 設計一個暗語的欄位，如果輸入對暗語”secret”，下方就會顯示一排藍色的秘密文字，如果輸入錯就會隱藏<br>也就是說，必須監聽暗語的欄位，監聽輸入的內容，如果內容符合條件，執行某種動作；反之，內容不符合某種條件，執行某種動作</p>
+<p>響應式表單有一個很方便的功能可以監聽欄位的變化-<code>valueChanges</code></p>
+<pre><code>const secret$ = this.applyForm.get(&#39;secret&#39;) //取得secret的控制元件
+secret$.valueChanges.subscribe(e =&gt; &#123; // 監聽secret控制元件的變化，如果有變化，將變化的值傳遞出去
+    console.log(e)
+    if (e === &#39;secret&#39;) &#123;
+        this.showSecret = true
+    &#125; else &#123;
+        this.showSecret = false
+    &#125;
+&#125;)</code></pre><ul>
+<li>先取得secret的控制元件</li>
+<li>使用valueChange的功能，valueChage本身也是一個可被觀察的對象(observable)，所以使用訂閱(subscribe)訂閱去取的變化內容</li>
+</ul>
+<p>在此例子中使用變數showSecret去控制祕密的內容是否顯示</p>
+<pre><code>&lt;p *ngIf=&quot;showSecret&quot;&gt;
+  &lt;span style=&quot;color:blue&quot;&gt;這是一個隱藏的秘密&lt;/span&gt;
+&lt;/p&gt;</code></pre><h1 id="修改表單-patchValue"><a href="#修改表單-patchValue" class="headerlink" title="修改表單-patchValue"></a>修改表單-patchValue</h1><p>另外一個目標: 如果暗語輸入對，就會將想說的話清空。<br>(這個題目發想可能有點爛，不過可以舉個例子:現實生活中，可能買某樣東西送一樣二選一的贈品，如果選擇A的話又選擇B的話，在選擇的同時，要把另一樣東西的數量強制修改為0)</p>
+<pre><code>if (e === &#39;secret&#39;) &#123;
+    this.showSecret = true
+    this.applyForm.patchValue(&#123;
+        talk: &#39;&#39;
+    &#125;)
+&#125;</code></pre><p>patchValue的使用方法很件單，就是使用patchValue的方法，並且用物件的方式表達要修改的欄位與修改的值<br>patchValue僅會修改在物件中的欄位，如果不在物件中的欄位，就不會被變更到</p>
+<h1 id="重置表單-reset"><a href="#重置表單-reset" class="headerlink" title="重置表單-reset"></a>重置表單-reset</h1><p>將表單的內容送出之後，要將表單的內容重置為初始狀態，這時候就可以使用<code>reset</code>方法</p>
+<pre><code>this.applyForm.reset(&#123;
+      userName:&#39;&#39;,
+      password:&#39;&#39;,
+      secret:&#39;&#39;,
+      talk:&#39;&#39;,
+      email:&#39;&#39;
+&#125;)</code></pre><p>將表格的所有狀態改為初始狀態(例如有沒有被點過、資料驗證有沒有過的狀態)<br>如果沒有設定參數，會把表格裡面所有的值改為null，但是如果輸入參數，可以預設所需要的值<br>也許會有疑問，reset和patchValue兩者有什麼不一樣。兩者都可以修改表單的資料，最大的差異是:</p>
+<ul>
+<li>patchValue只修改表單的值，不會修改表單的狀態</li>
+<li>reset除了修改表單的值，同時也會修改表單的狀態，將表單的狀態修改為初始狀態(例如:已經觸碰的touched變成為觸碰的untouched)<h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1>今天的範例內容可以在這裡看到:範例內容</li>
+</ul>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>響應式表單使用技巧</li>
+<li>認識表單元件的狀態</li>
+<li>使用<code>valueChanges</code>偵測表單異動</li>
+<li>使用<code>patchValue</code>修改表單的值</li>
+<li>使用<code>reset</code>重設表單</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/05/2019ithomeday19/">prev</a><a class="next" href="/blog/2019/10/03/2019ithomeday17/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY26-如何與人協同工作與好好溝通-後端工程師篇 | Jason's BLOG</title><meta name="description" content="DAY26-如何與人協同工作與好好溝通-後端工程師篇 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY26-如何與人協同工作與好好溝通-後端工程師篇</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/%E6%BA%9D%E9%80%9A/">溝通</a></li></ul></div><div class="post-content"><h1 id="DAY26-如何與人協同工作與好好溝通-後端工程師篇"><a href="#DAY26-如何與人協同工作與好好溝通-後端工程師篇" class="headerlink" title="DAY26-如何與人協同工作與好好溝通-後端工程師篇"></a>DAY26-如何與人協同工作與好好溝通-後端工程師篇</h1><h1 id="前端與後端的關係"><a href="#前端與後端的關係" class="headerlink" title="前端與後端的關係"></a>前端與後端的關係</h1><p>在早期還沒有前後端分離的時候，前後端是要共同維護一份檔案的，例如.net的cshtml</p>
+<pre><code class="html">@&#123;
+    var joe = new Person(&quot;Joe&quot;, 33);
+&#125;
+
+&lt;p&gt;Age@(joe.Age)&lt;/p&gt;</code></pre>
+<p>這樣的做法的缺點是，檔案的拆分都需要和後端協商討論，因為後端要得要修改同樣的檔案。因此造成前後端常常在改同一份檔案，如果沒有約定好統一個改法或風格的話，常常衝突的亂七八糟。</p>
+<p>後來發展出前後端分離與RESTful API後，相當大程度將前端與後端的工作分開來，不會再緊緊相依，彼此溝通的管道就是透過API來溝通。但是用API溝通之後，就不代表就不會有溝通的問題，只能說問題會比較少，還是會遇到像下列的問題:</p>
+<ul>
+<li>API要求的格式或參數好奇怪</li>
+<li>API給的結果很奇怪，根本不能直接用，還要做很多轉換</li>
+</ul>
+<p>反過來說，後端也會覺得前端很奇怪，要求奇怪的格式或結果。</p>
+<p>所以前端和後端溝通的問題成為:API要怎麼開呢?</p>
+<h1 id="API的開發流程"><a href="#API的開發流程" class="headerlink" title="API的開發流程"></a>API的開發流程</h1><p>API的開發流程究竟是要前端主導還是後端主導呢?</p>
+<p>在此我的建議是:都可以，在不破壞大原則之下，以最節省雙方時間的做法為主</p>
+<h2 id="不破壞大原則"><a href="#不破壞大原則" class="headerlink" title="不破壞大原則"></a>不破壞大原則</h2><p>不破壞大原則的意思是不為了對方的需求而破壞原本的流程或程式結構。例如前端為了應對後端的格式，要多開原本沒有設計時沒有預留的方法或頁面，要特別額外去處理的，就算是破壞大原則的一種</p>
+<h2 id="節省雙方的時間"><a href="#節省雙方的時間" class="headerlink" title="節省雙方的時間"></a>節省雙方的時間</h2><p>如果雙方都認為要調整的話，那麼以調整起來最方便的那端為主。例如後端調整個格式需要三天的時間，而前端拿到資料調整只要一天的時間，那麼就給需要時間最少的前端調整。畢竟前後端是一個團隊，要以團隊最快的流程作為主要考量。</p>
+<h2 id="API開發流程的例子"><a href="#API開發流程的例子" class="headerlink" title="API開發流程的例子"></a>API開發流程的例子</h2><p>以下面的表格為例:</p>
+<p><img src="Untitled.png" alt="Untitled.png"></p>
+<p>一個表格有四個欄位，後端開給我五支API。一支API取得資料的ID，再用ID去分別查詢四個欄位的API，查完之後，再用ID去對應資料把一列的資料分別聚合起來成一筆。</p>
+<p>原本只是一個取資料然後填上去的動作，原本我預計不用幾個小時就可以完成，因為這樣的API格式讓我做了一個禮拜，想辦法處理資料、聚合資料然後再檢驗我的做法有沒有錯誤。</p>
+<p>當時為了做這個讓我整個時程大大地被拖延。後來我有去找後端聊聊這件事情，為什麼不開一支API幫我處理好資料，讓我拿到資料可以不用處理，直接使用。他跟我解釋，開五支API是為了後端設計原則，不讓API太過於複雜，但是他沒有想到我會額外花這麼多時間去處理，因此我們就溝通好為了節省我的時間，他可以不動這五支API破壞後端的原則，另外再開一支API幫我處理這些資料，因為他處理這些資料不過是一下子的時間，不若前端處理那麼複雜。</p>
+<p>這件困擾我已久的事情就這麼簡單地解決了，也讓我體悟一件事情：其實大家在別人有困難的時候都是很願意幫忙的，很多時候是根本不知道你的問題而無從幫起，這件事情最好的解法就是好好地溝通</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed27/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed25/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

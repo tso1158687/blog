@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-6) Angular元件資料的顯示與應用2- ngSwitch, ngModel-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-6) Angular元件資料的顯示與應用2- ngSwitch, ngModel-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-6) Angular元件資料的顯示與應用2- ngSwitch, ngModel-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-22<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>在上一篇提到如何使用<code>ngFor</code>顯示多筆資料和使用<code>ngIf</code> 控制條件決定顯示與否，這一篇要來介紹另一個更加複雜的情況，如果是多個條件的情況要如何控制顯示？</p>
+<h1 id="使用ngSwitch"><a href="#使用ngSwitch" class="headerlink" title="使用ngSwitch"></a>使用ngSwitch</h1><p>ngSwitch就和Javascript的switch一樣。</p>
+<p>Javascript的switch語法是這樣:</p>
+<pre><code>switch(expression) &#123;
+  case x:
+    // code block
+    break;
+  case y:
+    // code block
+    break;
+  default:
+    // code block
+&#125;</code></pre><p>用成簡單的白話來說是這樣：</p>
+<ul>
+<li>如果情況x的時候做某件事情;</li>
+<li>如果情況y的時候做某件事情;</li>
+<li>如果沒有任何一個符合的情況就執行default預設情況。</li>
+</ul>
+<p>Angular的ngSwitch用法基本上一樣：</p>
+<pre><code>&lt;container-element [ngSwitch]=&quot;switch_expression&quot;&gt;
+  &lt;!-- 依照情境的不同顯示不同的元素 --&gt;
+  &lt;some-element *ngSwitchCase=&quot;match_expression_1&quot;&gt;...&lt;/some-element&gt;
+  &lt;some-element *ngSwitchCase=&quot;match_expression_2&quot;&gt;...&lt;/some-element&gt;
+  &lt;!--如果沒有任何一個符合的情況顯示預設的元素 --&gt;
+  &lt;some-element *ngSwitchDefault&gt;...&lt;/some-element&gt;
+&lt;/container-element&gt;</code></pre><p>再繼續以上一篇的例子應用ngSwitch</p>
+<pre><code>  heros = [
+    &#123; name: &#39;兩斤勘吉&#39;, age: 35 &#125;,
+    &#123; name: &#39;秋本麗子&#39;, age: 25 &#125;,
+    &#123; name: &#39;野比大雄&#39;, age: 12 &#125;,
+    &#123; name: &#39;江戶川柯南&#39;, age: 8 &#125;
+  ];</code></pre><p>在上一篇有提到，如果未成年的英雄，我們使用<code>ngIf</code>隱藏不讓他出現，在這裡改變一下做法，未成年的英雄我們照樣顯示年齡，但是對於名字作保護不顯示出來。因此12歲的大雄顯示小英雄;而8歲的柯南顯示小小英雄。</p>
+<pre><code>&lt;div *ngFor=&quot;let hero of heros&quot;&gt;
+    &lt;div&gt;
+        名字: 
+        &lt;span [ngSwitch]=&quot;hero.age&quot;&gt;
+        &lt;span *ngSwitchCase=&quot;12&quot;&gt;
+          小英雄
+        &lt;/span&gt;
+        &lt;span *ngSwitchCase=&quot;8&quot;&gt;
+          小小英雄
+        &lt;/span&gt;
+        &lt;span *ngSwitchDefault&gt;
+          &#123;&#123;hero.name&#125;&#125;
+        &lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        年齡: &#123;&#123;hero.age&#125;&#125;
+    &lt;/div&gt;
+    ===========
+&lt;/div&gt;</code></pre><p><img src="https://ithelp.ithome.com.tw/upload/images/20190922/20120107mlONJjDFTq.png" alt="https://ithelp.ithome.com.tw/upload/images/20190922/20120107mlONJjDFTq.png"></p>
+<h1 id="使用ngModel執行雙向綁定"><a href="#使用ngModel執行雙向綁定" class="headerlink" title="使用ngModel執行雙向綁定"></a>使用ngModel執行雙向綁定</h1><p>到目前為止介紹的事都是如何處理顯示的資料，這都只是顯示資料，這些都只是顯示資料的單向綁定。還需要一個可以輸入與修改英雄的功能，也就是可以輸入什麼，資料就改變成什麼的功能，這樣的功能稱為雙向綁定。<br><code>[(ngModel)] 是 Angular 的雙向資料繫結語法</code>。</p>
+<h2 id="匯入-ngModel-所屬的模組-FormsModule"><a href="#匯入-ngModel-所屬的模組-FormsModule" class="headerlink" title="匯入 ngModel 所屬的模組-FormsModule"></a>匯入 ngModel 所屬的模組-FormsModule</h2><p>在使用雙向綁定的ngModel之前，得先做一些設定，必須將ngModel的這個功能所屬的<code>FormsModule</code>匯入，才可以正常使用。<br>因此打開根模組<code>app.module.ts</code></p>
+<pre><code>import &#123; FormsModule &#125; from &#39;@angular/forms&#39;;</code></pre><p>然後把 FormsModule 新增到 @NgModule 元資料的 imports 陣列中，這裡是該應用所需外部模組的列表。</p>
+<pre><code>imports: [
+  BrowserModule,
+  FormsModule
+],</code></pre><p>這樣一來就大功告成可以開始使用ngModel的功能了。</p>
+<h2 id="使用ngModel"><a href="#使用ngModel" class="headerlink" title="使用ngModel"></a>使用ngModel</h2><p>先在<code>ts</code>檔案宣告一個新的屬性newHeroName</p>
+<pre><code>newHeroName=&quot; &quot;</code></pre><p>再來在<code>html</code>檔案裡面新增一個input輸入框，並且使用<code>ngModel</code>綁定輸入框輸入的值</p>
+<pre><code>&lt;input type=&quot;text&quot; [(ngModel)]=&#39;newHeroName&#39; &gt;</code></pre><p>顯示新輸入英雄的名字:</p>
+<pre><code>&lt;p&gt;新的英雄名稱:&#123;&#123;newHeroName&#125;&#125;&lt;/p&gt;</code></pre><p>綜合起來程式碼會長成這樣:</p>
+<pre><code>&lt;input type=&quot;text&quot; [(ngModel)]=&#39;newHeroName&#39; &gt;
+
+&lt;p&gt;新的英雄名稱:&#123;&#123;newHeroName&#125;&#125;&lt;/p&gt;</code></pre><p>輸入什麼下面就會顯示什麼<br><img src="https://ithelp.ithome.com.tw/upload/images/20190922/20120107Jus8T1gRGH.png" alt="https://ithelp.ithome.com.tw/upload/images/20190922/20120107Jus8T1gRGH.png"></p>
+<p>修改新英雄的名字<br><img src="https://ithelp.ithome.com.tw/upload/images/20190922/20120107IqJWQCv5gs.png" alt="https://ithelp.ithome.com.tw/upload/images/20190922/20120107IqJWQCv5gs.png"></p>
+<p>雙向綁定的功能這樣就完成了!</p>
+<h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1><p>今天的範例內容可以在這裡看到:<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-iron-jason-d6?file=src/app/app.component.html">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的有:</p>
+<ul>
+<li>使用ngSwitch依照條件顯示不同的內容</li>
+<li>使用ngModel雙向綁定顯示與修改資料</li>
+</ul>
+<p>下一篇將繼續討論ngModel如何觸發功能並且新增與修改原有的資料!</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/23/2019ithomeday7/">prev</a><a class="next" href="/blog/2019/09/21/2019ithomeday5/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

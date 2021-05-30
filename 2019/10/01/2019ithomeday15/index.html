@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-15) Angular的資料轉換-管道(pipe)-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-15) Angular的資料轉換-管道(pipe)-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-15) Angular的資料轉換-管道(pipe)-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-01<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>經過上一篇複雜的路由設定，這一篇的主題要來比較輕鬆但是同樣很實用的主題-<code>管道(pipe)</code></p>
+<h1 id="什麼是管道-pipe"><a href="#什麼是管道-pipe" class="headerlink" title="什麼是管道(pipe)"></a>什麼是管道(pipe)</h1><h2 id="為什麼需要轉換資料"><a href="#為什麼需要轉換資料" class="headerlink" title="為什麼需要轉換資料"></a>為什麼需要轉換資料</h2><p>在目前為止，我們所做的事情差不多就是這樣:</p>
+<ul>
+<li>取得資料</li>
+<li>顯示資料<br>如何取得資料與如何顯示資料。在取得資料和顯示資料之間，其實還有一個重要的關鍵步驟:<br><code>如何轉換資料</code></li>
+</ul>
+<p>為什麼需要轉換資料？舉一個例子，假如要顯示某一筆資料的建立時間，<br>伺服器傳過來的時間資料可能是這樣子：</p>
+<pre><code>2019-10-01T13:44:07.721Z</code></pre><p>伺服器可能傳來的是<code>ISO的標準時間</code>，可是顯示的時候使用者看不懂這樣的時間格式，使用者只想看幾年幾月的時間格式：</p>
+<pre><code>2019-10-01</code></pre><p>這時候如果要顯示時間的話，就必須把時間格式轉換成時間的使用格式。<br>如果只轉換一次那可能還不會造成開發者太多困擾。但是如果假設使用者編輯資料結束送出之後，必須將時間更新為最新的編輯時間送給後端伺服器。<br>於是就會有一連串的複查步驟：</p>
+<ul>
+<li>得到標準的時間格式</li>
+<li>將標準的時間格式轉換成簡單的時間格式顯示給使用者看</li>
+<li>再將簡單的時間格式轉換成標準時間格式傳送給後端</li>
+</ul>
+<p>這時候管道(pipe)的優勢就顯現出來了，管道可以將原始資料和顯示的資料分開，也就是說：<br>不會更動原始資料，意味著不必做複雜的轉換動作<br>只會將顯示資料轉換成另外一種所需要的格式<br>將轉換資料的動作大幅簡化，可以輕鬆得到想要的資料，也可以輕鬆得到顯示的資料</p>
+<h1 id="如何使用管道-pipe"><a href="#如何使用管道-pipe" class="headerlink" title="如何使用管道(pipe)"></a>如何使用管道(pipe)</h1><p>Angular已經內建多種實用的管道可以直接使用。<br>管道的使用方法為：<br>綁定的資料後面加上<code>|</code>後，加上綁定的管道名稱：</p>
+<pre><code>&#123;&#123;data | pipeName&#125;&#125;</code></pre><h2 id="轉換時間"><a href="#轉換時間" class="headerlink" title="轉換時間"></a>轉換時間</h2><pre><code>time = new Date();//</code></pre><pre><code>&#123;&#123;time&#125;&#125; // Tue Oct 01 2019 22:42:48 GMT+0800 (台北標準時間)
+&#123;&#123;time | date:'yyyy-MM-dd'&#125;&#125; // 2019-10-01</code></pre><p>管到後面可以加上參數，例如指定轉換後的時間格式</p>
+<h2 id="轉換大小寫"><a href="#轉換大小寫" class="headerlink" title="轉換大小寫"></a>轉換大小寫</h2><pre><code>data = &#39;Hello World&#39;</code></pre><pre><code>&#123;&#123;data | uppercase&#125;&#125; // HELLO WORLD
+&#123;&#123;data | lowercase&#125;&#125; // hello world</code></pre><h2 id="顯示json檔案"><a href="#顯示json檔案" class="headerlink" title="顯示json檔案"></a>顯示json檔案</h2><pre><code>hero = &#123;
+    name: &quot;兩津勘吉&quot;,
+    age: 35,
+    description: &quot;閃啦閃啦~撞到不負責&quot;
+  &#125;;</code></pre><pre><code>&#123;&#123;hero&#125;&#125; // [object Object]&#125;
+&#123;&#123;hero | json&#125;&#125; // &#123; &quot;name&quot;: &quot;兩津勘吉&quot;, &quot;age&quot;: 35, &quot;description&quot;: &quot;閃啦閃啦~撞到不負責&quot; &#125;</code></pre><h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1><p>今天的範例內容可以在這裡看到:<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-iron-jason-d14">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>為什麼需要轉換資料</li>
+<li>如何使用管道(pipe)</li>
+<li>介紹Angular內的管道</li>
+</ul>
+<p>下一篇將介紹，如何自訂管道</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/02/2019ithomeday16/">prev</a><a class="next" href="/blog/2019/09/30/2019ithomeday14/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

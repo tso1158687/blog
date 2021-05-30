@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-16) Angular的資料轉換-管道(pipe)-自訂管道-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-16) Angular的資料轉換-管道(pipe)-自訂管道-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-16) Angular的資料轉換-管道(pipe)-自訂管道-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-02<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>上一篇提到如何使用Angular內建的管道。Angular內建的管道固然很實用，但是不能涵蓋全部的使用情境，如果沒有涵蓋到，就自己來定義一個管道吧</p>
+<h1 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h1><pre><code>heros = [
+    &#123; name: &#39;大雄&#39;, score: 0 &#125;,
+    &#123; name: &#39;靜香&#39;, score: 90 &#125;,
+    &#123; name: &#39;胖虎&#39;, score: 50 &#125;,
+    &#123; name: &#39;小夫&#39;, score: 70 &#125;,
+    &#123; name: &#39;小杉&#39;, score: 100 &#125;,
+]</code></pre><p>現在要來做一個轉換的管道來顯示考試結果</p>
+<ul>
+<li>超過80分顯示:高分</li>
+<li>超過60分、未滿80分:低分及格</li>
+<li>未滿60分:不及格</li>
+</ul>
+<h1 id="如何建立自訂的管道"><a href="#如何建立自訂的管道" class="headerlink" title="如何建立自訂的管道"></a>如何建立自訂的管道</h1><h2 id="建立管道"><a href="#建立管道" class="headerlink" title="建立管道"></a>建立管道</h2><pre><code>ng generate pipe &lt;pipeName&gt;</code></pre><p>建立score管道</p>
+<pre><code>ng generate pipe score</code></pre><p>Angular CLI 建立管道的時候，會自動宣告新建立的管道。(如果沒有可以自行宣告)<br><code>app.module.ts</code></p>
+<pre><code>@NgModule(&#123;
+    imports: [BrowserModule, FormsModule],
+    declarations: [AppComponent, HelloComponent, ScorePipe], // 宣告score pipe
+    bootstrap: [AppComponent]
+&#125;)</code></pre><p>接下來來到score pipe<br><code>score.pipe.ts</code></p>
+<pre><code>import &#123; Pipe, PipeTransform &#125; from &#39;@angular/core&#39;;
+
+@Pipe(&#123;
+    name: &#39;score&#39;
+&#125;)
+export class ScorePipe implements PipeTransform &#123;
+    transform(value: any, args?: any): any &#123;
+        return null;
+    &#125;
+&#125;</code></pre><p>這是一個新建立好，空白的管道</p>
+<pre><code>@Pipe(&#123;
+    name: &#39;score&#39;
+&#125;)</code></pre><p>@pipe裡面有一個<code>name</code>的屬性，指定管道的名字。Angular CLI在建立的時候，會自動填上名字。如果不喜歡可以在這裡修改。</p>
+<p>再來看到管道的轉換內容:</p>
+<pre><code>export class ScorePipe implements PipeTransform &#123;
+    transform(value: any, args?: any): any &#123;
+        return null;
+    &#125;
+&#125;</code></pre><p>可以看到有一個<code>transform</code>的方法轉換資料，此方法接受兩個參數:<code>value</code>,<code>args</code></p>
+<ul>
+<li>value:為原始資料，是必填選項</li>
+<li>args:為管道的參數<br>透過value參數取得原始資料，然後做處理之後，最後<code>return</code>返回處理後的結果。</li>
+</ul>
+<p>因此就來寫一個簡單的分數轉換:</p>
+<pre><code>export class ScorePipe implements PipeTransform &#123;
+    transform(value: any, args?: any): any &#123;
+        if (value &gt;= 60 &amp;&amp; value &lt; 80) &#123;
+            return &quot;低分及格&quot;;
+        &#125; else if (value &gt; 80) &#123;
+            return &quot;高分&quot;;
+        &#125; else &#123;
+            return &quot;不及格&quot;;
+        &#125;
+    &#125;
+&#125;</code></pre><p>使用簡單的if判斷式，判斷結過之後，將轉換的結果return返回。</p>
+<p>回到html頁面，套上score pipe看看結果</p>
+<pre><code>&lt;div&gt;
+    &lt;h2&gt;自訂管道&lt;/h2&gt;
+    &lt;span *ngFor=&quot;let hero of heros&quot;&gt;
+        &lt;p&gt;&#123;&#123;hero.name&#125;&#125;&lt;/p&gt;
+        &lt;p&gt;原始分數:&#123;&#123;hero.score&#125;&#125;&lt;/p&gt;
+        &lt;p&gt;轉換結果:&#123;&#123;hero.score | score&#125;&#125;&lt;/p&gt;
+        ================
+    &lt;/span&gt;
+&lt;/div&gt;</code></pre><p>一個簡單的轉換分數的管道就完成了!</p>
+<h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1><p>今天的範例內容可以在這裡看到:<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-iron-jason-d15?file=src%2Fapp%2Fscore.pipe.ts">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>如何建立管道</li>
+<li>如何自訂管道</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/03/2019ithomeday17/">prev</a><a class="next" href="/blog/2019/10/01/2019ithomeday15/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

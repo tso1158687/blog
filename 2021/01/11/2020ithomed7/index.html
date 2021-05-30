@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY7-CSS結構化與命名技巧 | Jason's BLOG</title><meta name="description" content="DAY7-CSS結構化與命名技巧 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY7-CSS結構化與命名技巧</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/CSS/">CSS</a></li><li><a class="post-tag" href="/blog/tags/OOCSS/">OOCSS</a></li></ul></div><div class="post-content"><h1 id="DAY7-CSS結構化與命名技巧"><a href="#DAY7-CSS結構化與命名技巧" class="headerlink" title="DAY7-CSS結構化與命名技巧"></a>DAY7-CSS結構化與命名技巧</h1><p>CSS的優點就是很容易上手，很好使用，無論怎麼命名、怎麼使用，只要對應的到都可以。甚至如果有相同的命名，還會去計算權重，使用權重最高的那個。幾乎不用擔心會出錯，頂多出現的效果還想的不一樣而已。</p>
+<p>但是缺點和優點一體兩面，簡單好上手的優點在結構化和維護的觀點來看，反而成了缺點。</p>
+<h1 id="CSS的結構化設計"><a href="#CSS的結構化設計" class="headerlink" title="CSS的結構化設計"></a>CSS的結構化設計</h1><h2 id="OOCSS-Object-Oriented-CSS"><a href="#OOCSS-Object-Oriented-CSS" class="headerlink" title="OOCSS (Object Oriented CSS)"></a>OOCSS (Object Oriented CSS)</h2><p>也就是物件導向式的CSS設計。將結構和樣式分離，例如可以看以下bootstrap的例子</p>
+<img src="/blog/2021/01/11/2020ithomed7/1.png" class="">
+
+<ul>
+<li>結構: 像 <code>btn</code> 這個class就是代表結構，規範有的按鈕都應該長什麼樣子，像是按鈕的圓角(border-radius)要多少、文字與外框的間距(padding)多少、按鈕與其他的元素要間隔多少距離(margin)，這些都是按鈕通用的結構樣式。</li>
+<li>樣式:像 <code>btn-primary</code> 、 <code>btn-secondary</code> 等樣式，則是規範不同樣式的按鈕各自的樣子，像是使用btn-primary就會有藍底白字的按鈕、btn-secondary就會有灰底白字的按鈕。</li>
+</ul>
+<p>結構型的CSS可能會是一組CSS，訂定好一個東西應該要有的樣子，像是</p>
+<pre><code class="scss">.btn&#123;
+    padding: 10px;
+    margin:4px;
+    min-width: 35px;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+&#125;</code></pre>
+<p>但是樣式型的CSS則相反，盡量越簡單越單純越好</p>
+<pre><code class="scss">.btn-primary &#123;
+  color: #ffffff;
+  background-color: #40809d;
+&#125;
+
+.btn-secdonary &#123;
+  color: #ffffff;
+  background-color: #7d7d7d;
+&#125;
+
+.btn-large &#123;
+  font-size: 1.5em;
+&#125;
+
+.btn-small &#123;
+  font-size: 0.8em;
+&#125;</code></pre>
+<p>樣式型CSS越單純，越容易排列組合重複利用。</p>
+<h1 id="CSS的命名原則"><a href="#CSS的命名原則" class="headerlink" title="CSS的命名原則"></a>CSS的命名原則</h1><p>程式的命名不論在什麼語言都是一個很重要的課題。命名這個動作雖然很簡單，但是怎樣的命名可以讓大多數人一看就清楚明白命名的內涵是什麼可是一項高難度的技巧。甚至有好多書籍或文章都在探討要如何好好<strong>命名</strong>。</p>
+<h3 id="不要使用太過泛用的命名"><a href="#不要使用太過泛用的命名" class="headerlink" title="不要使用太過泛用的命名"></a>不要使用太過泛用的命名</h3><p>例如使用class <code>highlight</code> 去代表強調的樣式，就可以在樣式檔案到處看到這樣的樣式</p>
+<pre><code class="scss">// 第1行
+.highlight&#123;
+    color:red
+&#125;
+
+// 第50行
+.tab .highlight&#123;
+    color:blue;
+&#125;
+
+// 第100行
+.link .highlight&#123;
+    color:yellow
+&#125;
+
+// 第500行
+.highlight&#123;
+    color:green !important
+&#125;</code></pre>
+<p>用到最後都會搞不清楚到底最後使用的是哪一種highlight樣式。找到快要瘋掉，就只能開大絕加上 <code>!important</code> 解決一切所有事情。但是如果每次都開大絕，到處都加了important，就一點都不important，還能再加一個嗎?當然不行</p>
+<p>因此建議命名的時候可以多描述一點，這樣可以更好區分各種不同的highlight，也可以避免命名一樣互相蓋來蓋去的情況</p>
+<pre><code class="scss">.text-highlight &#123;
+  color: blue;
+&#125;
+
+.link-highlight &#123;
+  color: yellow;
+&#125;</code></pre>
+<h3 id="使用抽象的命名"><a href="#使用抽象的命名" class="headerlink" title="使用抽象的命名"></a>使用抽象的命名</h3><p>通常網頁設計會有主配色、副配色等搭配。例如主配色是藍色、副配色是紅色</p>
+<pre><code class="scss">.blue-color&#123;
+    color: blue;
+&#125;
+
+.red-color&#123;
+    color:red
+&#125;</code></pre>
+<p>這樣直接使用配色的顏色作為CSS的名稱使用，可能在使用當下不會發現什麼太大的問題。但是如果之後要改版，將主配色換成綠色、副配色換成黃色。那麼將 <code>.blue-color</code> 裡面的顏色改成綠色，命名起來，就不是那麼名副其實了。</p>
+<p>為了避免這個問題，請使用樣式的功能來命名。這個同樣可以參考bootstrap的做法。</p>
+<img src="/blog/2021/01/11/2020ithomed7/2.png" class="">
+
+<p>bootstrap在處理這方面的問題，是以樣式的功能來命名，例如 <code>text-primary</code> 、 <code>text-danger</code> 分別用來代表主配色和表示危險的顏色。至於主配色是什麼或危險的顏色是什麼，就可以定義在裡面。變動的時候，只要修改內容，也不會影響其意義。</p>
+<p>是一個很好管理樣式的作法</p>
+<h2 id="CSS設計的參考"><a href="#CSS設計的參考" class="headerlink" title="CSS設計的參考"></a>CSS設計的參考</h2><p>在筆者學習各種CSS結構化與命名技巧的過程中，大多是看bootstrap的原始碼得到許多靈感。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/twbs/bootstrap/blob/main/scss/_buttons.scss">bootstrap參考</a></p>
+<p>另外除了OOCSS之外，還有更多不同的CSS設計原則，像是 <code>SMACSS</code> 、 <code>BEM</code> 、 <code>CSS in JS</code> 等各種不同的方法，可以多比較多使用看看</p>
+<hr>
+<p>參考文章:</p>
+<p><a target="_blank" rel="noopener" href="https://cythilya.github.io/2018/06/05/css-methodologies/">https://cythilya.github.io/2018/06/05/css-methodologies/</a></p>
+<p><a target="_blank" rel="noopener" href="https://wcc723.github.io/css/2016/12/04/oocss-three/">https://wcc723.github.io/css/2016/12/04/oocss-three/</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed8/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed6/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

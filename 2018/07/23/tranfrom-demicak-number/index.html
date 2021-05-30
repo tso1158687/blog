@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>如何去除小數點後多餘的0 | Jason's BLOG</title><meta name="description" content="如何去除小數點後多餘的0 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">如何去除小數點後多餘的0</h1><div class="post-info"><a></a>2018-07-23<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/javascript/">javascript</a></li></ul></div><div class="post-content"><p>有一個需求是這樣的:<br>有一個欄位使用者輸入的資料內容差異非常大，但是又要求非常精確。之所以差異會非常大，是因為不同使用者使用不同單位當作標準，例如:使用公斤當作單位時，有時候要處理公克的資料，所以就必須加入0.001 (kg)這樣的資料，但是有些使用者只會處理很大單位的資料，他們都資料永遠不會有小數點。</p>
+<p>為了處理這些差異極大的資料，後端資料庫開的資料欄位格式不管有沒有小數點統一會有六位數。所以可能會有65.000000、1.234000或66.666666這樣的資料送過來，但是如果明明是65，顯示65.000000給使用者看顯然是相當愚蠢的行為。</p>
+<p>因此我們要做的是，如果去除小數點後多餘的零<br>於是我在網路上找到一個還蠻不錯的辦法，跟我原本想要做的事情差不多，但是他用的方法比我還要簡潔</p>
+<pre><code> //  判斷數字是否有小數點
+ if (value.indexOf(&quot;.&quot;) &gt; -1) &#123;
+    //拆解字串,格式為: 整數.小數
+    var arr = value.split(&quot;.&quot;);
+    var $int = arr[0];
+    var $dec = arr[1];
+    // 將小數點 ,右邊的0去除
+    var $dec = arr[1].replace(/0+$/, &#39;&#39;);
+    if ($dec == &#39;&#39;) &#123;
+        value = $int.trim();
+        return
+    &#125;
+    value = $int.trim() + &#39;.&#39; + $dec.trim(); //重組格式 ,並返回
+&#125;</code></pre><p>總而言之就是把一個數字拆分成整數和小數兩個部分。然後梳理小數的部分之後，再重組回去成為一個新的數字。<br>最重要就是梳理小數的部分，這個部份現在還沒有很明白，之後有時間可以來研究一下。</p>
+<p>PS:還有另外一個方法真是讓我驚呆了，後端的同事淡然地跟我說其實處理這種東西只要一行就夠了</p>
+<pre><code>Number(x)</code></pre><p>ex:</p>
+<pre><code>Number(9.487000) //9.487</code></pre><p>只要把數字方進去，就會自動轉為需求所要的結果了ORZ，果然身邊到處有高人阿</p>
+<p>參考網站:<br><a target="_blank" rel="noopener" href="http://sendohlun.pixnet.net/blog/post/458509466-%5Bjavascript%5D-%E5%8E%BB%E6%8E%89%E5%B0%8F%E6%95%B8%E9%BB%9E%E7%9A%84%E9%9B%B6">[JavaScript] 去掉小數點的零</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2018/09/06/trim/">prev</a><a class="next" href="/blog/2018/06/26/new-date-bomb/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

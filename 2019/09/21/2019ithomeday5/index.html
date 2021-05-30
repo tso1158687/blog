@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-5) Angular元件資料的顯示與應用- ngFor, ngIf-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-5) Angular元件資料的顯示與應用- ngFor, ngIf-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-5) Angular元件資料的顯示與應用- ngFor, ngIf-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-21<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>在上一篇有提到，可以使用花括號綁定值，這個有正式的名稱，稱為<code>插值法(Interpolation)</code><br>花括號裡面寫的屬性，Angular會搜尋對應的內容並且替換</p>
+<h1 id="插值法-Interpolation"><a href="#插值法-Interpolation" class="headerlink" title="插值法(Interpolation)"></a>插值法(Interpolation)</h1><h2 id="插值法的基本用法"><a href="#插值法的基本用法" class="headerlink" title="插值法的基本用法"></a>插值法的基本用法</h2><p>例如:</p>
+<p><code>main.component.html</code></p>
+<pre><code>&lt;p&gt;
+  我的名字是 &#123;&#123;name&#125;&#125;
+&lt;/p&gt;</code></pre><p>Angular將會尋找稱為name的屬性，並且將值替換上去</p>
+<p><code>main.component.ts</code></p>
+<pre><code>name = &#39;jason&#39;</code></pre><p>因此最後會顯示為:</p>
+<pre><code>我的名字是 jason</code></pre><p>插值法不僅能顯示文字的內容，也能使用在顯示圖片</p>
+<pre><code>&lt;div&gt;&lt;img src=&quot;&#123;&#123;itemImageUrl&#125;&#125;&quot;&gt;&lt;/div&gt;</code></pre><p>這樣圖片的路徑就會隨著屬性itemImageUrl的不同跟著變動。</p>
+<h2 id="插值法的更多應用"><a href="#插值法的更多應用" class="headerlink" title="插值法的更多應用"></a>插值法的更多應用</h2><p>可以做簡單的數學運算:</p>
+<pre><code>&lt;p&gt;1 + 1 的答案是 &#123;&#123;1 + 1&#125;&#125;&lt;/p&gt; // 2</code></pre><h3 id="可以呼叫方法"><a href="#可以呼叫方法" class="headerlink" title="可以呼叫方法"></a>可以呼叫方法</h3><pre><code>&lt;p&gt;今天是 &#123;&#123;getWeekDay('六')&#125;&#125;&lt;/p&gt; //今天是星期六</code></pre><pre><code>  getWeekDay(weekDay)&#123;
+    return `星期 $&#123;weekDay&#125;`
+  &#125;</code></pre><h3 id="可以二元判斷"><a href="#可以二元判斷" class="headerlink" title="可以二元判斷"></a>可以二元判斷</h3><pre><code>&lt;p&gt;今天是 &#123;&#123;goodDay? '晴天':'雨天'&#125;&#125;&lt;/p&gt; // 晴天</code></pre><pre><code>goodDay = true</code></pre><h1 id="使用ngFor顯示多筆資料"><a href="#使用ngFor顯示多筆資料" class="headerlink" title="使用ngFor顯示多筆資料"></a>使用ngFor顯示多筆資料</h1><p>假設現在有一筆陣列的資料</p>
+<pre><code>  heros = [
+    &#123; name: &#39;兩斤勘吉&#39;, age: 35 &#125;,
+    &#123; name: &#39;秋本麗子&#39;, age: 25 &#125;,
+    &#123; name: &#39;野比大雄&#39;, age: 12 &#125;,
+    &#123; name: &#39;江戶川柯南&#39;, age: 8 &#125;
+  ];</code></pre><p>這時候就可以使用ngFor來顯示英雄的名字與年紀</p>
+<pre><code>&lt;h1&gt;
+  使用ngFor顯示陣列內容
+&lt;/h1&gt;</code></pre><pre><code>&lt;div *ngFor=&quot;let hero of heros&quot;&gt;
+    &lt;div&gt;
+        名字: &#123;&#123;hero.name&#125;&#125;
+    &lt;/div&gt;
+    &lt;div&gt;
+        年齡: &#123;&#123;hero.age&#125;&#125;
+    &lt;/div&gt;
+    ===========
+&lt;/div&gt;</code></pre><p>顯示出來的內容:<br><img src="https://ithelp.ithome.com.tw/upload/images/20190921/20120107doUwzyG57p.png" alt="https://ithelp.ithome.com.tw/upload/images/20190921/20120107doUwzyG57p.png"></p>
+<h1 id="使用ngIf顯示隱藏資料"><a href="#使用ngIf顯示隱藏資料" class="headerlink" title="使用ngIf顯示隱藏資料"></a>使用ngIf顯示隱藏資料</h1><p>ngIf可以依照條件顯示或隱藏內容<br>再繼續剛剛的例子，假如被抗議不能顯示未成年的英雄的姓名及年齡，那麼就必須使用條件將未滿18歲的英雄隱藏起來，這時候就可以使用ngIf去做判斷</p>
+<p>如果here.age大於18，結果為true就會顯示，反之，hero.age小於18，結果為false，就會移除不顯示</p>
+<pre><code>&lt;h1&gt;
+  使用ngFor顯示陣列內容
+&lt;/h1&gt;</code></pre><pre><code>&lt;div *ngFor=&quot;let hero of heros&quot;&gt;
+  &lt;div *ngIf=&quot;hero.age &gt; 18&quot;&gt;
+    名字: &#123;&#123;hero.name&#125;&#125;
+  &lt;/div&gt;
+  &lt;div *ngIf=&quot;hero.age &gt; 18&quot;&gt;
+    年齡: &#123;&#123;hero.age&#125;&#125;
+  &lt;/div&gt;
+  ===========
+&lt;/div&gt;</code></pre><p>顯示出來的內容:<br>未滿18歲的大雄與柯南就被移除了<br><img src="https://ithelp.ithome.com.tw/upload/images/20190921/20120107QGugUH3NkE.png" alt="https://ithelp.ithome.com.tw/upload/images/20190921/20120107QGugUH3NkE.png"></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><ul>
+<li>插值法的基本用法，顯示綁定的資料</li>
+<li>插值法的更多用法，除了顯示綁定的資料，亦可以做簡單的運算、方法及二元判斷式</li>
+<li>使用<code>ngFor</code>處理多筆資料</li>
+<li>使用<code>ngIf</code>處理資料顯示的條件</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/22/2019ithomeday6/">prev</a><a class="next" href="/blog/2019/09/20/2019ithomeday4/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>如何偵測使用者的裝置是否為行動裝置 | Jason's BLOG</title><meta name="description" content="如何偵測使用者的裝置是否為行動裝置 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">如何偵測使用者的裝置是否為行動裝置</h1><div class="post-info"><a></a>2019-03-10<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/javascript/">javascript</a></li><li><a class="post-tag" href="/blog/tags/es6/">es6</a></li></ul></div><div class="post-content"><p>如何為不同裝置的使用者量身打造專屬的頁面?一般而言以解析度作為判斷的依據。如果裝置的寬度大於或小於某個解析度就會切換至不同的模式。例如:bootstrap判斷的解析度斷點以<code>576(xs)</code>、<code>768(sm)</code>、<code>992(md)</code>三種大小來分別判斷為手機、平板、電腦三種裝置。這樣的做法有個缺點:假設使用者使用電腦時將頁面的寬度縮小至992以下，頁面因為判斷到觸發的斷點而切換至平板模式。可是今天有個需求是這樣，部分的功能我只對手機的使用者開放或隱藏，也就是說:不論電腦或平板的使用者將頁面如何縮放，即使判斷到手機的斷點，仍舊開放或不開放某個功能給使用者使用。因此以使用者的螢幕寬度作為判斷，不是一個很牢靠的判斷方式。</p>
+<p>既然無法使用css的media query去判斷頁面的寬度作為依據的話，只好使用javascript去偵測使用者的裝置是什麼了。於是在stackoverflow找到解決辦法:</p>
+<img src="/blog/2019/03/10/detect-mobile-device/01.png" class="">
+
+<p>這個辦法蠻聰明的，偵測瀏覽器的<code>userAgent</code>有沒有包含行動裝置的關鍵字，如果偵測到相關的關鍵字。則返回<code>true</code>，反之返回<code>false</code>。利用得到的布林值就可以很輕易地使用判斷式去判斷某些專屬的功能可不可以被執行。</p>
+<h3 id="stackoverflow的解決辦法"><a href="#stackoverflow的解決辦法" class="headerlink" title="stackoverflow的解決辦法"></a>stackoverflow的解決辦法</h3><pre><code>function detectmob() &#123; 
+ if( navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i)
+ )&#123;
+    return true;
+  &#125;
+ else &#123;
+    return false;
+  &#125;
+&#125;</code></pre><p>這樣問題就決了。可是這樣的寫法有點複雜又不簡潔，例如在if判斷式中，幾乎每個判斷式都長得一模一樣navigator.userAgent.match(xxx)，只有判斷的關鍵字不一樣。重複做了七次一樣的事情除了看起來不舒服占了很多行數之外，在維護方面，非常難以維護。接下來還要想辦法讓這個判斷的功能更優雅、更簡潔一點，造福未來維護的自己。</p>
+<h3 id="step1"><a href="#step1" class="headerlink" title="step1:"></a>step1:</h3><p>既然同樣的事情要重複做七次，那麼馬上想到使用迴圈去做重複的事情。於是先把要檢查的裝置轉換成陣列儲存起來。</p>
+<pre><code>function isMobileDevice()&#123;
+    var mobileDevices = [&#39;Android&#39;, &#39;webOS&#39;, &#39;iPhone&#39;, &#39;iPad&#39;, &#39;iPod&#39;, &#39;BlackBerry&#39;, &#39;Windows Phone&#39;]
+&#125;</code></pre><h3 id="step2"><a href="#step2" class="headerlink" title="step2:"></a>step2:</h3><p>再來新增一個變數，用來儲存判斷之後的結果，預設為false，不是行動裝置</p>
+<pre><code>function isMobileDevice()&#123;
+    var mobileDevices = [&#39;Android&#39;, &#39;webOS&#39;, &#39;iPhone&#39;, &#39;iPad&#39;, &#39;iPod&#39;, &#39;BlackBerry&#39;, &#39;Windows Phone&#39;]
+    var isMobileDevice=false
+&#125;</code></pre><h3 id="step3"><a href="#step3" class="headerlink" title="step3:"></a>step3:</h3><p>接下來開始實作迴圈的功能。如果判斷到符合關鍵字則將isMobileDevice的變數改為true，是行動裝置</p>
+<pre><code>function isMobileDevice()&#123;
+    var mobileDevices = [&#39;Android&#39;, &#39;webOS&#39;, &#39;iPhone&#39;, &#39;iPad&#39;, &#39;iPod&#39;, &#39;BlackBerry&#39;, &#39;Windows Phone&#39;]
+    var isMobileDevice=false
+    for(var i=0;i&lt;mobileDevice.length;i++)&#123;
+        if(navigator.userAgent.match(mobileDevice[i]))&#123;
+            isMobileDevice=true
+        &#125;
+    &#125;
+&#125;</code></pre><h3 id="step4"><a href="#step4" class="headerlink" title="step4:"></a>step4:</h3><p>最後只要把結果返回，一切就大功告成啦!</p>
+<pre><code>function isMobileDevice()&#123;
+    var mobileDevices = [&#39;Android&#39;, &#39;webOS&#39;, &#39;iPhone&#39;, &#39;iPad&#39;, &#39;iPod&#39;, &#39;BlackBerry&#39;, &#39;Windows Phone&#39;]
+    var isMobileDevice=false
+    for(var i=0;i&lt;mobileDevice.length;i++)&#123;
+        if(navigator.userAgent.match(mobileDevice[i]))&#123;
+            isMobileDevice=true
+        &#125;
+    &#125;
+    return isMobileDevice
+&#125;</code></pre><p>這樣看起來是不是比原本的還要直覺、簡潔了呢?還有更直覺、更美觀的寫法!<br>使用<code>ES6</code>吧!</p>
+<h3 id="使用es6-step1"><a href="#使用es6-step1" class="headerlink" title="使用es6-step1:"></a>使用es6-step1:</h3><p>使用const取代var讓變數的意義與作用範圍更明確</p>
+<pre><code>function isMobileDevice() &#123;
+    const mobileDevice = [&#39;Android&#39;, &#39;webOS&#39;, &#39;iPhone&#39;, &#39;iPad&#39;, &#39;iPod&#39;, &#39;BlackBerry&#39;, &#39;Windows Phone&#39;]
+&#125;</code></pre><h3 id="使用es6-step2"><a href="#使用es6-step2" class="headerlink" title="使用es6-step2:"></a>使用es6-step2:</h3><p>原本使用for迴圈的目的，在於歷遍陣列中所有的裝置，只要其中有任何一個裝置符合，isMobileDevice就為true，反之為flase。我們最終要的結果，就是要知道<code>isMobileDevice是true或false</code><br><code>只要能達成目的，也就是取得isMobileDevice的值</code>，過程中使用什麼方法則顯得不那麼重要。所以就可以捨棄for迴圈的方法，改使用es6的<code>some()</code>一樣可以達成目的，而且更輕鬆喔。</p>
+<pre><code>function isMobileDevice() &#123;
+    const mobileDevice = [&#39;Android&#39;, &#39;webOS&#39;, &#39;iPhone&#39;, &#39;iPad&#39;, &#39;iPod&#39;, &#39;BlackBerry&#39;, &#39;Windows Phone&#39;]
+    let isMobileDevice = mobileDevice.some(e =&gt; navigator.userAgent.match(e))
+    return isMobileDevice
+&#125;</code></pre><p>少去繁雜的迴圈與判斷式，整個程式看起來更簡潔，並且維持一樣的效果，這樣就大功告成啦!</p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結:"></a>總結:</h3><p>最初的目的只是想找找有沒有更精準判斷使用者裝置是否為行動裝置的方法，雖然在stackoverflow上面找到不錯的解決辦法，但是總不能只是一個會複製貼上的傢伙，還是要有一點自己的主見。想到有更好的寫法，於是一步一步記錄下我的思考過程。方法雖然沒有很難，但是也花了一兩年的時間不斷地在練習和消化，希望可以分享給大家一起參考、一起學習。</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/05/20/extend-angular-pipe/">prev</a><a class="next" href="/blog/2019/01/03/ie-promise/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

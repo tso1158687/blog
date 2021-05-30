@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-24) Nestjs 服務 (Service)-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-24) Nestjs 服務 (Service)-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-24) Nestjs 服務 (Service)-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-10<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nestjs/">nestjs</a></li></ul></div><div class="post-content"><h1 id="為什麼需要服務"><a href="#為什麼需要服務" class="headerlink" title="為什麼需要服務"></a>為什麼需要服務</h1><p>在Angular的篇章提到元件(Component)和服務(Service)的差別，元件應該專注在處理顯示頁面的邏輯；服務應該專注在處理資料的取得資料、解析資料等等複雜的業務邏輯。</p>
+<p>同樣的概念在Nestjs同樣適用，控制器(Controller)應該專注在如何接收從客戶端傳來的資料，取得資料之後，就應該將資料轉拋到<code>服務(Service)</code>去處理。</p>
+<h1 id="如何建立服務"><a href="#如何建立服務" class="headerlink" title="如何建立服務"></a>如何建立服務</h1><p>建立服務的指令和Angular建立服務的指令一樣</p>
+<pre><code>nest generate service &lt;serviceName&gt;</code></pre><p>在這裡建立一個名為document的service</p>
+<pre><code>nest generate service document</code></pre><p>建立完之後得到一個空白的服務</p>
+<pre><code>import &#123; Injectable &#125; from &#39;@nestjs/common&#39;;
+
+
+
+
+@Injectable()
+export class DocumentService &#123;&#125;
+</code></pre><p>在Nestjs CLI建立服務的同時，也會同時將建立起來的服務宣告註冊到根模組<br><code>app.module.ts</code></p>
+<p>引入 DocumentService </p>
+<pre><code>import &#123; DocumentService &#125; from &#39;./document/document.service&#39;;</code></pre><p>註冊到根模組</p>
+<pre><code>@Module(&#123;
+  imports: [....],
+  controllers: [........],
+  providers: [AppService, DocumentService],
+&#125;)</code></pre><h1 id="在控制器裡注入服務"><a href="#在控制器裡注入服務" class="headerlink" title="在控制器裡注入服務"></a>在控制器裡注入服務</h1><p>回到昨天的documentController</p>
+<pre><code>export class DocumentController &#123;
+    constructor(
+        private documentService: DocumentService,
+    ) &#123; &#125;
+..........
+&#125;</code></pre><p>和Angular注入服務的方法一樣，在建構式當中，將服務加入進來，就可以使用囉!</p>
+<h1 id="設計與使用服務"><a href="#設計與使用服務" class="headerlink" title="設計與使用服務"></a>設計與使用服務</h1><p>首先先將上一篇定義的假資料從控制器搬移到服務</p>
+<pre><code>import &#123; Injectable &#125; from &#39;@nestjs/common&#39;;
+
+
+
+
+@Injectable()
+export class DocumentService &#123;
+    data = [
+        &#123;
+            name: &#39;存有與虛無&#39;,
+            author: &#39;沙特&#39;,
+            id: 1
+        &#125;,
+        &#123;
+            name: &#39;單子論&#39;,
+            author: &#39;萊布尼茲&#39;,
+            id: 2
+        &#125;,
+        &#123;
+            name: &#39;物不遷論&#39;,
+            author: &#39;僧肇&#39;,
+            id: 3
+        &#125;,
+        &#123;
+            name: &#39;道德經&#39;,
+            author: &#39;老子&#39;,
+            id: 4
+        &#125;
+    ]
+
+    &#125;
+&#125;
+</code></pre><p>接下來建立一個取得所有資料的方法讓控制器呼叫，當控制器呼叫取得所有文件的方法的時候，返回假資料</p>
+<pre><code>getDocumentData()&#123;
+    return this.data
+&#125;</code></pre><p>由於假資料是直接寫在服務裡面，所以沒有非同步的問題，但是之後如果實際串接資料庫，服務在呼叫資料庫查詢資料的時候，就是一個非同步的事件。因此先在這裡改為非同步的方法傳送假資料。<br>Nestjs同樣整合了<code>RXJS</code>，所以一樣可以使用在前幾篇學到的RXJS的<code>可被觀察對象(Observable)</code>與<code>訂閱(Subscribe)</code>的方法來處理非同步事件<br>於是稍微修改一下</p>
+<pre><code>getDocumentData()&#123;
+    return of(this.data)
+&#125;</code></pre><p><code>of</code> 是RXJS建立可被觀察對象的方法之一，of可以將裡面的參數轉換成可被觀察的對象</p>
+<blockquote>
+<p>使用of需要引用RXJS資料庫，如果沒有自動匯入的話請手動匯入</p>
+</blockquote>
+<pre><code>import &#123; of &#125; from &#39;rxjs&#39;;</code></pre><h1 id="修改控制器取得服務的內容"><a href="#修改控制器取得服務的內容" class="headerlink" title="修改控制器取得服務的內容"></a>修改控制器取得服務的內容</h1><p>既然服務裡面取得所有資料的方法是使用可被觀察(Observable)的對象的話，那麼控制器就需要訂閱(Subscribe)去取得內容<br>以取得所有資料為例</p>
+<pre><code>@Get()
+getAllDocuments(@Response() res) &#123;
+    this.documentService.getDocumentData().subscribe(data=&gt;&#123;
+        res.status(HttpStatus.OK).json(data);
+    &#125;)
+&#125;</code></pre><p>其他的方法修改方式也相同</p>
+<p>使用postman測試，成功使用控制器去呼叫服務取得資料<br><img src="https://ithelp.ithome.com.tw/upload/images/20191010/20120107f2yaH5vvDi.png" alt="https://ithelp.ithome.com.tw/upload/images/20191010/20120107f2yaH5vvDi.png"></p>
+<h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><p>今天的範例內容可以githib上面看到:<a target="_blank" rel="noopener" href="https://github.com/tso1158687/hello-nest-iron">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>為什麼需要服務</li>
+<li>為什麼建立服務</li>
+<li>如何使用服務</li>
+<li>如何從控制器呼叫服務</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/11/2019ithomeday25/">prev</a><a class="next" href="/blog/2019/10/09/2019ithomeday23/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

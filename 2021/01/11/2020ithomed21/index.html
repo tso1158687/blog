@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function | Jason's BLOG</title><meta name="description" content="DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/javascript/">javascript</a></li></ul></div><div class="post-content"><h1 id="DAY21-常常有莫名其妙的bug嗎-要不要試試看pure-function"><a href="#DAY21-常常有莫名其妙的bug嗎-要不要試試看pure-function" class="headerlink" title="DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function"></a>DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function</h1><h1 id="什麼是pure-function"><a href="#什麼是pure-function" class="headerlink" title="什麼是pure function"></a>什麼是pure function</h1><p>pure function不是一個手法，而是一個觀念</p>
+<blockquote>
+<p>不論輸入幾次一樣的參數，永遠會得到一樣的結果，而且不會對函式以外的區域造成任何影響</p>
+</blockquote>
+<p>也就是說，輸入一樣的東西永遠都會有一樣的結果，而且不會造成副作用。</p>
+<h2 id="不是pure-function的反面例子"><a href="#不是pure-function的反面例子" class="headerlink" title="不是pure function的反面例子"></a>不是pure function的反面例子</h2><p>先來看看一個反面例子</p>
+<p><img src="Untitled.png" alt="Untitled.png"></p>
+<p>連續呼叫三次 <code>sayHello</code> 的方法，都輸入同樣的參數 <code>1</code>  三次所得到的結果都不一樣，而且在sayHello方法外的變數 <code>number</code> 被修改成 3</p>
+<h2 id="更多不是pure-function的反面例子"><a href="#更多不是pure-function的反面例子" class="headerlink" title="更多不是pure function的反面例子"></a>更多不是pure function的反面例子</h2><p>Javascript有很多內建的方法都不是pure function，舉幾個例子</p>
+<ul>
+<li>push</li>
+<li>shift</li>
+<li>unshift</li>
+<li>pop</li>
+</ul>
+<p><strong>push:從陣列最後新增元素</strong></p>
+<pre><code class="jsx">let numbers=[1,2,3,4]
+
+numbers.push(1) //1,2,3,4,1
+numbers.push(1) //1,2,3,4,1,1</code></pre>
+<p><strong>shift:從陣列最前刪除元素</strong></p>
+<pre><code class="jsx">let numbers=[1,2,3,4]
+
+numbers.shift() //2,3,4
+numbers.shift() //3,4
+</code></pre>
+<p><strong>unshift:從陣列最前新增元素</strong></p>
+<pre><code class="jsx">let numbers=[1,2,3,4]
+
+numbers.unshift(1) //1,1,2,3,4
+numbers.unshift(1) //1,1,1,2,3,4</code></pre>
+<p><strong>pop:從陣列最後篩除元素</strong></p>
+<pre><code class="jsx">let numbers=[1,2,3,4]
+
+numbers.pop() //1,2,3
+numbers.pop() //1,2</code></pre>
+<p>splice</p>
+<h1 id="如何寫pure-function"><a href="#如何寫pure-function" class="headerlink" title="如何寫pure function"></a>如何寫pure function</h1><ul>
+<li>不去修改方法外的變數</li>
+<li>只使用參數來獲得資料</li>
+<li>使用 <code>return</code> 將結果返回</li>
+</ul>
+<p>在這以簡單的加法功能為例，這是一個充滿副作用的加法功能</p>
+<pre><code class="jsx">let a = 1;
+let b = 2;
+let result;
+
+function add() &#123;
+  result = a + b;
+&#125;
+
+add(); //3</code></pre>
+<p>遵守以上三個原則</p>
+<pre><code class="jsx">function add(x, y) &#123;
+  return x + y;
+&#125;
+
+result = add(a, b); //3
+result = add(a, b); //3
+result = add(a, b); //3</code></pre>
+<p>這兩個例子比較起來，可以看到:</p>
+<ul>
+<li>add方法內不會去修改外部參數result</li>
+<li>add方法，只使用參數x,y去操作</li>
+<li>最後將結果用return返回，確保輸入同樣參數都會獲得同樣結果。因此 <code>add(a, b)</code> 這個方法無論呼叫幾次，結果都會一樣</li>
+</ul>
+<h1 id="pure-function有甚麼好處"><a href="#pure-function有甚麼好處" class="headerlink" title="pure function有甚麼好處"></a>pure function有甚麼好處</h1><ul>
+<li>無副作用:作用方法只限定在方法內，不會影響到其他的地方</li>
+<li>可預測結果:同樣的輸入都會得到同樣的結果，也利於測試</li>
+<li>易於組合:因為功能單一，無副作用，所以可以跟其他的pure function組合</li>
+</ul>
+<p>例如我想要求下列陣列中的數字乘二相加之後的結果，就可以用不同的方法組合起來</p>
+<pre><code class="jsx">const source = [&quot;apple&quot;, &quot;banana&quot;, 2, 4, &#39;hohoho&#39;, 888, &#39;11&#39;, &#39;doraenom&#39;];
+
+let total = source
+    .filter(e =&gt; !!Number(e))
+    .map(x =&gt; Number(x) * 2)
+    .reduce((total, value) =&gt; total + value)</code></pre>
+<p><a target="_blank" rel="noopener" href="https://medium.com/frochu/%E7%B4%94%E7%B2%B9%E7%9A%84%E5%A5%BD-pure-function-%E7%9F%A5%E9%81%93-574d5c0d7819">https://medium.com/frochu/純粹的好-pure-function-知道-574d5c0d7819</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed22/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed20/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

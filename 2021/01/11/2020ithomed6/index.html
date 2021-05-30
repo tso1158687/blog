@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY6-寫CSS很痛苦嗎?SCSS快速入門介紹 | Jason's BLOG</title><meta name="description" content="DAY6-寫CSS很痛苦嗎?SCSS快速入門介紹 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY6-寫CSS很痛苦嗎?SCSS快速入門介紹</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/CSS/">CSS</a></li><li><a class="post-tag" href="/blog/tags/SCSS/">SCSS</a></li></ul></div><div class="post-content"><h1 id="DAY6-寫CSS很痛苦嗎-SCSS快速入門介紹"><a href="#DAY6-寫CSS很痛苦嗎-SCSS快速入門介紹" class="headerlink" title="DAY6-寫CSS很痛苦嗎?SCSS快速入門介紹"></a>DAY6-寫CSS很痛苦嗎?SCSS快速入門介紹</h1><h1 id="寫CSS最痛苦的事情是什麼？"><a href="#寫CSS最痛苦的事情是什麼？" class="headerlink" title="寫CSS最痛苦的事情是什麼？"></a>寫CSS最痛苦的事情是什麼？</h1><p>介紹SCSS之前，先想想寫CSS最痛苦的地方是什麼？</p>
+<ul>
+<li>寫法很囉唆</li>
+<li>不容易維護</li>
+</ul>
+<p>例如以下這個例子</p>
+<pre><code class="scss">div &#123;
+    color: #d7d7d7;
+&#125;
+
+div ul&#123;
+    color: #40809d;
+&#125;
+
+div ul span .highlight&#123;
+    color: #40809d;
+&#125;
+</code></pre>
+<h2 id="寫法很囉唆"><a href="#寫法很囉唆" class="headerlink" title="寫法很囉唆"></a>寫法很囉唆</h2><p>假如這是一個元件，裡面還有一系列的元素，彼此之間有階層的關係。如果要設計這個元素的樣式的話，就不斷重複寫。而且重複寫了幾次，寫了好幾層也不但輕易看出他們之間彼此的關係</p>
+<h2 id="不容易維護"><a href="#不容易維護" class="headerlink" title="不容易維護"></a>不容易維護</h2><p>假設顏色 <code>#40809d</code> 是主視覺的顏色。如果有一天設計師想要修改主視覺顏色。那麼身為前端工程師的我們卻沒有方法可以一鍵修改，豈不是尷尬？以這個例子為例，就要修改兩個地方。假如這份樣式原本不是自己寫的，交接時也沒有交代清楚，就不知道有多少地方要改。</p>
+<h2 id="如果用SCSS寫呢？"><a href="#如果用SCSS寫呢？" class="headerlink" title="如果用SCSS寫呢？"></a>如果用SCSS寫呢？</h2><pre><code class="scss">$primaryColor: #40809d;
+div&#123;
+    color: #d7d7d7;
+    ul&#123;
+        color: $primaryColor;
+        span&#123;
+            .highlight&#123;
+                color: $primaryColor;
+            &#125;
+        &#125;
+    &#125;
+&#125;</code></pre>
+<ul>
+<li>巢狀的寫法，不但可以減少寫很多重複的元素，也可以讓元素之間的關係更清晰</li>
+<li>使用變數定義顏色，如果修改的話，只需要修改變數的定義的話，就可以修改所有使用到這個變數的樣式。</li>
+</ul>
+<h1 id="什麼是SCSS"><a href="#什麼是SCSS" class="headerlink" title="什麼是SCSS?"></a>什麼是SCSS?</h1><p>SCSS是CSS的超集合，基本上和CSS的寫法幾乎一模一樣。只是SCSS多了變數和各種模組化的用法。讓樣式檔案經過工程化和模組化之後，不僅減少開發時間，也增加維護時的彈性，應付更多不同的需求。</p>
+<h2 id="變數"><a href="#變數" class="headerlink" title="變數"></a>變數</h2><p>可以像Javascript一樣，將值用變數儲存起來，可以重複使用。如果要修改，只要修改變數的值後，就可以全部套用。</p>
+<pre><code class="scss">$primaryColor: #393b3e;
+$secondaryColor: #40809d;
+$tltleFontSize: 96px;
+$columnGap: 4px;</code></pre>
+<p>變數除了宣告以外，也可以做運算</p>
+<pre><code class="scss">$standardFontSize: 96px;
+h1&#123;
+  font-size: $standardFontSize;
+&#125;
+h2&#123;
+  font-size: $standardFontSize / 2;
+&#125;</code></pre>
+<p>例如副標的文字大小要是主標的一半，可以使用四則運算的方式訂定規則，這樣更加容易維護。</p>
+<h3 id="使用情境"><a href="#使用情境" class="headerlink" title="使用情境"></a>使用情境</h3><p>一般來說，網站大多有主視覺配色和副視覺配色等設定。可以將這些設定宣告成變數，套用在專案當中。未來如果要修改設定，只要修改變數就好，不必再到處修改</p>
+<h2 id="巢狀"><a href="#巢狀" class="headerlink" title="巢狀"></a>巢狀</h2><h3 id="巢狀寫法"><a href="#巢狀寫法" class="headerlink" title="巢狀寫法"></a>巢狀寫法</h3><p>巢狀的寫法可使使用中括號來表之間的上下關係，越多括號代表越下層</p>
+<pre><code class="scss">.parent&#123;
+  color:blue;
+  .child&#123;
+    font-size:12px;
+    .grandson&#123;
+      border: 1px solid #fff;
+    &#125;
+  &#125;
+&#125;</code></pre>
+<p>這樣的寫法編譯後等同於CSS的</p>
+<pre><code class="scss">.parent &#123;
+  color: blue;
+&#125;
+
+.parent .child &#123;
+  font-size: 12px;
+&#125;
+
+.parent .child .grandson&#123;
+  border:1px solid #fff
+&#125;</code></pre>
+<h3 id="平級-amp"><a href="#平級-amp" class="headerlink" title="平級(&amp;)"></a>平級(&amp;)</h3><p>巢狀的寫法是指class之間有上下階層的關係，但是如果要寫平級的class，可以使用(&amp;)代表平級</p>
+<p>假設有一個html的結構是這樣</p>
+<pre><code class="html">&lt;div class=&quot;title highlight&quot;&gt;
+  這是重點
+&lt;/div&gt;</code></pre>
+<p>想要宣告一個同時擁有title和highlight的class的樣式可以這樣宣告</p>
+<pre><code class="scss">.title&#123;
+    &amp;.highlight&#123;
+        color:yellow
+    &#125;
+&#125;</code></pre>
+<h3 id="偽類"><a href="#偽類" class="headerlink" title="偽類(:)"></a>偽類(:)</h3><p>CSS中有許多偽類可以使用，例如input就有hover、focus等不同狀態，可以使用(:)代表偽類。更可以搭配平級的用法，一次訂好各種不同的狀態</p>
+<pre><code class="scss">input&#123;
+    &amp;:focus&#123;
+        color:red
+    &#125;
+    &amp;:hover&#123;
+        color: blue;
+    &#125;
+&#125;</code></pre>
+<h2 id="mixin"><a href="#mixin" class="headerlink" title="mixin"></a>mixin</h2><p>mixin的用法很像是CSS的function或是一群值的組合</p>
+<p>例如以下範例為一個表格的樣式設定</p>
+<pre><code class="scss">@mixin table-base &#123;
+  th &#123;
+    text-align: center;
+    font-weight: bold;
+  &#125;
+  td,
+  th &#123;
+    padding: 2px;
+  &#125;
+&#125;</code></pre>
+<p>使用 <code>@mixin</code> 加名稱，來宣告一組樣式的設定</p>
+<pre><code class="scss">#data &#123;
+  @include table-base;
+&#125;</code></pre>
+<p>如果要使用的話，使用 <code>@include</code> 來引入設定</p>
+<p>這樣的寫法編譯後等同於CSS</p>
+<pre><code class="scss">#data th &#123;
+  text-align: center;
+  font-weight: bold;
+&#125;
+#data td,
+#data th &#123;
+  padding: 2px;
+&#125;</code></pre>
+<h3 id="mixin與變數的搭配"><a href="#mixin與變數的搭配" class="headerlink" title="mixin與變數的搭配"></a>mixin與變數的搭配</h3><p>說mixin很像function，那必定得能輸入參數，並且用參數做一些事情。</p>
+<pre><code class="scss">@mixin version($color) &#123;
+    background-color: $color;
+    ::placeholder &#123;
+        color: $color;
+    &#125;
+    .top-info&#123;
+        .ui-inputgroup .ui-inputgroup-addon&#123;
+            background-color: $white;
+            width: 50px;;
+            i&#123;
+                color:$color;
+            &#125;
+        &#125;
+        .ui-button&#123;
+            background-color: $white;
+            color:$color;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        &#125;
+    &#125;   
+&#125;</code></pre>
+<p>例如mixin中，使用變數 <code>$color</code> 去當作參數，然後直接套用到使用到的CSS屬性。這樣要使用的時候，再由外部呼叫的時候，決定賦予這個變數什麼顏色。</p>
+<pre><code class="scss">@include version($darkOrange)</code></pre>
+<p>範例</p>
+<p><a target="_blank" rel="noopener" href="https://codepen.io/tso1158687/pen/MWyzeZj">https://codepen.io/tso1158687/pen/MWyzeZj</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed7/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed5/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

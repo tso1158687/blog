@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-10) Angular-使用HttpClient取得資料-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-10) Angular-使用HttpClient取得資料-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-10) Angular-使用HttpClient取得資料-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-26<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>在上一篇提到，所有存取資料的操作都應該在服務(Service)完成，元件(Componet)不應該負責存取資料，只應該負責如何顯示資料與畫面上的操作。</p>
+<p>因此建立一個服務並且將英雄的資料定義在服務裡面。由元件呼叫服務，將英雄的資料傳送給元件。</p>
+<p>到目前為止，都是將英雄的資料寫在Angular裡面，不論是寫在元件或是服務裡面。將資料寫在Angular裡面是為了方便解說各項功能的假資料。在真實的網站，所以的資料基本上都是透過<code>呼叫API取得</code>真實資料。</p>
+<p><code>呼叫API取得資料</code>就會將事情變得比較複雜。就得面對然後處理以下兩件事情:</p>
+<ol>
+<li>處理AJAX行為</li>
+<li>處理非同步事件</li>
+</ol>
+<p>本篇將只會探討第一個處理AJAX行為，第二個處理非同步事件會稍微帶過，之後再來專門討論如何好好地處理非同步事件。</p>
+<h1 id="什麼是HttpClient"><a href="#什麼是HttpClient" class="headerlink" title="什麼是HttpClient"></a>什麼是HttpClient</h1><p>HttpClient 是Angular 內建專門處理AJAX的模組，負責處理用API 溝通取得資料的複雜流程。有了這個模組，只要呼叫這個模組，就可以幫我們處理完整個複雜的流程囉</p>
+<h1 id="匯入HttpClient"><a href="#匯入HttpClient" class="headerlink" title="匯入HttpClient"></a>匯入HttpClient</h1><p><code>app.module.ts</code></p>
+<pre><code>import &#123; HttpClientModule &#125;    from &#39;@angular/common/http&#39;;</code></pre><p>並且在imports裡面，將HttpClientModule匯入</p>
+<pre><code>@NgModule(&#123;
+  imports:      [ BrowserModule, FormsModule,HttpClientModule ],// 將HttpClientModule匯入到Angular裡面
+  declarations: [ AppComponent, HelloComponent, HeroComponent ],
+  bootstrap:    [ AppComponent ],
+  providers: [DataService]
+&#125;)</code></pre><p><img src="https://ithelp.ithome.com.tw/upload/images/20190926/20120107tNbUMms1Pf.png" alt="https://ithelp.ithome.com.tw/upload/images/20190926/20120107tNbUMms1Pf.png"></p>
+<h1 id="使用HttpClient-取得資料"><a href="#使用HttpClient-取得資料" class="headerlink" title="使用HttpClient 取得資料"></a>使用HttpClient 取得資料</h1><p>將HttpClient的模組匯入Angular當中之後，就要開始使用HttpClient在之前已經建立好的服務-dataService</p>
+<p><code>data.service.ts</code></p>
+<pre><code>import &#123; Injectable &#125; from &#39;@angular/core&#39;;
+import &#123; HttpClient, HttpHeaders &#125; from &#39;@angular/common/http&#39;; //匯入HttpClient模組
+
+@Injectable(&#123; providedIn: &#39;root&#39;, &#125;)
+export class DataService &#123;
+
+  constructor(
+    private http: HttpClient //將HttpClient注入
+  ) &#123; &#125;
+  getData() &#123;
+    const httpOptions = &#123;
+      headers: new HttpHeaders(&#123; &#39;secret-key&#39;: &#39;$2b$10$WwqX.02qchXGVG/hhiNyTu3caiRdObjIZcMFdFr4G1bwm9vEZMNN.&#39; &#125;)
+    &#125;; //自己架的API需要的header，可以略過不看
+    const url=&#39;https://api.jsonbin.io/b/5d8cc016ef78a919ccb52682/3&#39;
+    return this.http.get(url,httpOptions) //使用get方法取得資料
+  &#125;
+&#125;</code></pre><ol>
+<li>同樣將HttpClient模組匯入到DataService</li>
+<li>在constructor將HttpClient模組注入，並且簡稱為http</li>
+<li>修改getData的方法，利用get方法取得非同步資料</li>
+</ol>
+<p>再來回到從dataService取得取得資料的<code>app.component.ts</code><br>修改取得資料的方法</p>
+<pre><code>  ngOnInit() &#123;
+  //  this.heros = this.dataService.getData()
+    this.dataService.getData().subscribe(res =&gt; &#123;
+      console.log(res) //可以打開console看看資料室什麼
+      this.heros = res.data
+
+    &#125;)
+  &#125;</code></pre><p>這裡一定會覺得很奇怪，為什麼使用<code>subscribe</code>去取得資料。Angular處理非同步的事件時，使用<code>RXJS</code>來處理非同步事件。簡單來說，處理非同步事件，一定要有人訂閱(subscribe)才會開始啟動。這是RXJS的設計模式。<br>關於更多RXJS的部分，下一篇會再詳細介紹。<br>今天主要的目的，只要能成功取得API回傳的資料就好了!</p>
+<p>成功利用HttpClient去打API取得資料<br><img src="https://ithelp.ithome.com.tw/upload/images/20190926/20120107AZ6WXCeoCP.png" alt="https://ithelp.ithome.com.tw/upload/images/20190926/20120107AZ6WXCeoCP.png"></p>
+<h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1><p>今天的範例內容可以在這裡看到:<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-iron-jason-d10?file=src/app/data.service.ts">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>為什麼需要HttpClient</li>
+<li>如何使用HttpClient</li>
+<li>如何使用HttpClient取得外部資料</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/27/2019ithomeday11/">prev</a><a class="next" href="/blog/2019/09/25/2019ithomeday9/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

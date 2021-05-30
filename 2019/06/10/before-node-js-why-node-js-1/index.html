@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>寫在NodeJS之前01-什麼是非同步和非阻塞輸入輸出 | Jason's BLOG</title><meta name="description" content="寫在NodeJS之前01-什麼是非同步和非阻塞輸入輸出 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">寫在NodeJS之前01-什麼是非同步和非阻塞輸入輸出</h1><div class="post-info"><a></a>2019-06-10<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nodejs/">nodejs</a></li></ul></div><div class="post-content"><h3 id="同步阻塞"><a href="#同步阻塞" class="headerlink" title="同步阻塞:"></a>同步阻塞:</h3><p>以在飲料店點飲料為例子，你向店員點了一杯珍珠奶茶(假設店員只有一位)，付了錢之後，你不讓出你的位置到旁邊去給下一位客人點飲料，而是站在原地，一直死命地盯著店員，看他有沒有好好地做你的珍珠奶茶，你也沒有辦法做其他事情，直到店員做好你的珍珠奶茶拿給你為止。(同步:你的飲料做完之後才能做別人的飲料；阻塞:死命盯著看，不能做別的事情)</p>
+<h3 id="同步非阻塞"><a href="#同步非阻塞" class="headerlink" title="同步非阻塞:"></a>同步非阻塞:</h3><p>同樣以剛剛的例子為例，同樣點了一杯飲料之後，不讓出你的位置到旁邊給下一位客人點飲料，站在原地死命地盯著店員，看他有沒有好好地做你的珍珠奶茶。不過這次你聰明了一點，你不再分分秒秒死盯著店員看，而是每 30 秒看一下店員確認進度，在這 30 秒之前，你可以滑手機做你的事情。(同步:你的飲料做完之後才能做別人的飲料；非阻塞:改每 30 秒確認一次，其他時間可以做其他事情)</p>
+<h3 id="非同步非阻塞"><a href="#非同步非阻塞" class="headerlink" title="非同步非阻塞:"></a>非同步非阻塞:</h3><p>同樣子剛剛的例子為例，同樣點了一杯飲料之後，你就讓出位置到等候區讓其他人點餐。你也不會死命地盯著店員，看他到底做好了沒，而是做你的事情，例如滑滑手機、講講電話，等到店員做好叫號的時候，聽到店員叫號才去拿你的飲料</p>
+<h3 id="非同步阻塞"><a href="#非同步阻塞" class="headerlink" title="非同步阻塞:"></a>非同步阻塞:</h3><p>所以非同步的動作是不是就等於非阻塞呢?因為都到等候區了，想要做自己的事就做自己事情，你也不會去理會店員做什麼。但是意外總是發生在大意的時候，例如你忘記帶手機了，即使可以做自己的事情也根本沒有事情可以做，只能眼睜睜地看著店員做飲料。</p>
+<p>所以以你的立場來說，你雖然到了等候區做了非同步的動作想要做自己的事情，但是你想做的事情做不了(因為沒帶手機，必須等飲料做好之後，才能回家拿手機繼續做事情)，所以對你來說你要做的事情還是被堵住了，這就是非同步阻塞</p>
+<h3 id="最後總結這四個概念"><a href="#最後總結這四個概念" class="headerlink" title="最後總結這四個概念:"></a>最後總結這四個概念:</h3><ul>
+<li>同步阻塞:你做你的，我盯著你做</li>
+<li>同步非阻塞:你做你的，我每隔 30 秒看一下你的進度</li>
+<li>非同步阻塞:你做你的，做好了告訴我，我等你做</li>
+<li>非同步非阻塞:你做你的，我忙我的，好了告訴我</li>
+</ul>
+<p>同步和非同步表示<code>過程</code>，阻塞和非阻塞表示過程中的<code>狀態</code></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/06/17/what-is-v8-engine/">prev</a><a class="next" href="/blog/2019/06/10/before-node-js-why-node-js-0/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Angular 如何整合 Google Maps 設定篇 | Jason's BLOG</title><meta name="description" content="Angular 如何整合 Google Maps 設定篇 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Angular 如何整合 Google Maps 設定篇</h1><div class="post-info"><a></a>2021-05-30<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li><li><a class="post-tag" href="/blog/tags/google-maps/">google maps</a></li></ul></div><div class="post-content"><h1 id="Angular-如何整合-Google-Maps-設定篇"><a href="#Angular-如何整合-Google-Maps-設定篇" class="headerlink" title="Angular 如何整合 Google Maps 設定篇"></a>Angular 如何整合 Google Maps 設定篇</h1><p>上一篇提到，我認為與angular整合最好的套件是angular官方推出的 Angular Google Maps component，因此本篇將以此套件作為整合示範</p>
+<h1 id="開始前的準備"><a href="#開始前的準備" class="headerlink" title="開始前的準備"></a>開始前的準備</h1><p>在開始之前，必須要準備 <code>google maps api key</code> ，這個是必須不可或缺的，因為使用google map api 的服務不是免費服務，是以使用次數來計價，這個也是google maps 營利的方式之一。</p>
+<h1 id="安裝-Angular-Google-Maps-component"><a href="#安裝-Angular-Google-Maps-component" class="headerlink" title="安裝 Angular Google Maps component"></a>安裝 Angular Google Maps component</h1><pre><code>npm install @angular/google-maps</code></pre><p>在 <code>app.module.ts</code>引入 <code>google maps module</code></p>
+<pre><code class="tsx">import &#123; NgModule &#125; from &#39;@angular/core&#39;;
+import &#123; GoogleMapsModule &#125; from &#39;@angular/google-maps&#39;;
+import &#123; BrowserModule &#125; from &#39;@angular/platform-browser&#39;;
+
+import &#123; AppComponent &#125; from &#39;./app.component&#39;;
+
+@NgModule(&#123;
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+        // 引入 google maps module
+    GoogleMapsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+&#125;)
+export class AppModule &#123; &#125;</code></pre>
+<p>在index.html加入金鑰</p>
+<pre><code class="html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;HelloAngular&lt;/title&gt;
+  &lt;base href=&quot;/&quot;&gt;
+
+  &lt;!-- 加入api 金鑰 --&gt;
+  &lt;script src=&quot;https://maps.googleapis.com/maps/api/js?key=你的金鑰&quot;&gt;&lt;/script&gt;
+
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/x-icon&quot; href=&quot;favicon.ico&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;app-root&gt;&lt;/app-root&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>在app.component.html 加入google maps</p>
+<pre><code class="html">&lt;google-map
+  height=&quot;75%&quot;
+  width=&quot;75%&quot;
+  [zoom]=&quot;zoom&quot;
+  [center]=&quot;center&quot;
+  [options]=&quot;options&quot;
+&gt;
+  &lt;map-polyline [options]=&quot;polyOptions&quot; [path]=&quot;polyPath&quot;&gt;&lt;/map-polyline&gt;
+&lt;/google-map&gt;</code></pre>
+<p>要注意的是，一定要給google maps的父元素空間，google maps才會顯示</p>
+<p>因此在app.component.scss加入一些設定</p>
+<pre><code class="scss">:host&#123;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+&#125;</code></pre>
+<p>最後在 <code>app.component.ts</code>加入設定的參數</p>
+<pre><code class="tsx">import &#123; Component &#125; from &#39;@angular/core&#39;;
+
+@Component(&#123;
+  selector: &#39;app-root&#39;,
+  templateUrl: &#39;./app.component.html&#39;,
+  styleUrls: [&#39;./app.component.scss&#39;],
+&#125;)
+export class AppComponent &#123;
+  polyPath: google.maps.LatLngLiteral[] = [
+    &#123; lat: 25.03280092118552, lng: 121.56348748779168 &#125;,
+    &#123; lat: 25.03587797931996, lng: 121.56351157458673 &#125;,
+    &#123; lat: 25.03583432131525, lng: 121.56543846794476 &#125;,
+    &#123; lat: 25.033019138809674, lng: 121.56546250540032 &#125;,
+    &#123; lat: 25.033062791203154, lng: 121.56201826717597 &#125;,
+  ];
+  center: google.maps.LatLngLiteral = &#123;
+    lat: 25.0336962,
+    lng: 121.5643673,
+  &#125;;
+  polyOptions: google.maps.PolylineOptions = &#123;
+    strokeColor: &#39;#40809d&#39;,
+    strokeOpacity: 1,
+    strokeWeight: 10,
+    icons: [
+      &#123;
+        icon: &#123;
+          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+        &#125;,
+        offset: &#39;100%&#39;,
+      &#125;,
+    ],
+  &#125;;
+  //
+  zoom = 17;
+  options: google.maps.MapOptions = &#123;
+    disableDefaultUI: true,
+    backgroundColor: &#39;#126df5&#39;,
+    clickableIcons: false,
+    disableDoubleClickZoom: true,
+    draggable: true,
+    zoomControl: true,
+  &#125;;
+&#125;</code></pre>
+<p>就可以做出這種把台北101圍起來的效果</p>
+<p><img src="Untitled.png" alt="Untitled.png"></p>
+<h1 id="如何管理環境"><a href="#如何管理環境" class="headerlink" title="如何管理環境"></a>如何管理環境</h1><h3 id="為何需要管理環境"><a href="#為何需要管理環境" class="headerlink" title="為何需要管理環境"></a>為何需要管理環境</h3><p>由於google maps api是收費的服務，以使用的次數收費。談到錢的問題，就很敏感，誰用的就要誰付費。而一般系統都會區分為生產環境和測試環境。生產環境提供給使用者使用，所產生的營運費用可能算在合約裡面也可能算在維運的廢運；而測試環境提供給開發者使用，開發者所產生的費用會由部門經費支付。</p>
+<p>因此生產環境和測試會各自有一把金鑰，各自管理、各自使用、各自付費。</p>
+<h3 id="官方提供的方法"><a href="#官方提供的方法" class="headerlink" title="官方提供的方法"></a>官方提供的方法</h3><p>在上一篇套件選擇的文章中提到，這一套的缺點是管理環境有點麻煩，以下是官方文件所提供的方法</p>
+<pre><code class="tsx">// google-maps-demo.module.ts
+
+import &#123; NgModule &#125; from &#39;@angular/core&#39;;
+import &#123; GoogleMapsModule &#125; from &#39;@angular/google-maps&#39;;
+import &#123; CommonModule &#125; from &#39;@angular/common&#39;;
+import &#123; HttpClientModule, HttpClientJsonpModule &#125; from &#39;@angular/common/http&#39;;
+
+import &#123; GoogleMapsDemoComponent &#125; from &#39;./google-maps-demo.component&#39;;
+
+@NgModule(&#123;
+  declarations: [
+    GoogleMapsDemoComponent,
+  ],
+  imports: [
+    CommonModule,
+    GoogleMapsModule,
+    HttpClientModule,
+    HttpClientJsonpModule,
+  ],
+  exports: [
+    GoogleMapsDemoComponent,
+  ],
+&#125;)
+export class GoogleMapsDemoModule &#123;&#125;
+
+// google-maps-demo.component.ts
+
+import &#123; Component &#125; from &#39;@angular/core&#39;;
+import &#123; HttpClient &#125; from &#39;@angular/common/http&#39;;
+import &#123; Observable, of &#125; from &#39;rxjs&#39;;
+import &#123; catchError, map &#125; from &#39;rxjs/operators&#39;;
+
+@Component(&#123;
+  selector: &#39;google-maps-demo&#39;,
+  templateUrl: &#39;./google-maps-demo.component.html&#39;,
+&#125;)
+export class GoogleMapsDemoComponent &#123;
+  apiLoaded: Observable&lt;boolean&gt;;
+
+  constructor(httpClient: HttpClient) &#123;
+    this.apiLoaded = httpClient.jsonp(&#39;https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&#39;, &#39;callback&#39;)
+        .pipe(
+          map(() =&gt; true),
+          catchError(() =&gt; of(false)),
+        );
+  &#125;
+&#125;</code></pre>
+<p>在這邊我覺得最麻煩的地方是，如果要管理不同的api key，必須在每個元件啟動的時候個別載入一次，而不是有一個全域統一載入的地方。</p>
+<p>這樣的作法會造成另外一個問題，假設同一個頁面要同時顯示多個以上的地圖元件，一樣的api key就會被重複載入多次，反而會讓api 返回錯誤，說同樣的api key請求授權太多次。</p>
+<h3 id="我的解法"><a href="#我的解法" class="headerlink" title="我的解法"></a>我的解法</h3><p>修改<code>main.ts</code></p>
+<pre><code class="tsx">import &#123; enableProdMode &#125; from &#39;@angular/core&#39;;
+import &#123; platformBrowserDynamic &#125; from &#39;@angular/platform-browser-dynamic&#39;;
+
+import &#123; AppModule &#125; from &#39;./app/app.module&#39;;
+import &#123; environment &#125; from &#39;./environments/environment&#39;;
+
+// 新增這個
+addGoogleMapApiKeyByEnvironment();
+if (environment.production) &#123;
+  enableProdMode();
+&#125;
+
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .catch((err) =&gt; console.error(err));
+
+// 新增這個
+function addGoogleMapApiKeyByEnvironment() &#123;
+  const head = document.getElementsByTagName(&#39;head&#39;)[0];
+  const mapApiKey = environment.mapKey;
+  const script = document.createElement(&#39;script&#39;);
+  script.type = &#39;text/javascript&#39;;
+  script.src = `https://maps.googleapis.com/maps/api/js?key=$&#123;mapApiKey&#125;`;
+  head.appendChild(script);
+&#125;</code></pre>
+<p><code>main.ts</code> 是angular啟動之前所執行的檔案，也就是說，我的作法是，在angular啟動之前，就先依照環境的不同，讀取不同的金鑰，然後直接寫入 <code>index.html</code> 當中，就和一開始直接在index.html直接寫死金鑰有同樣的效果，只不過多了一個環境變數作為判斷。</p>
+<p>如此一來，就能保證金鑰只被載入一次，不會有上述重複載入的問題，更有環境判斷的效果了</p>
+<h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p><a target="_blank" rel="noopener" href="https://github.com/tso1158687/angular-google-maps-component-demo">github原始碼</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="next" href="/blog/2021/05/30/angular-with-google-maps1/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

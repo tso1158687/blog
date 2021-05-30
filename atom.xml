@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Jason&#39;s BLOG</title>
+  
+  <subtitle>用哲學寫程式</subtitle>
+  <link href="https://tso1158687.github.io/blog/atom.xml" rel="self"/>
+  
+  <link href="https://tso1158687.github.io/blog/"/>
+  <updated>2021-05-30T04:01:11.578Z</updated>
+  <id>https://tso1158687.github.io/blog/</id>
+  
+  <author>
+    <name>Jason Zheng</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Angular 如何整合 Google Maps 設定篇</title>
+    <link href="https://tso1158687.github.io/blog/2021/05/30/angular-with-google-maps2/"/>
+    <id>https://tso1158687.github.io/blog/2021/05/30/angular-with-google-maps2/</id>
+    <published>2021-05-30T11:37:23.000Z</published>
+    <updated>2021-05-30T04:01:11.578Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Angular-如何整合-Google-Maps-設定篇"><a href="#Angular-如何整合-Google-Maps-設定篇" class="headerlink" title="Angular 如何整合 Google Maps 設定篇"></a>Angular 如何整合 Google Maps 設定篇</h1><p>上一篇提到，我認為與angular整合最好的套件是angular官方推出的 Angular Google Maps component，因此本篇將以此套件作為整合示範</p><h1 id="開始前的準備"><a href="#開始前的準備" class="headerlink" title="開始前的準備"></a>開始前的準備</h1><p>在開始之前，必須要準備 <code>google maps api key</code> ，這個是必須不可或缺的，因為使用google map api 的服務不是免費服務，是以使用次數來計價，這個也是google maps 營利的方式之一。</p><h1 id="安裝-Angular-Google-Maps-component"><a href="#安裝-Angular-Google-Maps-component" class="headerlink" title="安裝 Angular Google Maps component"></a>安裝 Angular Google Maps component</h1><pre><code>npm install @angular/google-maps</code></pre><p>在 <code>app.module.ts</code>引入 <code>google maps module</code></p><pre><code class="tsx">import &#123; NgModule &#125; from &#39;@angular/core&#39;;import &#123; GoogleMapsModule &#125; from &#39;@angular/google-maps&#39;;import &#123; BrowserModule &#125; from &#39;@angular/platform-browser&#39;;import &#123; AppComponent &#125; from &#39;./app.component&#39;;@NgModule(&#123;  declarations: [    AppComponent  ],  imports: [    BrowserModule,        // 引入 google maps module    GoogleMapsModule  ],  providers: [],  bootstrap: [AppComponent]&#125;)export class AppModule &#123; &#125;</code></pre><p>在index.html加入金鑰</p><pre><code class="html">&lt;!doctype html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;  &lt;meta charset=&quot;utf-8&quot;&gt;  &lt;title&gt;HelloAngular&lt;/title&gt;  &lt;base href=&quot;/&quot;&gt;  &lt;!-- 加入api 金鑰 --&gt;  &lt;script src=&quot;https://maps.googleapis.com/maps/api/js?key=你的金鑰&quot;&gt;&lt;/script&gt;  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;  &lt;link rel=&quot;icon&quot; type=&quot;image/x-icon&quot; href=&quot;favicon.ico&quot;&gt;&lt;/head&gt;&lt;body&gt;  &lt;app-root&gt;&lt;/app-root&gt;&lt;/body&gt;&lt;/html&gt;</code></pre><p>在app.component.html 加入google maps</p><pre><code class="html">&lt;google-map  height=&quot;75%&quot;  width=&quot;75%&quot;  [zoom]=&quot;zoom&quot;  [center]=&quot;center&quot;  [options]=&quot;options&quot;&gt;  &lt;map-polyline [options]=&quot;polyOptions&quot; [path]=&quot;polyPath&quot;&gt;&lt;/map-polyline&gt;&lt;/google-map&gt;</code></pre><p>要注意的是，一定要給google maps的父元素空間，google maps才會顯示</p><p>因此在app.component.scss加入一些設定</p><pre><code class="scss">:host&#123;    display: block;    width: 100vw;    height: 100vh;&#125;</code></pre><p>最後在 <code>app.component.ts</code>加入設定的參數</p><pre><code class="tsx">import &#123; Component &#125; from &#39;@angular/core&#39;;@Component(&#123;  selector: &#39;app-root&#39;,  templateUrl: &#39;./app.component.html&#39;,  styleUrls: [&#39;./app.component.scss&#39;],&#125;)export class AppComponent &#123;  polyPath: google.maps.LatLngLiteral[] = [    &#123; lat: 25.03280092118552, lng: 121.56348748779168 &#125;,    &#123; lat: 25.03587797931996, lng: 121.56351157458673 &#125;,    &#123; lat: 25.03583432131525, lng: 121.56543846794476 &#125;,    &#123; lat: 25.033019138809674, lng: 121.56546250540032 &#125;,    &#123; lat: 25.033062791203154, lng: 121.56201826717597 &#125;,  ];  center: google.maps.LatLngLiteral = &#123;    lat: 25.0336962,    lng: 121.5643673,  &#125;;  polyOptions: google.maps.PolylineOptions = &#123;    strokeColor: &#39;#40809d&#39;,    strokeOpacity: 1,    strokeWeight: 10,    icons: [      &#123;        icon: &#123;          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,        &#125;,        offset: &#39;100%&#39;,      &#125;,    ],  &#125;;  //  zoom = 17;  options: google.maps.MapOptions = &#123;    disableDefaultUI: true,    backgroundColor: &#39;#126df5&#39;,    clickableIcons: false,    disableDoubleClickZoom: true,    draggable: true,    zoomControl: true,  &#125;;&#125;</code></pre><p>就可以做出這種把台北101圍起來的效果</p><p><img src="Untitled.png" alt="Untitled.png"></p><h1 id="如何管理環境"><a href="#如何管理環境" class="headerlink" title="如何管理環境"></a>如何管理環境</h1><h3 id="為何需要管理環境"><a href="#為何需要管理環境" class="headerlink" title="為何需要管理環境"></a>為何需要管理環境</h3><p>由於google maps api是收費的服務，以使用的次數收費。談到錢的問題，就很敏感，誰用的就要誰付費。而一般系統都會區分為生產環境和測試環境。生產環境提供給使用者使用，所產生的營運費用可能算在合約裡面也可能算在維運的廢運；而測試環境提供給開發者使用，開發者所產生的費用會由部門經費支付。</p><p>因此生產環境和測試會各自有一把金鑰，各自管理、各自使用、各自付費。</p><h3 id="官方提供的方法"><a href="#官方提供的方法" class="headerlink" title="官方提供的方法"></a>官方提供的方法</h3><p>在上一篇套件選擇的文章中提到，這一套的缺點是管理環境有點麻煩，以下是官方文件所提供的方法</p><pre><code class="tsx">// google-maps-demo.module.tsimport &#123; NgModule &#125; from &#39;@angular/core&#39;;import &#123; GoogleMapsModule &#125; from &#39;@angular/google-maps&#39;;import &#123; CommonModule &#125; from &#39;@angular/common&#39;;import &#123; HttpClientModule, HttpClientJsonpModule &#125; from &#39;@angular/common/http&#39;;import &#123; GoogleMapsDemoComponent &#125; from &#39;./google-maps-demo.component&#39;;@NgModule(&#123;  declarations: [    GoogleMapsDemoComponent,  ],  imports: [    CommonModule,    GoogleMapsModule,    HttpClientModule,    HttpClientJsonpModule,  ],  exports: [    GoogleMapsDemoComponent,  ],&#125;)export class GoogleMapsDemoModule &#123;&#125;// google-maps-demo.component.tsimport &#123; Component &#125; from &#39;@angular/core&#39;;import &#123; HttpClient &#125; from &#39;@angular/common/http&#39;;import &#123; Observable, of &#125; from &#39;rxjs&#39;;import &#123; catchError, map &#125; from &#39;rxjs/operators&#39;;@Component(&#123;  selector: &#39;google-maps-demo&#39;,  templateUrl: &#39;./google-maps-demo.component.html&#39;,&#125;)export class GoogleMapsDemoComponent &#123;  apiLoaded: Observable&lt;boolean&gt;;  constructor(httpClient: HttpClient) &#123;    this.apiLoaded = httpClient.jsonp(&#39;https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&#39;, &#39;callback&#39;)        .pipe(          map(() =&gt; true),          catchError(() =&gt; of(false)),        );  &#125;&#125;</code></pre><p>在這邊我覺得最麻煩的地方是，如果要管理不同的api key，必須在每個元件啟動的時候個別載入一次，而不是有一個全域統一載入的地方。</p><p>這樣的作法會造成另外一個問題，假設同一個頁面要同時顯示多個以上的地圖元件，一樣的api key就會被重複載入多次，反而會讓api 返回錯誤，說同樣的api key請求授權太多次。</p><h3 id="我的解法"><a href="#我的解法" class="headerlink" title="我的解法"></a>我的解法</h3><p>修改<code>main.ts</code></p><pre><code class="tsx">import &#123; enableProdMode &#125; from &#39;@angular/core&#39;;import &#123; platformBrowserDynamic &#125; from &#39;@angular/platform-browser-dynamic&#39;;import &#123; AppModule &#125; from &#39;./app/app.module&#39;;import &#123; environment &#125; from &#39;./environments/environment&#39;;// 新增這個addGoogleMapApiKeyByEnvironment();if (environment.production) &#123;  enableProdMode();&#125;platformBrowserDynamic()  .bootstrapModule(AppModule)  .catch((err) =&gt; console.error(err));// 新增這個function addGoogleMapApiKeyByEnvironment() &#123;  const head = document.getElementsByTagName(&#39;head&#39;)[0];  const mapApiKey = environment.mapKey;  const script = document.createElement(&#39;script&#39;);  script.type = &#39;text/javascript&#39;;  script.src = `https://maps.googleapis.com/maps/api/js?key=$&#123;mapApiKey&#125;`;  head.appendChild(script);&#125;</code></pre><p><code>main.ts</code> 是angular啟動之前所執行的檔案，也就是說，我的作法是，在angular啟動之前，就先依照環境的不同，讀取不同的金鑰，然後直接寫入 <code>index.html</code> 當中，就和一開始直接在index.html直接寫死金鑰有同樣的效果，只不過多了一個環境變數作為判斷。</p><p>如此一來，就能保證金鑰只被載入一次，不會有上述重複載入的問題，更有環境判斷的效果了</p><h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><p><a href="https://github.com/tso1158687/angular-google-maps-component-demo">github原始碼</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Angular-如何整合-Google-Maps-設定篇&quot;&gt;&lt;a href=&quot;#Angular-如何整合-Google-Maps-設定篇&quot; class=&quot;headerlink&quot; title=&quot;Angular 如何整合 Google Maps 設定篇&quot;&gt;&lt;/a&gt;An</summary>
+      
+    
+    
+    
+    
+    <category term="angular" scheme="https://tso1158687.github.io/blog/tags/angular/"/>
+    
+    <category term="google maps" scheme="https://tso1158687.github.io/blog/tags/google-maps/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Angular 如何整合 Google Maps - 比較篇</title>
+    <link href="https://tso1158687.github.io/blog/2021/05/30/angular-with-google-maps1/"/>
+    <id>https://tso1158687.github.io/blog/2021/05/30/angular-with-google-maps1/</id>
+    <published>2021-05-30T11:37:17.000Z</published>
+    <updated>2021-05-30T04:01:11.578Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Angular-如何整合-Google-Maps-比較篇"><a href="#Angular-如何整合-Google-Maps-比較篇" class="headerlink" title="Angular 如何整合 Google Maps - 比較篇"></a>Angular 如何整合 Google Maps - 比較篇</h1><p>Angular和Google Maps都是google推出的自家產品，一個是前端框架、一個是地圖服務。但是兩者一直沒有很好的結合，想要整合這兩者，必須自己想辦法、各顯神通去整合</p><p>目前在Angular使用google maps有下列三個方法</p><ul><li>Maps Javascript API</li><li>AGM (Angular Google Maps)</li><li>Angular Google Maps component</li></ul><h1 id="三大套件比較"><a href="#三大套件比較" class="headerlink" title="三大套件比較"></a>三大套件比較</h1><p>以下以Angular的角度，來分析這幾個套件的優劣</p><h2 id="Maps-Javascript-API"><a href="#Maps-Javascript-API" class="headerlink" title="Maps Javascript API"></a>Maps Javascript API</h2><h3 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h3><ul><li>Google Maps 團隊原生支援，所有套件的基礎，都是包裝官方API整合而生</li><li>最廣泛通用的格式，不限定 Angular，所有框架都可以使用，無痛轉換</li><li>官方說明文件詳細豐富，基本上只要複製貼上都可以使用</li></ul><h3 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h3><ul><li>為 Javascript ，非Typescript，如果要使用Typescript，享受Typescript的好處的話，需要自行額外整合</li><li>沒有與Angular整合，如果要利用Angular生命週期或資料綁定等方法去操作的話，需要花額外大量時間整合</li></ul><h2 id="AGM-Angular-Google-Maps"><a href="#AGM-Angular-Google-Maps" class="headerlink" title="AGM (Angular Google Maps)"></a>AGM (Angular Google Maps)</h2><h3 id="優點-1"><a href="#優點-1" class="headerlink" title="優點"></a>優點</h3><ul><li>整合了 Angular，並且封裝得很好，使用上友善方便</li><li>大量利用 Angular 的特性，使用上幾乎沒有學習成本</li><li>Typescript型別定義完整，對於開發速度很有幫助</li></ul><h3 id="缺點-1"><a href="#缺點-1" class="headerlink" title="缺點"></a>缺點</h3><ul><li>基本用法很簡單，但是如果要深度客製化的話，因為文件稀少，難度會變得很高，需要自己去翻原始法，自己會意使用方法，難度會呈現指數成長</li><li>此套件為開發者自行發起的專案，很難保證是否一直持續穩定更新，保證相容性。現在最新的版本已經幾乎快要一年沒有更新，跟 Angular Ivy 已經有相容性的問題了</li></ul><h2 id="Angular-Google-Maps-component"><a href="#Angular-Google-Maps-component" class="headerlink" title="Angular Google Maps component"></a>Angular Google Maps component</h2><h3 id="優點-2"><a href="#優點-2" class="headerlink" title="優點"></a>優點</h3><ul><li>Angular 官方團隊開發，與AGM一樣，封裝良好，可以與Angular各種特性良好結合</li><li>更新速度快，與新版本發布速度一致，不用擔心不相容或是成為孤兒版本</li><li>文件齊全，客製化非常簡單</li></ul><h2 id="缺點-2"><a href="#缺點-2" class="headerlink" title="缺點"></a>缺點</h2><ul><li>惰性載入 (Lazy Loading)有點麻煩也有點愚蠢</li><li>不同環境的切換管理也很麻煩</li></ul><h1 id="套件選擇"><a href="#套件選擇" class="headerlink" title="套件選擇"></a>套件選擇</h1><p>介紹完三個套件的優缺點之後，如果要我推薦使用一套的話，我的推薦順序會是這樣:</p><p>Angular Google Maps component &gt; Maps Javascript API &gt; AGM (Angular Google Maps)</p><p>首先，我非常強烈推薦使用Angular官方的套件，原因非常簡單，就是他整合的非常好，安裝完就可以直接使用，幾乎沒有任何學習成本。唯一麻煩的地方就是，管理不同環境和惰性載入有點麻煩，但總體來說，瑕不掩瑜，不是致命的缺點，只是有點麻煩，也有辦法可以自己手動繞過去。</p><p>再來會推薦使用地圖原生的 Maps Javascript API，原因是這是地圖團隊官方的套件，參考範例和文件是最豐富的，幾乎每一種客製化的範例都可以在上面找到並且直接複製使用。但有個明顯的缺點就是，Javascript與Angular並無整合，如果要使用各種生命周期或事件，需要自己另外花時間去整合，這個就很考驗開發者的功力</p><p>最後比較不推薦的是 AGM，AGM雖然和angular整合程度很好，但是缺點很致命，並沒有持續在更新，與新版的Angular整合還有些問題，建議如果沒有使用過的話，那也不必使用了。但是，如果是舊版的Angular (Angular Ivy之前)，並且原本就有使用的話，那還是非常推薦使用。畢竟最麻煩的地方就是整合 Angular，如果已經有第三方整合好了，而且功能又完整的話，這還是一個很強大的套件。</p><p>下一篇，將介紹如何安裝與使用 Angular Google Maps component ，並且如何自己管理不同環境的切換</p><h1 id="參考"><a href="#參考" class="headerlink" title="參考"></a>參考</h1><ul><li><a href="https://developers.google.com/maps/documentation/javascript/overview">Maps Javascript API</a></li><li><a href="https://angular-maps.com/">AGM (Angular Google Maps)</a></li><li><a href="https://github.com/angular/components/blob/master/src/google-maps/README.md">Angular Google Maps component</a></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Angular-如何整合-Google-Maps-比較篇&quot;&gt;&lt;a href=&quot;#Angular-如何整合-Google-Maps-比較篇&quot; class=&quot;headerlink&quot; title=&quot;Angular 如何整合 Google Maps - 比較篇&quot;&gt;&lt;/a&gt;</summary>
+      
+    
+    
+    
+    
+    <category term="angular" scheme="https://tso1158687.github.io/blog/tags/angular/"/>
+    
+    <category term="google maps" scheme="https://tso1158687.github.io/blog/tags/google-maps/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一步一步將 Nestjs 部署到 Heroku</title>
+    <link href="https://tso1158687.github.io/blog/2021/05/14/depoly-nestjs-to-heroku/"/>
+    <id>https://tso1158687.github.io/blog/2021/05/14/depoly-nestjs-to-heroku/</id>
+    <published>2021-05-14T20:33:45.000Z</published>
+    <updated>2021-05-30T04:01:11.586Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="一步一步將-Nestjs-部署到-Heroku"><a href="#一步一步將-Nestjs-部署到-Heroku" class="headerlink" title="一步一步將 Nestjs 部署到 Heroku"></a>一步一步將 Nestjs 部署到 Heroku</h1><p>Nestjs 是一個我很喜歡用的 Nodejs 框架，和 Expressjs 比起來，Nestjs有更多工程化、模組化、抽象化的設計，讓整體架構可以更清晰，同時也更好維護與修改。最大的好處是，其語法基本上和 Angular 幾乎一模一樣，只要熟悉Angular，基本上可以無縫接軌迅速上手。</p><p>另外，官網的文件也寫得很詳細，詳細解釋要如何使用。但就是沒有解釋說編譯完成後，要如何部署上去，部署上去後要如何執行。官方文件似乎缺少這一塊，或許是這一塊可能是 Nodejs 的基本常識，是我缺乏而已，總而言之，現在就來一步一步說明如何將 Nestjs部署到 Heroku 上面</p><ol><li>確定有安裝 Nodejs 和 Nestjs CLI</li></ol><pre><code class="bash">npm i -g @nestjs/cli</code></pre><ol start="2"><li>建立 Nestjs 專案</li></ol><pre><code class="bash">nest new hello-nestjs</code></pre><p>打開之後，可以看到一個全新的 Nestjs 空專案</p><p><img src="Untitled.png" alt="Untitled.png"></p><p>打開 <code>main.ts</code> ，將預設的port修改成吃運行設定，如果沒有的話才吃3000</p><pre><code class="tsx">async function bootstrap() &#123;  const app = await NestFactory.create(AppModule);  const port = process.env.PORT || 3000;  await app.listen(port);&#125;</code></pre><p>在 <code>package.json</code> 有一個指令start:prod，代表正式版本運行的指令</p><pre><code class="html">&quot;start:prod&quot;: &quot;node dist/main&quot;,</code></pre><p>新增 <code>Procfile</code>檔案，注意沒有任何副檔名，這是 Heroku 的設定檔案，告訴 Heroku 啟動的時候要執行什麼指令</p><pre><code class="html">web: npm run start:prod</code></pre><p>建立 Heroku 專案</p><p><img src="Untitled%201.png" alt="Untitled%201.png"></p><p>取一個自己喜歡的名字，點 Create app 就建立完成了</p><p><img src="Untitled%202.png" alt="Untitled%202.png"></p><p>接著這邊可以選擇部屬方式，你可以選擇使用 Heroku 內建的 Git 或者是連接 Github</p><p>在這裡我選擇連接我比較熟悉的 Github，點選之後，會要求你授權，給予授權之後，就可以尋找自己的專案，並且連接</p><p><img src="Untitled%203.png" alt="Untitled%203.png"></p><p>連接完成之後，可以點選自動部屬或手動部屬，在這裡選擇手動部屬 master</p><p><img src="Untitled%204.png" alt="Untitled%204.png"></p><p>按下去之後，就會開始安裝相依套件</p><p><img src="Untitled%205.png" alt="Untitled%205.png"></p><p>稍等一下之後，就會看到部屬成功的訊息</p><p><img src="Untitled%206.png" alt="Untitled%206.png"></p><p>點選 View的按鈕，就可以打開部屬的網址，看到結果</p><p><img src="Untitled%207.png" alt="Untitled%207.png"></p><p>Heroku 是一個很方便部屬實驗性的API的地方，唯一的缺點就是，如果有一陣子沒人用他的話，機器就會自動關係，下次呼叫的時候，就會特別久，等待機器再啟動。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;一步一步將-Nestjs-部署到-Heroku&quot;&gt;&lt;a href=&quot;#一步一步將-Nestjs-部署到-Heroku&quot; class=&quot;headerlink&quot; title=&quot;一步一步將 Nestjs 部署到 Heroku&quot;&gt;&lt;/a&gt;一步一步將 Nestjs 部署到 </summary>
+      
+    
+    
+    
+    
+    <category term="nestjs" scheme="https://tso1158687.github.io/blog/tags/nestjs/"/>
+    
+    <category term="nodejs" scheme="https://tso1158687.github.io/blog/tags/nodejs/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>graphql安裝與設定 apollo-angular篇</title>
+    <link href="https://tso1158687.github.io/blog/2021/04/05/apollo-angular-install/"/>
+    <id>https://tso1158687.github.io/blog/2021/04/05/apollo-angular-install/</id>
+    <published>2021-04-05T12:17:38.000Z</published>
+    <updated>2021-05-30T04:01:11.582Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="安裝apollo-angular"><a href="#安裝apollo-angular" class="headerlink" title="安裝apollo-angular"></a>安裝apollo-angular</h1><p>基本上安裝方法依照<a href="https://apollo-angular.com/docs/get-started">apollo angular教學</a>上面指示的方法安裝。官方有提供兩種安裝方法，一種是透過 <code>ng add</code> 的方式自動化安裝，一種是手動安裝。</p><h2 id="使用ng-add安裝"><a href="#使用ng-add安裝" class="headerlink" title="使用ng add安裝"></a>使用ng add安裝</h2><p>輸入:</p><pre><code>ng add apollo-angular</code></pre><p>Angular Schematics 就會處理好所有安裝和設定步驟，就可以直接使用了</p><h2 id="手動安裝"><a href="#手動安裝" class="headerlink" title="手動安裝"></a>手動安裝</h2><h3 id="安裝apollo-angular-1"><a href="#安裝apollo-angular-1" class="headerlink" title="安裝apollo-angular"></a>安裝apollo-angular</h3><p>但是在安裝的時候，發現官方提供的schematics在最新版本的angular使用會有問題，會發生錯誤之後就直接結束了，沒有辦法安裝下去，所以在等待官方修復之前，只能手動進行安裝</p><p>安裝apollo angular相關套件</p><pre><code>npm install apollo-angular @apollo/client graphql</code></pre><p>因為graphql需要用到 <code>AsyncIterable</code> 的功能，所以要去 <code>tsconfig</code> 設定，讓typescript在編譯的時候可以支援這個功能。</p><p>以angular 10為例，修改 <code>tsconfig.base.json</code> ，就可以修改整個專案的編譯選項</p><pre><code class="json">&#123;  &quot;compilerOptions&quot;: &#123;    // ...    &quot;lib&quot;: [      &quot;es2017&quot;,      &quot;dom&quot;,      &quot;esnext.asynciterable&quot;    ]  &#125;&#125;</code></pre><p>這樣就安裝完apollo-angular，接下來就只要設定就好了</p><h3 id="設定apollo-angular"><a href="#設定apollo-angular" class="headerlink" title="設定apollo-angular"></a>設定apollo-angular</h3><p>按照官方的教學，他會在 <code>app.module</code> 裡面去設定相關連線的選項，不過因為只是簡易的使用教學，在此設定並無問題。但是建議建立一個graphql module去統一管理與graphql有關的東西會比較好</p><p>建立graphql module</p><pre><code class="json">ng g m graphql</code></pre><p>建立完之後，在graphql module設定連線選項</p><pre><code class="js">import &#123; NgModule &#125; from &#39;@angular/core&#39;;import &#123; CommonModule &#125; from &#39;@angular/common&#39;;import &#123; APOLLO_OPTIONS &#125; from &#39;apollo-angular&#39;;import &#123; HttpLink &#125; from &#39;apollo-angular/http&#39;;import &#123; InMemoryCache &#125; from &#39;@apollo/client/core&#39;;@NgModule(&#123;  declarations: [],  imports: [CommonModule],  providers: [    &#123;      provide: APOLLO_OPTIONS,      useFactory: (httpLink: HttpLink) =&gt; &#123;        return &#123;          cache: new InMemoryCache(),          link: httpLink.create(&#123;                        // 輸入graphql位置，此為官方提供的範例位置            uri: &#39;https://48p1r2roz4.sse.codesandbox.io/&#39;,           &#125;),        &#125;;      &#125;,      deps: [HttpLink],    &#125;,  ],&#125;)export class GraphqlModule &#123;&#125;</code></pre><p>設定完之後，在app module匯入graph module就完成了</p><pre><code class="js">@NgModule(&#123;    declarations: [AppComponent],    imports: [      ...      GraphqlModule,    ],    bootstrap: [AppComponent],  &#125;)export class AppModule &#123;&#125;</code></pre><h1 id="設定Subscription"><a href="#設定Subscription" class="headerlink" title="設定Subscription"></a>設定Subscription</h1><p>graphql除了查詢(query)和變更(mutation)以外，還允許使用雙向連線websocket的方法去建立。</p><p>如果要使用websocket的方式連線，還需要安裝<a href="https://github.com/apollographql/subscriptions-transport-ws">subscription-transport-ws</a></p><pre><code class="js">npm install --save subscriptions-transport-ws</code></pre><h3 id="修改graphql-module支援websocket的連線方式"><a href="#修改graphql-module支援websocket的連線方式" class="headerlink" title="修改graphql module支援websocket的連線方式"></a>修改graphql module支援websocket的連線方式</h3><p>現在graphql有http和websocket兩種連線方式，因此需要個別設定不同連線的參數，並且設定何時要使用http去請求資料，何時使用websocket去請求資料。</p><pre><code class="js">import &#123; NgModule &#125; from &#39;@angular/core&#39;;import &#123; APOLLO_OPTIONS &#125; from &#39;apollo-angular&#39;;import &#123; HttpLink &#125; from &#39;apollo-angular/http&#39;;import &#123; InMemoryCache &#125; from &#39;@apollo/client/core&#39;;import &#123; split &#125; from &#39;@apollo/client/core&#39;;import &#123; WebSocketLink &#125; from &#39;@apollo/client/link/ws&#39;;import &#123; getMainDefinition &#125; from &#39;@apollo/client/utilities&#39;;@NgModule(&#123;  declarations: [],  imports: [],  providers: [    &#123;      provide: APOLLO_OPTIONS,      useFactory: (httpLink: HttpLink) =&gt; &#123;        const http = httpLink.create(&#123;          uri: `http://xxxxxxxx`,        &#125;);        const ws = new WebSocketLink(&#123;          uri: `ws://xxxxxxxxxxxxx`,          options: &#123;            reconnect: true,            lazy: true,            connectionParams: &#123;                Authorization:&#39;yyyyyy&#39;            &#125;,          &#125;,        &#125;);        // using the ability to split links, you can send data to each link        // depending on what kind of operation is being sent        const link = split(          // split based on operation type          (&#123; query &#125;) =&gt; &#123;            const definition = getMainDefinition(query);            return (              definition.kind === &#39;OperationDefinition&#39; &amp;&amp;              definition.operation === &#39;subscription&#39;            );          &#125;,          ws,          http        );        return &#123;          cache: new InMemoryCache(),          link,        &#125;;      &#125;,      deps: [HttpLink],    &#125;,  ],&#125;)export class GraphqlModule &#123;&#125;</code></pre><p>在websocket連線設定的地方有幾個參數</p><pre><code class="js">const ws = new WebSocketLink(&#123;    uri: `ws://xxxxxxxxxxxxx`,    options: &#123;        reconnect: true,        lazy: true,        connectionParams: &#123;            Authorization: &quot;yyyyyy&quot;,        &#125;,    &#125;,&#125;);</code></pre><ul><li>reconnect:如果斷線的話，會自動重新連線</li><li>lazy:不會在頁面啟動的時候就發起連線，而是在請求第一個websocket連線的時候，才會開始連線</li><li>connectionParams:連線時的參數，如果連線需要帶驗證資訊，就可以加在這裡，附帶驗證資訊</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;安裝apollo-angular&quot;&gt;&lt;a href=&quot;#安裝apollo-angular&quot; class=&quot;headerlink&quot; title=&quot;安裝apollo-angular&quot;&gt;&lt;/a&gt;安裝apollo-angular&lt;/h1&gt;&lt;p&gt;基本上安裝方法依照&lt;a hr</summary>
+      
+    
+    
+    
+    
+    <category term="angular" scheme="https://tso1158687.github.io/blog/tags/angular/"/>
+    
+    <category term="graphql" scheme="https://tso1158687.github.io/blog/tags/graphql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY30-給他魚不如給他釣竿，，那麼釣竿哪來?</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed30/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed30/</id>
+    <published>2021-01-11T21:25:22.000Z</published>
+    <updated>2021-05-30T04:01:11.566Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY30-給他魚不如給他釣竿，，那麼釣竿哪來"><a href="#DAY30-給他魚不如給他釣竿，，那麼釣竿哪來" class="headerlink" title="DAY30-給他魚不如給他釣竿，，那麼釣竿哪來?"></a>DAY30-給他魚不如給他釣竿，，那麼釣竿哪來?</h1><h1 id="從新手到中手之路"><a href="#從新手到中手之路" class="headerlink" title="從新手到中手之路"></a>從新手到中手之路</h1><p>鐵人賽系列文的最後一篇，回顧一下第一篇立下的目標，要如何從新手到中手，分別從這幾個方向探討:</p><ul><li>如何適應各種技術</li><li>如何與人合作溝通</li><li>如何增進對專業技術的理解</li></ul><h2 id="如何適應各種技術"><a href="#如何適應各種技術" class="headerlink" title="如何適應各種技術"></a>如何適應各種技術</h2><p>除了前端的基本技能外，提到了 git 相關議題，像是:commit 的原理、常用的指令與情境與少用卻也是大有用處的 cherry-pick 和 revert</p><p>最後稍微介紹一下如個弄個舒服的 vs code</p><p>另外還提到如何自己架一個私有的 NPM</p><p>最後提到和後端合作最常使用到的工具-postman，介紹了基本使用方法，與一些個人摸索出來的進階技巧，像是如何自動獲得授權資訊</p><h2 id="如何與人溝通合作"><a href="#如何與人溝通合作" class="headerlink" title="如何與人溝通合作"></a>如何與人溝通合作</h2><p>如何與人溝通合作，分別分享與不同職位、角色的人溝通經驗，像是主管、設計師、後端、外國人、實習生等等</p><h2 id="如何增進對專業技術的理解"><a href="#如何增進對專業技術的理解" class="headerlink" title="如何增進對專業技術的理解"></a>如何增進對專業技術的理解</h2><p>專業技術的理解，分為兩方面，一方面是細節的方面；一方面是原則的方面</p><p>細節方面，提到 Javascript 陣列的操作與情境，還有 Set 與 Map 的應用；另外也提到 SASS 的使用方法與 CSS 模組化技巧。</p><p>原則方面，則是說明了 SOLID 原則與在前端上的使用實例應用</p><p>雖然沒有按照順序討論，但基本上當初設定的三大主題都平均分配提到了</p><h1 id="真的從新手到中手了嗎"><a href="#真的從新手到中手了嗎" class="headerlink" title="真的從新手到中手了嗎?"></a>真的從新手到中手了嗎?</h1><p>雖然在本系列文中，提到了很多東西，但是都可以發現提到的內容深度都不深。在網路上可以很輕易地找到同樣主題的文章，寫得比我還要深入與精彩的文章。</p><p>的確，文章沒有寫的很深入的原因受限於筆者的技術深度和人生經驗。</p><p>技術的探索是無窮無盡的，但就以筆者的程度來說，能理解的範圍就到這裡了，再深入的東西還無法吸收消化，所以想要寫也寫不出來。但是寫下來的東西可以保證都是經過吸收、消化，慢慢淬鍊整理出來的內容。</p><p>同樣談到溝通技巧，同樣受限於工作經驗不多，在有限的幾年工作經驗，自己不斷反覆體悟還有前輩、主管的耐心教導下，慢慢整理出來的心得。或許還是有很多不足的地方，但是就是作為心得分享出來。畢竟如何溝通也是一開始工作讓筆者覺得困擾又無力解決的問題。在學校溝通都很輕鬆和隨便；在職場，因為要生活、要績效等等因素，溝通變成一項複雜且乎要技巧的技能。</p><p>寫下這些之後，能說自己從新手到中手了嗎?這個答案連我自己都不敢肯定，一方面是覺得自己還有很多地方要學習；另一方面，是希望自己還能保有新手般好奇的心，可以多看看多學學新東西，不要有任何名號的包袱</p><h1 id="給他魚不如給他釣竿，那誰給釣竿"><a href="#給他魚不如給他釣竿，那誰給釣竿" class="headerlink" title="給他魚不如給他釣竿，那誰給釣竿?"></a>給他魚不如給他釣竿，那誰給釣竿?</h1><p>有一句話是這麼說的:給他魚不如給他釣竿，這句話我只認同一半。如果還要給釣竿，那麼如果給釣竿的那個人不在了怎麼辦?想要得到魚，就只能用釣竿嗎?不能用手抓嗎?或是更省事一點，不能直接去全聯買就好了嗎?為什麼一定要用釣竿呢?</p><p>給他釣竿某種程度上就暗示，只要使用釣竿就能釣到魚。可是現實中更多的情況是，老闆說:我要某某某功能，就像說我要某某某魚，根本不會告訴你用這把釣魚竿去那邊釣就會釣到囉。更多的時候，連要用什麼工具都不知道，選擇要怎麼拿到魚都是個問題。如果有革命的精神，就可以豁出去用手抓；如果很有錢，乾脆直接用買的；如果很有方法，就會想辦法去弄個網子，撈一箱的魚。</p><p>因此本系列文最主要想寫下，筆者如何找到抓魚的工具的過程，不論是找到厲害的釣竿或是破爛的網子，都是一個尋找方法的過程。工具或框架總有一天會過時，厲害的方法可能過幾年後看起來很古板，但是學會找到工具或解答的方法，可以讓自己一直有想法去探索新事物，更厲害的工具去找到魚。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY30-給他魚不如給他釣竿，，那麼釣竿哪來&quot;&gt;&lt;a href=&quot;#DAY30-給他魚不如給他釣竿，，那麼釣竿哪來&quot; class=&quot;headerlink&quot; title=&quot;DAY30-給他魚不如給他釣竿，，那麼釣竿哪來?&quot;&gt;&lt;/a&gt;DAY30-給他魚不如給他釣竿，</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY29-如何與人協同工作與好好溝通-英文很重要，中文也很重要，你有注意過你的歐化中文嗎?</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed29/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed29/</id>
+    <published>2021-01-11T21:25:18.000Z</published>
+    <updated>2021-05-30T04:01:11.566Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY29-如何與人協同工作與好好溝通-英文很重要，中文也很重要，你有注意過你的歐化中文嗎"><a href="#DAY29-如何與人協同工作與好好溝通-英文很重要，中文也很重要，你有注意過你的歐化中文嗎" class="headerlink" title="DAY29-如何與人協同工作與好好溝通-英文很重要，中文也很重要，你有注意過你的歐化中文嗎?"></a>DAY29-如何與人協同工作與好好溝通-英文很重要，中文也很重要，你有注意過你的歐化中文嗎?</h1><p>英文對工程師來說是非常重要可以說是必備的技能之一。很多最新的技術介紹或是文件，幾乎都是用英文撰寫，如果等中文或是翻譯版本出來，往往要隔好久一段時間才有。所以如果要獲得第一手消息的話，不得不時時磨練砥礪自己的英文能力。</p><h1 id="母語衰退的現象"><a href="#母語衰退的現象" class="headerlink" title="母語衰退的現象"></a>母語衰退的現象</h1><p>提升自己的英文能力後，雖然提升自己的國際溝通能力，伴隨而來的副作用是會讓你的母語衰退或是運用的比較不靈活。在語言習得的科目上，有很多論文在討論這種學好外語後母語衰退的現象，或是比較輕微的詞彙空缺現象。也就是這個詞彙你只會用英文說，叫你用中文說你會說不出來或是不流利。這樣的現象在常接觸英文的工程師上面非常明顯。</p><p>小結一下，學好外語後會產生的母語衰退現象</p><ul><li>無法用母語完整表達一句話的意思，例如: <code>你覺得這件事是doable的嗎?需要什麼effort或是額外的work，這樣我才會知道how to manage time</code> ，用完整的中文表達就是: <code>你覺得這件事是可行的嗎?需要什麼作業或是額外的工作，這樣我才知道如何管理時間</code> 意思是一樣的。</li><li>詞彙不知道怎麼用母語表示，例如: <code>sync</code> → <code>同步</code> 、 <code>async</code> → <code>非同步</code></li></ul><p>另外還有一個現象稱為歐化中文，就是中文語言語法受到英文影響，讓中文的表達變得很奇怪</p><p>但是關於詞彙需不需要用母語表示，其實有正反論點的支持者，讀者可以自行斟酌正反論點，看自己接受哪一個論點</p><h2 id="專業術語使用原文表示的反對者"><a href="#專業術語使用原文表示的反對者" class="headerlink" title="專業術語使用原文表示的反對者"></a>專業術語使用原文表示的反對者</h2><p>有人認為專業術語不需要翻譯，盡量使用原文，例如前面提到的 <code>sync</code> 和 <code>async</code> 等，另外還有像是在Javascript裡面常用到的非同步方法 <code>promise</code> 和  <code>ajax</code> 等等。支持者認為使用原文的話，就可以在全世界溝通無礙，遇到誰你用原文表示幾乎所有人都聽得懂；但是你用中文的話，可能會不知道原文是什麼，而且無法跟外國人溝通。綜上原因，專有名詞使用原文比較好。</p><h2 id="專業術語使用母語表示的支持者"><a href="#專業術語使用母語表示的支持者" class="headerlink" title="專業術語使用母語表示的支持者"></a>專業術語使用母語表示的支持者</h2><p>如果專業術語只用原文而不使用母語溝通的話，會讓此詞彙在母語傳播不易，甚至消亡。</p><p>例如: <code>democracy</code>這個詞彙如果沒有翻譯成 <code>民主</code>的話，一般人很難知道democracy的意思就是 <code>由民作主</code> 的意思，民主的概念就不易在華語圈傳播。同樣的例子，如果 <code>array</code> 沒有翻譯成 <code>陣列</code> ，也會加大理解 <code>array</code> 的難度</p><p>至於消亡的意思是，如果在某個領域，都不使用母語而使用外文的話，會使得在母語在這個領域消滅死亡。也就是說，如果都使用原文在軟體開發的領域，中文就在軟體開發的領域死亡了。如果每個專業領域都有這種現象的話，那麼中文就會進入死亡狀態，就像軟體開發一樣，不會再更新，進入產品週期的末期，等待他死亡，中文就會消失在語言學中了。</p><p>聽起來可能危言聳聽，但是確實是發生在生活當中，試想，你有辦法用台語或客語在軟體開發的領域當中嗎?應該絕大多數的人都沒有辦法，只能用在生活當中買菜買東西等等，但是日本人卻有辦法用全日語在軟體開發領與當中。</p><p>這就可以說明，日語還是一個在進化的語言，而台語和客語就正在消亡當中</p><h1 id="歐化中文"><a href="#歐化中文" class="headerlink" title="歐化中文"></a>歐化中文</h1><p>根據維基百科對歐化中文的解釋:</p><blockquote><p>西化中文又稱歐化中文、西式中文（Westernised Chinese language），是指語法、文筆、風格或用詞受歐洲語文過分影響的中文，一般帶貶義。反對者認為歐化中文偏離傳統中文的特色、用詞冗贅，從而使得上下文難以理解。</p></blockquote><p>也就是說中文受到英文影響，變的冗贅，不太合於中文的使用習慣</p><ul><li>濫用被動句</li><li>濫用或直譯介詞</li><li>副詞必定加「地」</li><li>眾數千篇一律用「們」字</li></ul><h2 id="濫用被動句"><a href="#濫用被動句" class="headerlink" title="濫用被動句"></a>濫用被動句</h2><p>中文的被字句通常代表被動或負面的意思，但是英文卻不一定帶有負面的意思</p><p>例如:He is called the best president，中文翻成他被稱為最好的總統就不太妥，可以翻成人們稱他為最偉大的總統。</p><h2 id="濫用或直譯介詞"><a href="#濫用或直譯介詞" class="headerlink" title="濫用或直譯介詞"></a>濫用或直譯介詞</h2><p>介詞在英語當中可能不可或缺，但是在中文當中卻不是很必要，反而有點冗贅</p><p><code>關於</code> 他的申請，你看過了沒有？</p><h2 id="副詞必定加「地」"><a href="#副詞必定加「地」" class="headerlink" title="副詞必定加「地」"></a>副詞必定加「地」</h2><p>只要是英文的副詞，用中文一律用 <code>地</code> 表達，但是中文卻不是那麼必要，例如</p><p><code>慢慢地走</code> ，只要說慢慢走就好了</p><h2 id="眾數千篇一律用「們」字"><a href="#眾數千篇一律用「們」字" class="headerlink" title="眾數千篇一律用「們」字"></a>眾數千篇一律用「們」字</h2><p>因為中文名詞並沒有單複數之別，不會在名詞特別強調單複數，但是英文如果要將複數翻譯成中文通常會加上中文在名詞後面加上們，在中文大多有負面的意思，例如：小偷們、壞人們等等</p><p>如果不是負面的意思，在指稱多數的時候也不會特別加上「們」，例如不會說同學們，而是會說各位同學</p><p>但是英文翻譯成中文的時候就很容易加上「們」，例如：ladies and gentlemen，不應該翻譯為女士們、先生們，直接說各位先生女士，這樣比較符合中文的語感</p><p>更多的例子可以參考<a href="https://www.wikiwand.com/zh-tw/%E6%AD%90%E5%8C%96%E4%B8%AD%E6%96%87">維基百科</a>的列舉</p><h1 id="歐化中文與溝通的關聯"><a href="#歐化中文與溝通的關聯" class="headerlink" title="歐化中文與溝通的關聯"></a>歐化中文與溝通的關聯</h1><p>溝通時的意思表達分為言內之意與言外之意</p><ul><li>語詞原本的意思，也就是字典上查到這些語詞原本的意思</li><li>並非表達語詞的本意，意有所指另外的意思。例如在賄賂時說:這盒茶葉給你意思意思。這時候的茶葉並非指真的茶葉，而是只賄賂的東西</li></ul><p>而在溝通的時候，使用非中文規範的歐化中文時，可能言者無心，聽者卻有意，會意識到說的中文好像哪裡怪怪的，是不是有言外之意，或是想顯示自己和別人不一樣、或是很高傲的感覺。</p><p>所以不妨可以注意自己的母語是否有受到外語的影響，這個也是溝通很重要的小細節。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY29-如何與人協同工作與好好溝通-英文很重要，中文也很重要，你有注意過你的歐化中文嗎&quot;&gt;&lt;a href=&quot;#DAY29-如何與人協同工作與好好溝通-英文很重要，中文也很重要，你有注意過你的歐化中文嗎&quot; class=&quot;headerlink&quot; title=&quot;DA</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY28-如何與人協同工作與好好溝通-外國人篇</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed28/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed28/</id>
+    <published>2021-01-11T21:25:13.000Z</published>
+    <updated>2021-05-30T04:01:11.566Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY28-如何與人協同工作與好好溝通-外國人篇"><a href="#DAY28-如何與人協同工作與好好溝通-外國人篇" class="headerlink" title="DAY28-如何與人協同工作與好好溝通-外國人篇"></a>DAY28-如何與人協同工作與好好溝通-外國人篇</h1><p>筆者本人的英文程度可以說是台灣教育典型的英文程度，可是說是好又很不好。</p><p>所謂的好又很不好聽起來是一種很矛盾的狀態，但確實也反映了本人英文尷尬的程度。好的地方是，英文只要拿來考試，小至國高中的期中考英文課文或單字、大至學測指考的英文文章閱讀，甚至是企業最愛看的多益成績，都能輕鬆應付拿到高分。但是遇到外國人真的要講英文的時候，不是一句話都講不出來就是結結巴巴，甚至連外國人在說甚麼也常常聽不懂或反應不過來。</p><p>就是典型的只是將英文當成考試的工具，而不會將英文活用，讀寫很強但是聽說完全不行的人</p><h1 id="如何與外國人溝通"><a href="#如何與外國人溝通" class="headerlink" title="如何與外國人溝通"></a>如何與外國人溝通</h1><p>筆者第一個一起工作的外國人是法國人，記得一開始為了歡迎他，短短的一分鐘自我介紹我大概準備了三個小時，最後講出來的內容空洞無物。</p><p>後來為了讓外國人聽得懂我們在說什麼，開會也從中文改成英文。對外國人來說是好事，對我來說就不是什麼好事，每次為了幾分鐘的會議，我必須得緊張好久然後擬稿準備要講的東西，不然就是開會的時候一句話也講不出來。</p><p>這個過程雖然痛苦，不過也經由跟外國人反覆對話，將英文的聽跟說漸漸地練起來了，在這邊有一些自己覺得很實用的方法跟大家分享</p><h2 id="不要害怕說錯"><a href="#不要害怕說錯" class="headerlink" title="不要害怕說錯"></a>不要害怕說錯</h2><p>一開始發現說不出來最大的原因是害怕說錯、害法文法錯、害怕時態錯。</p><p>不過錯了就錯了，只要意思到了，大多數的人都聽得懂。</p><p>就像外國人學中文的時候，也是說得亂七八糟的，但是我們也都聽得懂</p><p>像是: <code>我中午去餐廳把飯吃</code> 這是初學華語的外國人常犯的把字句文法錯誤，但是我們還是可以懂意思是: <code>我中午去餐廳吃飯</code>  </p><p>同樣的道理，雖然文法最終要說對的，但是一開始不要因為害怕文法錯誤就不敢說，錯了就錯了，意思到位最重要</p><h2 id="不會說就換句話說"><a href="#不會說就換句話說" class="headerlink" title="不會說就換句話說"></a>不會說就換句話說</h2><p>很多時候，用中文會說，但是就是不知道怎麼轉換成英文說出來。那麼可以嘗試換句話說的方式用不同的話表達出差不多的意思</p><p>例如:我試著修好這個問題，但是徒勞無功。(I try to fix this issue but in vain)</p><p>不知道怎麼表達徒勞無功這個詞可以換句話說就是失敗的意思，可以改成</p><p>I try to fix this this but fail，意思不會差太遠卻又可以把自己想說的話表達出來</p><h2 id="單字不必用太難"><a href="#單字不必用太難" class="headerlink" title="單字不必用太難"></a>單字不必用太難</h2><p>以前在考試的時候背了一堆很難的單字，同樣的意思如果用比較難的單字，寫作文的時候老師會給得比較高分</p><p>例如: <code>I can drive the car</code> 改成 <code>I am able to drive the car</code></p><p>這樣用起來就會比較高分，但是口語並不會說太難的單字，一般來說用最簡單的單子溝通就夠了。</p><p>如果用了太難的單字就像中文用文言文的感覺:</p><p>例如: <code>你看不起我嗎</code> 變成 <code>爾安敢輕吾射</code></p><p>這樣感覺既彆扭又拗口</p><h2 id="聽不懂的話就聽關鍵字"><a href="#聽不懂的話就聽關鍵字" class="headerlink" title="聽不懂的話就聽關鍵字"></a>聽不懂的話就聽關鍵字</h2><p>而聽力最大的問題就在於對方說話太快聽不懂，或是聽懂了需要時間理解和轉換。說白了根本原因就是對該語言還不熟悉，所以無法本能的理解，還需要一個轉換的過程。</p><p>但是聽不懂也有聽不懂的技巧，就是可以嘗試聽出關鍵字，例如整句話的動詞和些許名詞像這樣的實詞，可以大致猜出整句話的意思，</p><p>這時候就可以暫時省略虛詞，例如: <code>in</code> <code>on</code>  <code>of</code> 等等的時間，爭取自己理解的轉換時間</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY28-如何與人協同工作與好好溝通-外國人篇&quot;&gt;&lt;a href=&quot;#DAY28-如何與人協同工作與好好溝通-外國人篇&quot; class=&quot;headerlink&quot; title=&quot;DAY28-如何與人協同工作與好好溝通-外國人篇&quot;&gt;&lt;/a&gt;DAY28-如何與人協同工作</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY27-如何與人協同工作與好好溝通-實習生篇</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed27/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed27/</id>
+    <published>2021-01-11T21:25:10.000Z</published>
+    <updated>2021-05-30T04:01:11.566Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY27-如何與人協同工作與好好溝通-實習生篇"><a href="#DAY27-如何與人協同工作與好好溝通-實習生篇" class="headerlink" title="DAY27-如何與人協同工作與好好溝通-實習生篇"></a>DAY27-如何與人協同工作與好好溝通-實習生篇</h1><h1 id="所有的問題都不簡單"><a href="#所有的問題都不簡單" class="headerlink" title="所有的問題都不簡單"></a>所有的問題都不簡單</h1><p>在你所有認為很基本的問題，對實習生來說都不簡單。想想我之所以會認為理所當然很簡單，是因為我每天都在操作，所以很熟練，也不是一開始就會。</p><p>所以當實習生問問題的時候，建議一定要好好調整自己的心態，千萬不要有這個不是很簡單嗎或是怎麼連這個都不會的心情與心態。而要像主管對你提出疑問的問題一樣認真思考，並且有耐心地回答問題。</p><p>例如：git為什麼要commit？</p><p>如果有git的觀念肯定會不知道這是什麼基本問題，但就是因為沒有git觀念才會問這個問題。不懂的問題就要問，如果有空的話可以好好解釋git的概念，沒空的話可以指點個方向去學習git。千萬千萬不要鄙視的臉和語氣而摧毀的一個剛萌芽的幼苗</p><h1 id="給他釣竿不要給他魚"><a href="#給他釣竿不要給他魚" class="headerlink" title="給他釣竿不要給他魚"></a>給他釣竿不要給他魚</h1><p>很多時候，實習生遇到的問題都很簡單，例如git在rebase的時候發生衝突了該怎麼辦。對我來說，最簡單又最快速的方法就是我親自解一解弄一弄，一下子就可以默默地解掉了。</p><p>但是這樣對實習生來說，只是解決眼前的問題，完全沒有收穫。下次若再遇到一樣的問題，他還是無法解決。所以以這個例子為例，可以告訴他為什麼發生，發生了大致解決的方向，然後請他自己想辦法要怎麼解決。頂多卡住的時候，再多給一點提示或方向，千萬不要親自動手操作任何東西。都必須經由他的手親自完成，除了能讓身體記住這種感覺之外，還會有比較多的體悟。</p><p>寧願第一次花6個小時弄懂問題的來龍去脈，也不要為了貪快隨便過去，而每次都不明不白遇到一樣的問題。</p><p>自己尋找出問題在哪、如何解決問題，也是很重要的技能之一</p><h1 id="鼓勵他不要害怕失敗"><a href="#鼓勵他不要害怕失敗" class="headerlink" title="鼓勵他不要害怕失敗"></a>鼓勵他不要害怕失敗</h1><p>有幾次看了實習生的程式碼，舉個類似的例子，發現他寧願同樣的東西寫10次，也不肯用迴圈來寫。後來有跟他談談，發現他不是不知道可以用迴圈，而是對迴圈不熟悉，害怕用了會失敗，導致一天一事無成，別人會認為是薪水小偷或是被罵什麼的</p><p>創造一個不必害怕失敗會被責罵的環境，我認為非常重要。為了讓他不害怕失敗，我也曾說，如果你弄壞或做不出來，不要怕，我可以幫你頂著。而我本人也下定決心，如果他真的弄壞了，我就算是留下來加班也要幫你解決。</p><p>有一個可以放心嘗試的環境，實習生就比較大膽嘗試他學的新東西，而其實說也神奇，他從來也沒有搞砸讓我收拾過，而且越做越好，越來越成熟，讓我替他的進步感到開心</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY27-如何與人協同工作與好好溝通-實習生篇&quot;&gt;&lt;a href=&quot;#DAY27-如何與人協同工作與好好溝通-實習生篇&quot; class=&quot;headerlink&quot; title=&quot;DAY27-如何與人協同工作與好好溝通-實習生篇&quot;&gt;&lt;/a&gt;DAY27-如何與人協同工作</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY26-如何與人協同工作與好好溝通-後端工程師篇</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed26/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed26/</id>
+    <published>2021-01-11T21:25:07.000Z</published>
+    <updated>2021-05-30T04:01:11.566Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY26-如何與人協同工作與好好溝通-後端工程師篇"><a href="#DAY26-如何與人協同工作與好好溝通-後端工程師篇" class="headerlink" title="DAY26-如何與人協同工作與好好溝通-後端工程師篇"></a>DAY26-如何與人協同工作與好好溝通-後端工程師篇</h1><h1 id="前端與後端的關係"><a href="#前端與後端的關係" class="headerlink" title="前端與後端的關係"></a>前端與後端的關係</h1><p>在早期還沒有前後端分離的時候，前後端是要共同維護一份檔案的，例如.net的cshtml</p><pre><code class="html">@&#123;    var joe = new Person(&quot;Joe&quot;, 33);&#125;&lt;p&gt;Age@(joe.Age)&lt;/p&gt;</code></pre><p>這樣的做法的缺點是，檔案的拆分都需要和後端協商討論，因為後端要得要修改同樣的檔案。因此造成前後端常常在改同一份檔案，如果沒有約定好統一個改法或風格的話，常常衝突的亂七八糟。</p><p>後來發展出前後端分離與RESTful API後，相當大程度將前端與後端的工作分開來，不會再緊緊相依，彼此溝通的管道就是透過API來溝通。但是用API溝通之後，就不代表就不會有溝通的問題，只能說問題會比較少，還是會遇到像下列的問題:</p><ul><li>API要求的格式或參數好奇怪</li><li>API給的結果很奇怪，根本不能直接用，還要做很多轉換</li></ul><p>反過來說，後端也會覺得前端很奇怪，要求奇怪的格式或結果。</p><p>所以前端和後端溝通的問題成為:API要怎麼開呢?</p><h1 id="API的開發流程"><a href="#API的開發流程" class="headerlink" title="API的開發流程"></a>API的開發流程</h1><p>API的開發流程究竟是要前端主導還是後端主導呢?</p><p>在此我的建議是:都可以，在不破壞大原則之下，以最節省雙方時間的做法為主</p><h2 id="不破壞大原則"><a href="#不破壞大原則" class="headerlink" title="不破壞大原則"></a>不破壞大原則</h2><p>不破壞大原則的意思是不為了對方的需求而破壞原本的流程或程式結構。例如前端為了應對後端的格式，要多開原本沒有設計時沒有預留的方法或頁面，要特別額外去處理的，就算是破壞大原則的一種</p><h2 id="節省雙方的時間"><a href="#節省雙方的時間" class="headerlink" title="節省雙方的時間"></a>節省雙方的時間</h2><p>如果雙方都認為要調整的話，那麼以調整起來最方便的那端為主。例如後端調整個格式需要三天的時間，而前端拿到資料調整只要一天的時間，那麼就給需要時間最少的前端調整。畢竟前後端是一個團隊，要以團隊最快的流程作為主要考量。</p><h2 id="API開發流程的例子"><a href="#API開發流程的例子" class="headerlink" title="API開發流程的例子"></a>API開發流程的例子</h2><p>以下面的表格為例:</p><p><img src="Untitled.png" alt="Untitled.png"></p><p>一個表格有四個欄位，後端開給我五支API。一支API取得資料的ID，再用ID去分別查詢四個欄位的API，查完之後，再用ID去對應資料把一列的資料分別聚合起來成一筆。</p><p>原本只是一個取資料然後填上去的動作，原本我預計不用幾個小時就可以完成，因為這樣的API格式讓我做了一個禮拜，想辦法處理資料、聚合資料然後再檢驗我的做法有沒有錯誤。</p><p>當時為了做這個讓我整個時程大大地被拖延。後來我有去找後端聊聊這件事情，為什麼不開一支API幫我處理好資料，讓我拿到資料可以不用處理，直接使用。他跟我解釋，開五支API是為了後端設計原則，不讓API太過於複雜，但是他沒有想到我會額外花這麼多時間去處理，因此我們就溝通好為了節省我的時間，他可以不動這五支API破壞後端的原則，另外再開一支API幫我處理這些資料，因為他處理這些資料不過是一下子的時間，不若前端處理那麼複雜。</p><p>這件困擾我已久的事情就這麼簡單地解決了，也讓我體悟一件事情：其實大家在別人有困難的時候都是很願意幫忙的，很多時候是根本不知道你的問題而無從幫起，這件事情最好的解法就是好好地溝通</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY26-如何與人協同工作與好好溝通-後端工程師篇&quot;&gt;&lt;a href=&quot;#DAY26-如何與人協同工作與好好溝通-後端工程師篇&quot; class=&quot;headerlink&quot; title=&quot;DAY26-如何與人協同工作與好好溝通-後端工程師篇&quot;&gt;&lt;/a&gt;DAY26-如何</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY25-如何與人協同工作與好好溝通-設計師篇</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed25/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed25/</id>
+    <published>2021-01-11T21:25:03.000Z</published>
+    <updated>2021-05-30T04:01:11.566Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY25-如何與人協同工作與好好溝通-設計師篇"><a href="#DAY25-如何與人協同工作與好好溝通-設計師篇" class="headerlink" title="DAY25-如何與人協同工作與好好溝通-設計師篇"></a>DAY25-如何與人協同工作與好好溝通-設計師篇</h1><p>設計師絕對是我一天當中溝通最多次的人之一。因為前端工程師要將設計師畫好的稿轉換成程式碼，變成能實際運作的頁面，就必須得和設計師大量的溝通，互相確保彼此的理解一致，才不會各做各的，讓成品都沒有達到雙方的要求。</p><h1 id="工程師和設計師的差別"><a href="#工程師和設計師的差別" class="headerlink" title="工程師和設計師的差別"></a>工程師和設計師的差別</h1><p>例如以製做登入頁面為例，我想的登入頁面是這樣:</p><p><img src="Untitled.png" alt="Untitled.png"></p><p>而設計師想的登入頁面是這樣:</p><p><img src="Untitled%201.png" alt="Untitled%201.png"></p><h2 id="前端工程師想的登入畫面"><a href="#前端工程師想的登入畫面" class="headerlink" title="前端工程師想的登入畫面"></a>前端工程師想的登入畫面</h2><p>前端工程師想的是，要如何建立一個可以交互運作的表單，即時驗證表單輸入要怎麼驗證、輸入錯誤要怎麼辦，輸入正確要怎麼處理資料後跟後端驗證取得token，至於頁面長怎麼樣，只要有個輸入帳號和密碼的地方和登入按鈕就好了，這些一般使用的套件都有提供，直接套上去就好了。</p><h2 id="設計師想的登入畫面"><a href="#設計師想的登入畫面" class="headerlink" title="設計師想的登入畫面"></a>設計師想的登入畫面</h2><p>設計師想的是，要如何建立一個美又時尚的登入畫面，要有什麼樣的風格同樣要跟公司的品牌精神吻合。要注意字型的運用、按鈕圓角是否夠圓潤等等細節。至於要怎麼要是實現登入功能或是表單的驗證，則不是設計師所在意的事情，就交由前端工程師實現就好了。</p><h2 id="工程師和設計師的差別-1"><a href="#工程師和設計師的差別-1" class="headerlink" title="工程師和設計師的差別"></a>工程師和設計師的差別</h2><p>工程師和設計師的關注點在同一個頁面上就有天差地遠的關注點，工程師關心的是功能如何要有效率的實現，不會過分關注畫面；而設計師關注的是畫面要如何完美的呈現，部會過分關注功能的實現。</p><p>如果以安裝水龍頭為比喻:</p><ul><li>設計師的工作就是設計一個美美的水龍頭，讓水龍頭看起來很吸引人，使用者會特別想要這個水龍頭，使用的感覺很好</li><li>前端工程師的工作就是按圖製做美美的水龍頭，並將水龍頭安裝在有水的地方，發揮水龍頭應有的功能。</li><li>後端工程師的工作就是確保水龍頭打開一定有水源可以使用。</li></ul><p>設計師常常看到工程師做出水龍頭樣式不對，這邊長了一點、那邊短了一點；這邊顏色不太對、那邊園角不夠圓等等。</p><p>而工程師常常看到設計師把水龍頭畫在天花板上，沒有接到水管，整個流程兜不起來，接不到水等等。</p><p>這樣的差異顯示角色站在自己的本位一下理解的差異，而沒有建立共通感。要建立共通感就得互相理解，現在來理解一下我觀察到的設計師。</p><h1 id="理解設計師"><a href="#理解設計師" class="headerlink" title="理解設計師"></a>理解設計師</h1><h2 id="不要預設設計師懂程式"><a href="#不要預設設計師懂程式" class="headerlink" title="不要預設設計師懂程式"></a>不要預設設計師懂程式</h2><p>雖然看到很多設計師的職缺要求要懂基本的html和css。但是以筆者經驗來說，就算懂基本的網頁技能，常常還是會有設計稿</p><p>例如，曾遇到一個設計稿上面標註的顏色都是CMYK，不是網頁常用的RGB。因此我無法照著他的稿做出來。當然設計師也不是故意找麻煩，而是他原本是印刷業，習慣用的就是CMYK，真的不知道網頁不是使用CMYK</p><p>又例如，常常看到設計師在標註按鈕之間的間距的時候，總是有一個奇怪的規則，造成我在寫CSS的時候，總是要加很多奇怪的規則。後來了解了之後才知道原來設計師不知道CSS的盒子模型，沒有外邊距(margin)和內邊距(padding)的概念。後來簡單介紹一下，才了解這個概念，之後就畫出我製作的設計稿</p><h2 id="設計師想的大多是如何變得更美"><a href="#設計師想的大多是如何變得更美" class="headerlink" title="設計師想的大多是如何變得更美"></a>設計師想的大多是如何變得更美</h2><p>設計師想的就是在滿足功能的要求下如何變得更美，如何展現品牌的個性與區別性。</p><p>常常我和設計師合作的時候，看到設計師可以專注在一個字體大小要14px或16px想了一個小時或是給我更新一版設計稿，說改進設計的細節的時候，只是把文字從黑色調成灰色之類的。</p><p>站在前端工程師的角度的我，基本上我對這些細節的改進不太有感覺。對我來說，14px和16px的差異真的感受不太強烈，幾乎感覺不出來。但是我可以做到的是，對於設計師的設計展現出充分的尊重，將他們的設計稿一模一樣地製做出來</p><h1 id="與設計師溝通的實際例子"><a href="#與設計師溝通的實際例子" class="headerlink" title="與設計師溝通的實際例子"></a>與設計師溝通的實際例子</h1><h2 id="例子一-美美的頁面和實用的頁面"><a href="#例子一-美美的頁面和實用的頁面" class="headerlink" title="例子一:美美的頁面和實用的頁面"></a>例子一:美美的頁面和實用的頁面</h2><p>工程師常說不要重複造輪子，don’t repeat yourself，因此有各種原則，想辦法重複利用已經建立好的東西。框架有提供優先使用框架提供的功能，若沒有提供才會去想辦法寫。</p><p>但是設計師的頁面同樣功能的頁面常有不同的形式表現，例如使用material風格的UI，在某個頁面就會跳脫material風格使用不同風格的樣式，要兼顧美感與功能性的狀況下，無法使用造好的輪子，就要花費工程師大量的時間重新製作，也會失去使用框架要節省時間的意義。</p><h2 id="例子二-別人的東西很好，但是我不要和他們一樣"><a href="#例子二-別人的東西很好，但是我不要和他們一樣" class="headerlink" title="例子二:別人的東西很好，但是我不要和他們一樣"></a>例子二:別人的東西很好，但是我不要和他們一樣</h2><p>基本上每個框架都會提供一整包已經製做好的icon，像是material風格或是font-awsome等等的icon，只要安裝好之後，引用進來，就可以快速套用，不用去處理任何大小不一致或顯示的問題。</p><p>但是設計師有時候會覺得直接使用很像抄襲或是沒有自己的個性，會把框架提供好的icon抓下來做個小調整的修改等等，再請你使用。但是自己修改過後的icon就不是只有引用這麼簡單，要想辦法處理各種相容性和效果的問題，就要花費大量的時間</p><h2 id="和設計師溝通"><a href="#和設計師溝通" class="headerlink" title="和設計師溝通"></a>和設計師溝通</h2><p>以上兩個例子都是筆者本人實際遇到的例子。我能體會設計師想要展現美感和風格的精神，但是這樣會讓我的工作時程暴漲，因為無法大量重複利用，什麼東西都要我重新來過做起，非常沒有效率。但是基於尊重的精神，很難說出:不好意思做不到等種話。</p><p>這些問題曾經困擾了我很久，後來想到溝通的基本精神:相互尊重-我尊重他們的創意，他們也得尊重我是否有辦法有效率實現。</p><p>因此和設計師達成共識，我們彼此簡單介紹，相互了解我們在實現功能上的流程，和在意的問題，並且如何在我們在意的問題之間取得平衡點。例如設計師在發想頁面的時候，工程師先提供大致的實行方向和使用元件，讓設計師不會毫無目標的發想，導致之後做不出來；在製做之前也要詳細看過稿，詳細討論覺得功能或流程不合理的地方，等到雙方充分討論覺得沒有問題之後，取得共識再真的下去執行。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY25-如何與人協同工作與好好溝通-設計師篇&quot;&gt;&lt;a href=&quot;#DAY25-如何與人協同工作與好好溝通-設計師篇&quot; class=&quot;headerlink&quot; title=&quot;DAY25-如何與人協同工作與好好溝通-設計師篇&quot;&gt;&lt;/a&gt;DAY25-如何與人協同工作</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY24-如何與人協同工作與好好溝通-主管篇</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed24/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed24/</id>
+    <published>2021-01-11T21:25:00.000Z</published>
+    <updated>2021-05-30T04:01:11.566Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY24-如何與人協同工作與好好溝通-主管篇"><a href="#DAY24-如何與人協同工作與好好溝通-主管篇" class="headerlink" title="DAY24-如何與人協同工作與好好溝通-主管篇"></a>DAY24-如何與人協同工作與好好溝通-主管篇</h1><ul><li>向主管回報</li><li>如何評估自己的進度</li><li>換個角度想，當主管是什麼感覺</li></ul><h1 id="主動回報各種狀況"><a href="#主動回報各種狀況" class="headerlink" title="主動回報各種狀況"></a>主動回報各種狀況</h1><p>不論是工作或生活，常常會發生很多預期以外的意外。如果只有一個人的話可能無所謂，因為不會影響到其他人；但是如果在團隊的話，影響就是一整個團隊了。所以請發生什麼事情的時候，不論好的壞的，都盡速誠實以告跟主管溝通。</p><p>至於回報的時機當然是越早越好，馬上發現馬上報告。只要有壞味道的時候，</p><p>例如:</p><p>原本預計今天要串接完API，但是中午的時候發現資料格式跟原本想的有差別，還需要多花時間處理。</p><p>這時候就要有警覺，這個處理完還要測試什麼的，可能無法今天做完，就要趕緊跟主管反映這件事情。讓主管心裡有個準備，可以多安排時間給你做，而不是今天過了之後才告訴主管你做不完，東西交不出來。</p><h1 id="換個角度想，當主管是什麼感覺"><a href="#換個角度想，當主管是什麼感覺" class="headerlink" title="換個角度想，當主管是什麼感覺"></a>換個角度想，當主管是什麼感覺</h1><p>有時候常常覺得當主管很爽，因為主管有很多下屬，只要動動嘴巴交代給下屬去做就好了。不過這只是我個人的想像。</p><p>後來實際跟主管聊過，主管其實沒有我們實際想的那麼輕鬆。</p><p>雖然主管通常只做管理的工作，不會實際去做開發或修改的工作，可是他得必須掌握他的團隊所有人的工作。主管最怕的不是你做不完要延長時間，最怕的是你做不完沒有跟他說。 做不完他可以馬上重新安排規劃，但是沒有跟他說做不完，時間到了才說真的是只能雙手一攤。</p><p>做不完的時候，上面更大的主管不會去責罵你的執行力不佳，只會去責怪你的主管領導力不佳。但對主管來說，這幾乎是非戰之罪，成了夾心餅乾。所以當主管的很怕掌握不了下面的人的進度，要讓主管安心、信任，就是能隨時告訴他你的進度，不論好事或壞事。</p><h1 id="要如何讓主管感到信任"><a href="#要如何讓主管感到信任" class="headerlink" title="要如何讓主管感到信任"></a>要如何讓主管感到信任</h1><p>信任是互相的，你想要主管信任你</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY24-如何與人協同工作與好好溝通-主管篇&quot;&gt;&lt;a href=&quot;#DAY24-如何與人協同工作與好好溝通-主管篇&quot; class=&quot;headerlink&quot; title=&quot;DAY24-如何與人協同工作與好好溝通-主管篇&quot;&gt;&lt;/a&gt;DAY24-如何與人協同工作與好好</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY23-如何與人協同工作與好好溝通</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed23/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed23/</id>
+    <published>2021-01-11T21:24:56.000Z</published>
+    <updated>2021-05-30T04:01:11.566Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY23-如何與人協同工作與好好溝通"><a href="#DAY23-如何與人協同工作與好好溝通" class="headerlink" title="DAY23-如何與人協同工作與好好溝通"></a>DAY23-如何與人協同工作與好好溝通</h1><h1 id="擁有同理心，建立共通感"><a href="#擁有同理心，建立共通感" class="headerlink" title="擁有同理心，建立共通感"></a>擁有同理心，建立共通感</h1><p>記得在大學的一門課，探討當代的哲學思想與困境的時候，討論到一個很重要的問題:</p><p>在現代資本主義的社會，不論你接受或不接受，就是一個高度分工的社會。將東西都切分的極細，專業分工，讓每個人都以最有效率的方法專注在自己專精的地方。</p><p>但高度專精的結果就是每個人都只關心自己的東西，而對自己以外的東西沒有感覺或是沒有認識。造成雙方沒有溝通的基礎。也就是說雙方沒有管道可以了解彼此在做什麼，做事情的困難點在哪裡。</p><p>要解決這個問題並不容易，至少可以從溝通開始做起，好好地聽對方說話，好好了解對方，建立彼此的共通感</p><h1 id="不預設立場，無論如何聽對方說完話"><a href="#不預設立場，無論如何聽對方說完話" class="headerlink" title="不預設立場，無論如何聽對方說完話"></a>不預設立場，無論如何聽對方說完話</h1><p>不論你有你的想法或沒有想法，不論你喜歡對方或不喜歡對方。建議都先把對方的話聽完，並且不要打斷對話。</p><p>有時候可能覺得對方說的話很可笑、很荒謬或很不專業，但是很多時候我們覺得可笑的原因有幾種:</p><ul><li>以自己的角度來說，對方所提的問題很無題，幾乎做不到</li><li>對方只說了個模糊的大餅，根本不知道要做什麼</li><li>自己聽不懂對方在說什麼</li></ul><p>很多時候縱使覺得對方再無理、再蠢，他會提出這個問題，就代表有這個需求。只不過對方可能無法很具體描繪出他的需求，而導致有點荒謬。所以這時候應該很認真地繼續追問下去，了解對方真實的需求</p><p>例如:</p><p>甲:我想要在登入頁面加個按鈕，可以寄信給別人</p><p>乙:???(荒謬到無法說出話)</p><p>乙:(心想:沒有登入我要以誰的名義寄信，而且寄信功能跟登入模組沒有整合根本無法做)</p><p>乙:在登入頁面加按鈕有點不合常理，為什麼想要在登入頁面加入寄信功能</p><p>甲:其實我是想要在員工登入系統之前寄信給主管，讓他們的帳號登入有個紀錄</p><p>(再追問之後，得到真實需求，就可以用自己的專業找出這個需求的解法)</p><p>乙:那麼其實可以不用加按鈕自己寄信，帳號登入之後，我做個紀錄模組，自動寄信會是更好的辦法</p><p>甲:對，就是這樣，我一職不知道要怎麼描述這個需求，還是你比較專業</p><p>以這個例子，乙雖然覺得荒謬，如果乙就此大發雷霆生氣的話，兩個人就會開始吵架，雙方就沒有辦法好好對話，沒有共通感，就無法了解甲提出需求的真實目的</p><h1 id="如何讓自己的談話有內容"><a href="#如何讓自己的談話有內容" class="headerlink" title="如何讓自己的談話有內容"></a>如何讓自己的談話有內容</h1><p>為了避免自己說的話也能讓別人聽得懂，在與在語用學上有一個原則稱為合作原則</p><p>合作原則</p><ul><li>質</li></ul><p>確保自己所說的話都是真的</p><p>不適合的例子:</p><p>A:你吃飽了嗎?</p><p>B:(已經吃飽了)我還沒吃</p><ul><li>量</li></ul><p>自己給予對方的訊息不多不少，要剛剛好</p><p>不適合的例子:</p><p>A:你的邏輯期中考跟期末考如何?</p><p>B:他的期末考很好</p><p>(只有回答期末考，沒有期中考)</p><ul><li>關係</li></ul><p>說話必須契合主題，要有關連，不答非所問</p><p>不適合的例子:</p><p>A:你覺得讀哲學系如何</p><p>B:今天天氣真好</p><ul><li>方式</li></ul><p>說法者言談必須有條理有邏輯，不宜陳述太多不相干而答非所問</p><p>不適合的例子:</p><p>A:你的午餐想要吃什麼</p><p>B:ㄇㄞˋ當勞二聲 </p><h1 id="專業就是講到外人都聽得懂"><a href="#專業就是講到外人都聽得懂" class="headerlink" title="專業就是講到外人都聽得懂"></a>專業就是講到外人都聽得懂</h1><p>除非你知道對方擁有同樣的專業背景，否則建議不要使用太多專業術語與對方溝通。而是要善用比喻，運用你我都懂得生活方式來比喻。</p><p>例如有人要跟我解釋什麼是鐵道業使用的「指差確認」，跟我說指差確認就是用眼手心口的確認動作，那麼我聽完之後會覺得還是什麼都沒有聽懂。</p><p>要解釋這個概念當然可以申論引經據典加上原文來解釋，如果是專業人士當然聽得懂你在說什麼，但是絕大部分的人都不是專業人士</p><p>例如如何解釋:同步(Synchronous)、異步(Asynchronous)、阻塞(Block)、非阻塞(Non-block)這幾個概念。</p><p>用比喻的方法可以這樣解釋:</p><pre><code>同步阻塞:以在飲料店點飲料為例子，你向店員點了一杯珍珠奶茶(假設店員只有一位)，付了錢之後，你不讓出你的位置到旁邊去給下一位客人點飲料，而是站在原地，一直死命地盯著店員，看他有沒有好好地做你的珍珠奶茶，你也沒有辦法做其他事情，直到店員做好你的珍珠奶茶拿給你為止。(同步:你的飲料做完之後才能做別人的飲料；阻塞:死命盯著看，不能做別的事情)同步非阻塞:同樣以剛剛的例子為例，同樣點了一杯飲料之後，不讓出你的位置到旁邊給下一位客人點飲料，站在原地死命地盯著店員，看他有沒有好好地做你的珍珠奶茶。不過這次你聰明了一點，你不再分分秒秒死盯著店員看，而是每 30 秒看一下店員確認進度，在這 30 秒之前，你可以滑手機做你的事情。(同步:你的飲料做完之後才能做別人的飲料；非阻塞:改每 30 秒確認一次，其他時間可以做其他事情)非同步非阻塞:同樣子剛剛的例子為例，同樣點了一杯飲料之後，你就讓出位置到等候區讓其他人點餐。你也不會死命地盯著店員，看他到底做好了沒，而是做你的事情，例如滑滑手機、講講電話，等到店員做好叫號的時候，聽到店員叫號才去拿你的飲料非同步阻塞:所以非同步的動作是不是就等於非阻塞呢?因為都到等候區了，想要做自己的事就做自己事情，你也不會去理會店員做什麼。但是意外總是發生在大意的時候，例如你忘記帶手機了，即使可以做自己的事情也根本沒有事情可以做，只能眼睜睜地看著店員做飲料。所以以你的立場來說，你雖然到了等候區做了非同步的動作想要做自己的事情，但是你想做的事情做不了(因為沒帶手機，必須等飲料做好之後，才能回家拿手機繼續做事情)，所以對你來說你要做的事情還是被堵住了，這就是非同步阻塞</code></pre><p>用生活中，大家都有的買飲料經驗解釋這幾個專有名詞，因為有共同的經驗，相信聽的人一定可以比光解釋名詞體悟的還要多</p><h1 id="讓對方知道你需要占用多少時間"><a href="#讓對方知道你需要占用多少時間" class="headerlink" title="讓對方知道你需要占用多少時間"></a>讓對方知道你需要占用多少時間</h1><p>很多時候，大多數的人都是好人，都非常願意幫助大家的問題或者溝通。但是每個人都有自己要忙的事情，不見得有很多時間。</p><p>所以想要與對方溝通的時候，最好先請問對方有沒有時間，同時間告訴對方你大概想要談什麼問題或遇到什麼問題，然後大概需要多少時間。</p><p>這樣一來，對方才會有個底，知道你想要談論什麼，可以先準備你們要談話的內容，不會毫不知情被迫去談論他還沒準備好的事情，讓討論的品質低落，甚至在鬼打牆。另外對方可以知道你們預計談話的時間，也好讓他安排他有空的時間。</p><p>換個立場，如果有個人突然跑來跟我說:我等一下要過來跟你講件事情。</p><p>我一定會一頭霧水，除了我一定會覺得對方不尊重我的時間之外，我會很擔心對方想要跟我說什麼，我毫無心理準備，會心神不寧，然後覺得我的個人行程都被卡住。</p><p>因此發揮同理心，自己不喜歡會擔心的事情，別人同樣也不喜歡和擔心。所以在和別人溝通的時候，請讓對方有個背景資訊和心理準備。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY23-如何與人協同工作與好好溝通&quot;&gt;&lt;a href=&quot;#DAY23-如何與人協同工作與好好溝通&quot; class=&quot;headerlink&quot; title=&quot;DAY23-如何與人協同工作與好好溝通&quot;&gt;&lt;/a&gt;DAY23-如何與人協同工作與好好溝通&lt;/h1&gt;&lt;h1 i</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY22-如何描述問題與問問題</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed22/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed22/</id>
+    <published>2021-01-11T21:24:52.000Z</published>
+    <updated>2021-05-30T04:01:11.562Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY22-如何描述問題與問問題"><a href="#DAY22-如何描述問題與問問題" class="headerlink" title="DAY22-如何描述問題與問問題"></a>DAY22-如何描述問題與問問題</h1><h1 id="遇到問題了怎麼辦"><a href="#遇到問題了怎麼辦" class="headerlink" title="遇到問題了怎麼辦"></a>遇到問題了怎麼辦</h1><p>遇到問題可以說是工程師的日常，天天都會遇到一大堆問題。也因為有問題，工程師才有存在的價值，沒有問題的話就不需要工程師了。</p><p>可是光是前端的問題就包羅萬象、千奇百怪。不可能知道所有的問題，幾乎大部分的問題都是我們為知不知道的問題。遇到不知道的問題的時候，有以下的建議:</p><ul><li>想辦法自行解決</li><li>如果無法自行解決就向人求助</li></ul><h2 id="想辦法自行解決"><a href="#想辦法自行解決" class="headerlink" title="想辦法自行解決:"></a>想辦法自行解決:</h2><p>大部分遇到的問題，其他人應該也遇到過。錯誤發生的時候，基本上仔細看一下console的錯誤訊息，都會描述發生了什麼錯誤或是錯誤的代碼等等。只要把錯誤訊息或代碼拿去google搜尋就可以搜尋到一籮筐的解法。</p><p>如果google不太到的話，也可以去專業的網站再搜尋一次</p><ul><li><a href="https://stackoverflow.com/">Stack Overflow</a> : 最大的程式設計領域的問答網站，上面有很多問題，也有很多高手在上面熱心的回答。曾經有個笑話說如果Stack Overflow網站掛了，那麼工程師就會沒有產能了，因為大家都是看Stack Overflow在寫程式的。裡面雖然都是英文，但是基本上用字都不難，甚至只要看懂關鍵字，幾乎就可以了解在做什麼</li><li><a href="https://www.zhihu.com/">知乎</a> : 中文最大的問答網站，類似雅虎奇摩知識+。上面也有各種千奇百怪的問題，但是每個千奇百怪的問題都會有各領域的大神在上面認真回答，幾乎以論文的標準引經據典地在回答。如果不想看英文，覺得頭很痛，可以在這查詢問題</li></ul><h2 id="向人求助"><a href="#向人求助" class="headerlink" title="向人求助:"></a>向人求助:</h2><p>如果找遍各大網站還是找不到解決方法，或是問題真的太冷門了，那麼只好向人求救了。</p><p>但是向人求救之前，就不是只有單純複製錯誤訊息那麼簡單。必須先搞懂問題在哪裡和要如何向人描述問題</p><h1 id="如何描述問題"><a href="#如何描述問題" class="headerlink" title="如何描述問題"></a>如何描述問題</h1><ul><li>遇到什麼問題</li><li>你試著用什麼辦法去解決問題</li><li>雖然失敗了，但是你覺得原因是什麼</li><li>將問題還原列出來</li></ul><p>例如:</p><pre><code>我遇到javascript promise的問題，我想要用promise跟API溝通取得資料，但是不知道為什麼一直取不到資料。我在stackoverflow上面查過，有可能是我使用參數的方法不太對，導致沒有一個方法可以接收資料。但是我不知道該怎麼做會比較對這是我的程式碼連結</code></pre><p>這樣就比較清楚描述你發生甚麼問題，然後你試過了什麼方法，不是只想當個伸手牌。但只是一直沒有辦法成功，所以要求助於大家。</p><p>另外還有附上你的程式碼，讓想幫助你的人可以迅速看到問題，而不用通靈想像你的錯誤</p><h1 id="如何還原問題"><a href="#如何還原問題" class="headerlink" title="如何還原問題"></a>如何還原問題</h1><p>還原問題不只是截圖，截圖有時候只能看到問題發生了，但是發生的問題大多都要憑直覺和想像。</p><p>最好的辦法是將發生問題的程式碼寫出來，讓別人看。</p><p>因此推薦以下兩個網站</p><h2 id="StackBlitz"><a href="#StackBlitz" class="headerlink" title="StackBlitz"></a>StackBlitz</h2><p><a href="https://stackblitz.com/">StackBlitz</a></p><p><img src="Untitled.png" alt="Untitled.png"></p><p>一個強大的網站，可以馬上套用各種框架，不用煩惱環境的問題。</p><p>如果有使用任何框架，推薦使用</p><h2 id="CodePen"><a href="#CodePen" class="headerlink" title="CodePen"></a>CodePen</h2><p><a href="https://codepen.io/pen/">CodePen</a></p><p><img src="Untitled%201.png" alt="Untitled%201.png"></p><p>相較於StackBlitz有豐富的框架可以選擇，CodePen就比較陽春許多。不過功能比較單純正是其優點。</p><p>很適合拿來描述樣式的問題或是無關框架的Javascript問題。可以很快再上面還原問題</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY22-如何描述問題與問問題&quot;&gt;&lt;a href=&quot;#DAY22-如何描述問題與問問題&quot; class=&quot;headerlink&quot; title=&quot;DAY22-如何描述問題與問問題&quot;&gt;&lt;/a&gt;DAY22-如何描述問題與問問題&lt;/h1&gt;&lt;h1 id=&quot;遇到問題了怎麼辦&quot;</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="溝通" scheme="https://tso1158687.github.io/blog/tags/%E6%BA%9D%E9%80%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed21/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed21/</id>
+    <published>2021-01-11T21:24:49.000Z</published>
+    <updated>2021-05-30T04:01:11.562Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY21-常常有莫名其妙的bug嗎-要不要試試看pure-function"><a href="#DAY21-常常有莫名其妙的bug嗎-要不要試試看pure-function" class="headerlink" title="DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function"></a>DAY21-常常有莫名其妙的bug嗎?要不要試試看pure function</h1><h1 id="什麼是pure-function"><a href="#什麼是pure-function" class="headerlink" title="什麼是pure function"></a>什麼是pure function</h1><p>pure function不是一個手法，而是一個觀念</p><blockquote><p>不論輸入幾次一樣的參數，永遠會得到一樣的結果，而且不會對函式以外的區域造成任何影響</p></blockquote><p>也就是說，輸入一樣的東西永遠都會有一樣的結果，而且不會造成副作用。</p><h2 id="不是pure-function的反面例子"><a href="#不是pure-function的反面例子" class="headerlink" title="不是pure function的反面例子"></a>不是pure function的反面例子</h2><p>先來看看一個反面例子</p><p><img src="Untitled.png" alt="Untitled.png"></p><p>連續呼叫三次 <code>sayHello</code> 的方法，都輸入同樣的參數 <code>1</code>  三次所得到的結果都不一樣，而且在sayHello方法外的變數 <code>number</code> 被修改成 3</p><h2 id="更多不是pure-function的反面例子"><a href="#更多不是pure-function的反面例子" class="headerlink" title="更多不是pure function的反面例子"></a>更多不是pure function的反面例子</h2><p>Javascript有很多內建的方法都不是pure function，舉幾個例子</p><ul><li>push</li><li>shift</li><li>unshift</li><li>pop</li></ul><p><strong>push:從陣列最後新增元素</strong></p><pre><code class="jsx">let numbers=[1,2,3,4]numbers.push(1) //1,2,3,4,1numbers.push(1) //1,2,3,4,1,1</code></pre><p><strong>shift:從陣列最前刪除元素</strong></p><pre><code class="jsx">let numbers=[1,2,3,4]numbers.shift() //2,3,4numbers.shift() //3,4</code></pre><p><strong>unshift:從陣列最前新增元素</strong></p><pre><code class="jsx">let numbers=[1,2,3,4]numbers.unshift(1) //1,1,2,3,4numbers.unshift(1) //1,1,1,2,3,4</code></pre><p><strong>pop:從陣列最後篩除元素</strong></p><pre><code class="jsx">let numbers=[1,2,3,4]numbers.pop() //1,2,3numbers.pop() //1,2</code></pre><p>splice</p><h1 id="如何寫pure-function"><a href="#如何寫pure-function" class="headerlink" title="如何寫pure function"></a>如何寫pure function</h1><ul><li>不去修改方法外的變數</li><li>只使用參數來獲得資料</li><li>使用 <code>return</code> 將結果返回</li></ul><p>在這以簡單的加法功能為例，這是一個充滿副作用的加法功能</p><pre><code class="jsx">let a = 1;let b = 2;let result;function add() &#123;  result = a + b;&#125;add(); //3</code></pre><p>遵守以上三個原則</p><pre><code class="jsx">function add(x, y) &#123;  return x + y;&#125;result = add(a, b); //3result = add(a, b); //3result = add(a, b); //3</code></pre><p>這兩個例子比較起來，可以看到:</p><ul><li>add方法內不會去修改外部參數result</li><li>add方法，只使用參數x,y去操作</li><li>最後將結果用return返回，確保輸入同樣參數都會獲得同樣結果。因此 <code>add(a, b)</code> 這個方法無論呼叫幾次，結果都會一樣</li></ul><h1 id="pure-function有甚麼好處"><a href="#pure-function有甚麼好處" class="headerlink" title="pure function有甚麼好處"></a>pure function有甚麼好處</h1><ul><li>無副作用:作用方法只限定在方法內，不會影響到其他的地方</li><li>可預測結果:同樣的輸入都會得到同樣的結果，也利於測試</li><li>易於組合:因為功能單一，無副作用，所以可以跟其他的pure function組合</li></ul><p>例如我想要求下列陣列中的數字乘二相加之後的結果，就可以用不同的方法組合起來</p><pre><code class="jsx">const source = [&quot;apple&quot;, &quot;banana&quot;, 2, 4, &#39;hohoho&#39;, 888, &#39;11&#39;, &#39;doraenom&#39;];let total = source    .filter(e =&gt; !!Number(e))    .map(x =&gt; Number(x) * 2)    .reduce((total, value) =&gt; total + value)</code></pre><p><a href="https://medium.com/frochu/%E7%B4%94%E7%B2%B9%E7%9A%84%E5%A5%BD-pure-function-%E7%9F%A5%E9%81%93-574d5c0d7819">https://medium.com/frochu/純粹的好-pure-function-知道-574d5c0d7819</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY21-常常有莫名其妙的bug嗎-要不要試試看pure-function&quot;&gt;&lt;a href=&quot;#DAY21-常常有莫名其妙的bug嗎-要不要試試看pure-function&quot; class=&quot;headerlink&quot; title=&quot;DAY21-常常有莫名其妙的bu</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="javascript" scheme="https://tso1158687.github.io/blog/tags/javascript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle)</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed20/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed20/</id>
+    <published>2021-01-11T21:24:44.000Z</published>
+    <updated>2021-05-30T04:01:11.542Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY20-SOLID原則-依賴反向原則-Dependency-Inversion-Principle"><a href="#DAY20-SOLID原則-依賴反向原則-Dependency-Inversion-Principle" class="headerlink" title="DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle )"></a>DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle )</h1><h1 id="什麼是依賴反向原則"><a href="#什麼是依賴反向原則" class="headerlink" title="什麼是依賴反向原則"></a>什麼是依賴反向原則</h1><blockquote><p>高層模組不應依賴低層模組，它們都應依賴於抽象介面。</p></blockquote><blockquote><p>抽象介面不應該依賴於具體實作，具體實作應依賴抽象介面。</p></blockquote><h1 id="依賴反向原則的例子"><a href="#依賴反向原則的例子" class="headerlink" title="依賴反向原則的例子"></a>依賴反向原則的例子</h1><h2 id="要如何從台北到板橋"><a href="#要如何從台北到板橋" class="headerlink" title="要如何從台北到板橋"></a>要如何從台北到板橋</h2><p><img src="Untitled.png" alt="Untitled.png"></p><p>根據google map的建議，從台北到板橋站可以搭乘台北捷運板南線。</p><h2 id="從台北到板橋有幾種方法"><a href="#從台北到板橋有幾種方法" class="headerlink" title="從台北到板橋有幾種方法"></a>從台北到板橋有幾種方法</h2><p>但是從台北到板橋只有搭捷運一種方法嗎?</p><p>看看台北地區軌道路網圖，從台北到板橋不只有搭捷運一種方法而已。除了搭捷運外，還可以搭乘台鐵、高鐵</p><p><img src="Untitled%201.png" alt="Untitled%201.png"></p><pre><code class="tsx">class Mrt &#123;  destination;  constructor(destination) &#123;    this.destination = destination;  &#125;  getStationList() &#123;    let stationList = [&quot;西門&quot;, &quot;龍山寺&quot;, &quot;江子翠&quot;, &quot;新埔&quot;, &quot;板橋&quot;];    console.log(`我要去$&#123;this.destination&#125;,沿途經過:`);    stationList.forEach(station =&gt; &#123;      console.log(station);    &#125;);  &#125;&#125;</code></pre><pre><code class="tsx">class Passenger &#123;  goTostation() &#123;    console.log(&quot;去車站&quot;);  &#125;  getOnTheTrain() &#123;    let station = new Mrt(&quot;板橋&quot;);    console.log(station.getStationList());  &#125;&#125;</code></pre><p>這樣的關係就是 <em>乘客依賴著捷運</em>，乘客是高層模組，捷運是低層模組</p><p>假設有一名乘客要搭車從台北到板橋</p><pre><code class="tsx">let passenger1 = new Passenger();console.log(passenger1.getOnTheTrain()); // 我要去板橋,沿途經過:// 西門// 龍山寺// 江子翠// 新埔// 板橋</code></pre><p>可是如果有一名乘客他趕時間，他只是想從台北到板橋，不一定要搭捷運，只要能到板橋的方法都好，他選擇票價最貴但是最快的高鐵</p><p>高鐵也是交通工具和捷運有一樣的功能，所以直接繼承捷運的類別</p><pre><code class="tsx">class Hsr extends Mrt &#123;  getStationList()&#123;    super.getStationList()    console.log(&#39;不好意思我們沒有停西門、龍山寺、江子翠、新埔&#39;)  &#125;&#125;</code></pre><p>同樣台鐵也是交通工具，也直接繼承捷運的類別</p><pre><code class="tsx">class tra extends Mrt &#123;  getStationList()&#123;    super.getStationList()    console.log(&#39;不好意思我們沒有停西門、龍山寺、江子翠、新埔，我們還另外停了萬華&#39;)  &#125;&#125;</code></pre><p>可以看到繼承越來越多，不能通用的例子也越來越多，繼承並沒有輕鬆許多，反而要去處理更多的例外。</p><p>看出問題在哪裡了嗎?</p><h2 id="怎麼從台北到板橋最好"><a href="#怎麼從台北到板橋最好" class="headerlink" title="怎麼從台北到板橋最好"></a>怎麼從台北到板橋最好</h2><p>乘客想要的就只是從板橋到台北，至於怎麼從板橋到台北則不是重點，只要能到就好。</p><p>換句話說，乘客所依賴的應該是抽象的交通工具，而並非實際的捷運。只要是交通工具，不論是高鐵、台鐵、捷運都好。</p><pre><code class="tsx">class Transportation &#123;  destination;  stationList;  constructor(destination, stationList) &#123;    this.destination = destination;    this.stationList = stationList;  &#125;  goTostation() &#123;    console.log(&quot;去車站&quot;);  &#125;  getOnTheTrain() &#123;    this.stationList.forEach(station=&gt;&#123;    console.log(station);    &#125;)  &#125;&#125;</code></pre><p>把抽象的細節做好，再讓細節去實作抽象的內容，這樣的話，只要遵守抽象的內容，細節隨時可以抽換</p><h1 id="依賴反向原則的優點"><a href="#依賴反向原則的優點" class="headerlink" title="依賴反向原則的優點"></a>依賴反向原則的優點</h1><p>從依賴細節到改依賴抽象的好處就是，只要符合抽象的原則，細節隨時可以替換，增加高層模組和低層模組之間的彈性</p><p>實際的例子像是<a href="https://www.wikiwand.com/zh-tw/%E5%AF%B9%E8%B1%A1%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84">ORM</a>套件上面，我要對資料庫的任何操作，假設我要求增加某項資料，我並沒有限定一定要哪種資料庫，我就只是想要「增加」這件事情。但是如果我把這個功能依賴在mySql上面，就會導致我的功能就只能在mySql上面實現，如果哪天我要使用msSql的話，這個功能就無用了。因此orm就是幫助我們對於指令的轉換多做一層抽象的工作，讓依賴可以反轉，不依賴實體而去依賴抽象，讓我要在哪個資料庫下增加的指令都不會有問題</p><p><a href="https://stackblitz.com/edit/typescript-eeb7et">https://stackblitz.com/edit/typescript-eeb7et</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY20-SOLID原則-依賴反向原則-Dependency-Inversion-Principle&quot;&gt;&lt;a href=&quot;#DAY20-SOLID原則-依賴反向原則-Dependency-Inversion-Principle&quot; class=&quot;headerlin</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="solid" scheme="https://tso1158687.github.io/blog/tags/solid/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY19-SOLID原則-介面隔離原則(Interface Segregation Principle)</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed19/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed19/</id>
+    <published>2021-01-11T21:24:40.000Z</published>
+    <updated>2021-05-30T04:01:11.542Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY19-SOLID原則-介面隔離原則-Interface-Segregation-Principle"><a href="#DAY19-SOLID原則-介面隔離原則-Interface-Segregation-Principle" class="headerlink" title="DAY19-SOLID原則-介面隔離原則(Interface Segregation Principle)"></a>DAY19-SOLID原則-介面隔離原則(Interface Segregation Principle)</h1><h1 id="什麼是介面隔離原則"><a href="#什麼是介面隔離原則" class="headerlink" title="什麼是介面隔離原則"></a>什麼是介面隔離原則</h1><blockquote><p>一個類別不應該被強迫實作一個它不需要的方法</p></blockquote><p>意思就是說，一個類別不應該去實作它不需要去執行的方法。感覺有點廢話，又把引言說了一次，直接來看看例子感受一下吧</p><h1 id="介面隔離原則的例子"><a href="#介面隔離原則的例子" class="headerlink" title="介面隔離原則的例子"></a>介面隔離原則的例子</h1><p>本次例子以Typescript為範例，Typescript更能凸顯出介面隔離原則的重要性。</p><p>假設有一個車子的介面，必須實作以下這些方法:</p><pre><code class="tsx">interface Car &#123;  startEngine(): void;  colseEngine(): void;  greeting(): void;  enableDebugMode(): void;&#125;</code></pre><p>分別有兩個對象去實作車子的介面:駕駛和工程師</p><pre><code class="tsx">class driver implements Car &#123;  startEngine() &#123;    console.log(&quot;啟動車子&quot;);  &#125;  colseEngine() &#123;    console.log(&quot;關閉車子&quot;);  &#125;  greeting() &#123;    console.log(&quot;歡迎搭車&quot;);  &#125;  enableDebugMode() &#123;    console.log(&#39;錯誤，無權存取&#39;)  &#125;&#125;class engineer implements Car &#123;  startEngine() &#123;    console.log(&quot;啟動車子&quot;);  &#125;  colseEngine() &#123;    console.log(&quot;關閉車子&quot;);  &#125;  greeting() &#123;    console.log(&quot;歡迎搭車&quot;);  &#125;  enableDebugMode() &#123;    console.log(&quot;啟動工程模式&quot;);  &#125;&#125;</code></pre><p>實際執行的結果</p><pre><code class="tsx">const driver1 = new driver();const engineer1 = new engineer();console.log(driver1.enableDebugMode()); // 錯誤，無權存取 console.log(engineer1.enableDebugMode()); // 啟動工程模式</code></pre><p>從這個例子可以看出， <code>enableDebugMode</code> 這個功能本來只專屬工程人員使用，不開放給一般駕駛使用。但是因為Car的介面有這個，所以駕駛不得不實作這個功能，然後丟出錯誤。</p><p>實作了之後再拋出錯誤，實在一個很彆扭的行為。會這麼彆扭的原因就是介面 <code>Car</code> 所要實作的方法，並不是通用，大家都得實作的方法。導致實作他的對象被迫以奇怪的方式實作。</p><p>因此如果要遵守介面隔離原則的話，可以將介面抽離，讓不同需要的人分別實作</p><pre><code class="tsx">interface Car &#123;  startEngine(): void;  colseEngine(): void;  greeting(): void;&#125;interface DebugMode&#123;enableDebugMode(): void;&#125;</code></pre><p>如此一來，駕駛和工程人員就可以分別去實作不同的東西</p><pre><code class="tsx">class driver implements Car &#123;  startEngine() &#123;    console.log(&quot;啟動車子&quot;);  &#125;  colseEngine() &#123;    console.log(&quot;關閉車子&quot;);  &#125;  greeting() &#123;    console.log(&quot;歡迎搭車&quot;);  &#125;&#125;class engineer implements Car,DebugMode &#123;  startEngine() &#123;    console.log(&quot;啟動車子&quot;);  &#125;  colseEngine() &#123;    console.log(&quot;關閉車子&quot;);  &#125;  greeting() &#123;    console.log(&quot;歡迎搭車&quot;);  &#125;  enableDebugMode() &#123;    console.log(&quot;啟動工程模式&quot;);  &#125;&#125;</code></pre><h1 id="介面隔離原則的優點"><a href="#介面隔離原則的優點" class="headerlink" title="介面隔離原則的優點"></a>介面隔離原則的優點</h1><p>將介面隔離出來的優點是可以不用被迫去實作不需要用到的方法。如果看到一堆強迫被執行的功能又要以奇怪的方式繞過，在維護上可以說是極難維護。而且如果沒有留下註解之類的話，還要自行花費大量時間抽絲剝繭。那倒不如一開始就將介面隔離，使用好的介面、擁有好的架構。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY19-SOLID原則-介面隔離原則-Interface-Segregation-Principle&quot;&gt;&lt;a href=&quot;#DAY19-SOLID原則-介面隔離原則-Interface-Segregation-Principle&quot; class=&quot;headerl</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="solid" scheme="https://tso1158687.github.io/blog/tags/solid/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Day18-SOLID原則-里氏替換原則(Liskov Substitution Principle)</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed18/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed18/</id>
+    <published>2021-01-11T21:24:36.000Z</published>
+    <updated>2021-05-30T04:01:11.542Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Day18-SOLID原則-里氏替換原則-Liskov-Substitution-Principle"><a href="#Day18-SOLID原則-里氏替換原則-Liskov-Substitution-Principle" class="headerlink" title="Day18-SOLID原則-里氏替換原則(Liskov Substitution Principle)"></a>Day18-SOLID原則-里氏替換原則(Liskov Substitution Principle)</h1><h1 id="什麼是里氏替換原則"><a href="#什麼是里氏替換原則" class="headerlink" title="什麼是里氏替換原則"></a>什麼是里氏替換原則</h1><blockquote><p>子型別必須遵從父型別的行為進行設計</p></blockquote><p>解釋只有一句話這麼簡單。</p><ul><li>子型別要完全實作父型別的方法</li><li>子型別要能完全替代父型別，且不能出現錯誤或異常</li></ul><h1 id="里氏替換原則的例子-矩形vs正方形"><a href="#里氏替換原則的例子-矩形vs正方形" class="headerlink" title="里氏替換原則的例子-矩形vs正方形"></a>里氏替換原則的例子-矩形vs正方形</h1><h2 id="矩形和正方形的定義"><a href="#矩形和正方形的定義" class="headerlink" title="矩形和正方形的定義"></a>矩形和正方形的定義</h2><p>矩形的定義為:定義為有一個角是直角的平行四邊形，即包含正方形和長方形</p><p>正方形的定義為:四個邊都等長的矩形</p><h2 id="以矩形和正方形為例子"><a href="#以矩形和正方形為例子" class="headerlink" title="以矩形和正方形為例子"></a>以矩形和正方形為例子</h2><p>從定義來看，矩形為正方形和長方形的父型別；反之正方形為矩形的子型別</p><p>假設有一個矩形的class ，必須輸入他的長和寬。並且有一個利用長和寬取得面積的方法</p><pre><code class="jsx">class Rectangle &#123;  height;  weight;  constructor(height, weight) &#123;    this.height = height;    this.weight = weight;  &#125;  getArea() &#123;    return this.height * this.weight;  &#125;&#125;</code></pre><p>當我想取得矩形的面積時候</p><pre><code class="jsx">const rectangle1 = new Rectangle(10, 20);console.log(rectangle1.getArea()); // 200</code></pre><p>再來建立一個正方形的class，它是繼承矩形而來的class。正方形和矩形一樣都有取得面積的方法。但是正方形的取得面積的方法多了一個檢查，長和寬需要一致，以符合三角形的定義</p><pre><code class="jsx">class Square extends Rectangle &#123;  constructor(height, weight) &#123;    super(height, weight);  &#125;  getArea() &#123;    if (this.height !== this.weight) &#123;      return &quot;長和寬需一致&quot;;    &#125; else &#123;      return super.getArea();    &#125;  &#125;&#125;</code></pre><p>當我想要取得正方形的面積的時候</p><pre><code class="jsx">const square1 = new Square(10, 20);console.log(square1.getArea()); // 長和寬需一致const square2 = new Square(20,20);console.log(square2.getArea()) // 400</code></pre><p>有沒有發現到，當父類別的矩形和子類別的正方形輸入一樣的參數的時候，竟然得到不一樣的結果</p><pre><code class="jsx">const rectangle1 = new Rectangle(10, 20);console.log(rectangle1.getArea()); // 200const square1 = new Square(10, 20);console.log(square1.getArea()); // 長和寬需一致</code></pre><p>一樣的參數父類別得到面積而子類別拋出錯誤訊息。對父類別來說，這個就是一個不可預期的結果。就是因為子類別並沒有完全遵守父類別的行為。</p><h2 id="所以應該要怎麼做"><a href="#所以應該要怎麼做" class="headerlink" title="所以應該要怎麼做"></a>所以應該要怎麼做</h2><p>既然發現了正方形在實作矩形取得面積的方法會有不同的行為而發生不可預期的結果。可以從源頭找起，是不是父類別設定長和寬的時候，就需要增加一個檢查長和寬的功能。讓這個矩形的父類別可以涵蓋更全面更廣泛</p><h1 id="里氏替換原則的優點"><a href="#里氏替換原則的優點" class="headerlink" title="里氏替換原則的優點"></a>里氏替換原則的優點</h1><ul><li>增加程式碼的健全度，在使用不同的子類別的時候，可以大幅度的保證彼此之間的相容性。只要父類別可以使用，基本上子類別也可以使用</li><li>子類別如果要新增功能，獨立在父類別的功能之外，才不會在搬移到其他子類別的時候發生奇怪的問題，也可以將功能切分乾淨，區分職責</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Day18-SOLID原則-里氏替換原則-Liskov-Substitution-Principle&quot;&gt;&lt;a href=&quot;#Day18-SOLID原則-里氏替換原則-Liskov-Substitution-Principle&quot; class=&quot;headerlink&quot;</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="solid" scheme="https://tso1158687.github.io/blog/tags/solid/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Day17-SOLID原則-開閉原則(Open–closed Principle)</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed17/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed17/</id>
+    <published>2021-01-11T21:24:31.000Z</published>
+    <updated>2021-05-30T04:01:11.542Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Day17-SOLID原則-開閉原則-Open–closed-Principle"><a href="#Day17-SOLID原則-開閉原則-Open–closed-Principle" class="headerlink" title="Day17-SOLID原則-開閉原則(Open–closed Principle)"></a>Day17-SOLID原則-開閉原則(Open–closed Principle)</h1><h1 id="什麼是開閉原則"><a href="#什麼是開閉原則" class="headerlink" title="什麼是開閉原則"></a>什麼是開閉原則</h1><blockquote><p>軟體實體應該對擴展開放，對修改關閉</p></blockquote><p>開閉原則的解釋就是這麼簡單。</p><p>以現實中遇到實現開閉原則的例子為例: Chrome 和 VS Code都是實現開閉原則的最好例子。</p><p>Chrome 和 VS Code都有新增擴充套件(extension)的功能，安裝擴充套件可以新增一些功能。</p><p>Chrome 和 VS Code允許新增套件增加新功能，但是不會修改到原本的功能，讓原本的功能因為加了新功能之後壞掉，這個就是開閉原則。</p><h1 id="開閉原則的例子"><a href="#開閉原則的例子" class="headerlink" title="開閉原則的例子"></a>開閉原則的例子</h1><p>假設有一個取得使用者資料的功能</p><pre><code class="jsx">function getUserData() &#123;    this.userService.getUserData().then(userLists =&gt; &#123;        this.userLists = parseUserLists(userLists)    &#125;)&#125;</code></pre><p>這個功能也就是從API取得使用者資料後，將使用者資料解析成前端可以使用的格式。</p><p>但是假設，有一天後端API要新增一種使用者資料的格式，所以前端要新增一個方法去解析新的資料格式。</p><pre><code class="jsx">function getUserData(newDataType) &#123; // 新增一個參數去判斷使用何種方法解析資料    this.userService.getUserData().then(userLists =&gt; &#123;        // 使用條件式決定要使用哪種方法解析資料        if (newDataType) &#123;            this.userLists = parseNewTypeUserLists(userLists)        &#125; else &#123;            this.userLists = parseUserLists(userLists)        &#125;    &#125;)&#125;</code></pre><p>使用最簡單的解法，傳入一個參數，再用條件式去判斷要使用何種方法去解析使用者的資料。</p><p>這樣的解法固然是一種可以滿足需求的方法。可是以開閉原則的角度來看，卻不是一種太好的做法。</p><p>根據開閉原則，新增方法不應該去修改到原本的方法，影響到原本的功能。對內修改應該要封閉，對外應該要開放。</p><p>所以根據開閉原則，不該去更新原本解析資料的方法，而是應該去修改 <code>pareUserLists</code> 這個方法，例如:</p><pre><code class="jsx">function parseUserLists(userLists, dataType) &#123;    return userLists = dataType ? parseNewTypeUserList() : pareOldTypeUserList();&#125;</code></pre><p>這樣一來就可以實現解析不同格式的資料，同時不會更改到原本已經寫好的功能</p><h1 id="開閉原則的優點"><a href="#開閉原則的優點" class="headerlink" title="開閉原則的優點"></a>開閉原則的優點</h1><ol><li>確保原本的方法不會更動到，可以確保運作過程與之前一致</li><li>切分職責更加清楚，也更有彈性，之後會更好維護</li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Day17-SOLID原則-開閉原則-Open–closed-Principle&quot;&gt;&lt;a href=&quot;#Day17-SOLID原則-開閉原則-Open–closed-Principle&quot; class=&quot;headerlink&quot; title=&quot;Day17-SOLID原</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="solid" scheme="https://tso1158687.github.io/blog/tags/solid/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Day16-SOLID原則-單一職責原則(Single Responsibility Principle)</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed16/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed16/</id>
+    <published>2021-01-11T21:24:28.000Z</published>
+    <updated>2021-05-30T04:01:11.542Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Day16-SOLID原則-單一職責原則-Single-Responsibility-Principle"><a href="#Day16-SOLID原則-單一職責原則-Single-Responsibility-Principle" class="headerlink" title="Day16-SOLID原則-單一職責原則(Single Responsibility Principle)"></a>Day16-SOLID原則-單一職責原則(Single Responsibility Principle)</h1><h1 id="什麼是SOLID原則"><a href="#什麼是SOLID原則" class="headerlink" title="什麼是SOLID原則"></a>什麼是SOLID原則</h1><p>SOLID原則分別是針對物件導向的五個設計原則取其第一個字母的縮略詞</p><ul><li>Single-responsibility principle (SRP) 單一職責原理</li><li>Open–closed principle (OCP) 開閉原則</li><li>Liskov substitution principle (LSP) 里氏替換原則</li><li>Interface segregation principle (ISP) 介面隔離原則</li><li>Dependency inversion principle (DIP) 依賴反向原則</li></ul><h1 id="為什麼需要SOLID原則"><a href="#為什麼需要SOLID原則" class="headerlink" title="為什麼需要SOLID原則:"></a>為什麼需要SOLID原則:</h1><p>工程師的職責就是把指定的功能使用程式碼去實現。雖然很多時候迫於時間的壓力或是其他外部因素，可能都是先求有再求好。先求可以實現功能，再求可穩定運作且可維護。</p><p>一開始的時候，對於求有這件事情或許多工程師不會太難。但是對於求好這件事情就會感到比較困難。畢竟什麼是好，這個好的不同人有不同的想法。</p><p>但大抵而言，大家追求的好差不多就是這幾件事情:</p><ul><li>程式碼功能清晰</li><li>程式碼架構清晰</li><li>程式碼易於維護</li><li>程式碼易於修改</li></ul><p>針對求好這件事，可以參考SOLID原則，提出一點想法。</p><h1 id="單一職責原理"><a href="#單一職責原理" class="headerlink" title="單一職責原理"></a>單一職責原理</h1><blockquote><p>一個功能類別應該只有單一職責</p></blockquote><p>假設有一個功能是要寄信有啟用的客戶。</p><p>程式碼如下:</p><pre><code class="jsx">function sendMailToActiveClients(clients) &#123;   clients.forEach(client=&gt;&#123;        if(client.isActive)&#123;            sendMail(client)        &#125;   &#125;)&#125;</code></pre><p>上面的程式碼用白話文來說就是: <code>對客戶列表跑迴圈，如果客戶是有啟用的，則寄信給客戶</code></p><p>從白話文可以知道這個功能做了這幾件事情:</p><ul><li>尋找有啟用的客戶</li><li>寄信給客戶</li></ul><p>這個功能做了兩件事情，和單一職責原則不符合，應該讓一個功能只有一個職責，所以依照單一職責原則重新改寫一下程式碼:</p><pre><code class="jsx">function sendMailToActiveClients(clients) &#123;    const activeClients=getActiveClient(clients)    activeClients.forEach(client=&gt;&#123;        snedMail(client)    &#125;)&#125;function getActiveClient(clients) &#123;    const activeClient=clients.filter(client=&gt;client.isActive)    return activeClient&#125;</code></pre><p>改寫過後的程式碼將尋找有啟用的客戶和寄信給客戶兩件事情分開。一次只做一件職責的事情</p><h1 id="單一職責原則的優點"><a href="#單一職責原則的優點" class="headerlink" title="單一職責原則的優點"></a>單一職責原則的優點</h1><h2 id="提升可讀性與維護性"><a href="#提升可讀性與維護性" class="headerlink" title="提升可讀性與維護性"></a>提升可讀性與維護性</h2><p>因為一個功能只做一件事情，所以可以很清楚明白這個功能在做什麼事情。也因為只做一件事情，所以程式碼可以縮短許多，比較簡短也更容易閱讀。</p><p>更容易閱讀也意味著更容易維護，因為知道在做什麼，目的也很明確</p><h2 id="減少修改影響的範圍"><a href="#減少修改影響的範圍" class="headerlink" title="減少修改影響的範圍"></a>減少修改影響的範圍</h2><p>因為職責單一，功能也就單一，所以修改的時候可以更清楚影響的範圍在哪裡，影響的範圍也比較小。</p><p>如果職責不夠單一，裡面包含一個以上的功能，常常會發生很多不在預期範圍內的影響，例如改A功能影響B功能，修改好B功能後，反而換C、D功能壞掉。</p><p>只要職責更單一，就可以大幅降低修改的成本和影響</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Day16-SOLID原則-單一職責原則-Single-Responsibility-Principle&quot;&gt;&lt;a href=&quot;#Day16-SOLID原則-單一職責原則-Single-Responsibility-Principle&quot; class=&quot;headerl</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="solid" scheme="https://tso1158687.github.io/blog/tags/solid/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DAY15-postman的分享與匯入</title>
+    <link href="https://tso1158687.github.io/blog/2021/01/11/2020ithomed15/"/>
+    <id>https://tso1158687.github.io/blog/2021/01/11/2020ithomed15/</id>
+    <published>2021-01-11T21:24:24.000Z</published>
+    <updated>2021-05-30T04:01:11.538Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="DAY15-postman的分享與匯入"><a href="#DAY15-postman的分享與匯入" class="headerlink" title="DAY15-postman的分享與匯入"></a>DAY15-postman的分享與匯入</h1><p>postman系列文的最後一篇，如何分享postman的collection或匯入別人分享的collection。</p><h1 id="使用情境"><a href="#使用情境" class="headerlink" title="使用情境"></a>使用情境</h1><p>在前後端共同開發一個新功能的時候，溝通的媒介就是API。不論是前端訂好Collection或是後端訂好Collection(通常是後端)，都有分享和匯入的需求。將自己的Collection分享給對方或是使用對方的Collection</p><h1 id="分享collection"><a href="#分享collection" class="headerlink" title="分享collection"></a>分享collection</h1><p>分享的方式分為兩種，一種是以連結的形式分享，一種是以檔案的形式分享</p><h2 id="使用連結分享"><a href="#使用連結分享" class="headerlink" title="使用連結分享"></a>使用連結分享</h2><p>點擊collection旁邊的”…”按鈕，可以看到 <code>Share Collection</code>的選項</p><p><img src="Untitled.png" alt="Untitled.png"></p><p>點擊之後，會跳出一個視窗問你要以何種方式分享，點選 <code>Get public link</code> 的頁籤</p><p><img src="Untitled%201.png" alt="Untitled%201.png"></p><p>點Get public link的按鈕之後，就可以看到分享的連結。就可以將這個連結分享給其他人囉</p><p><img src="Untitled%202.png" alt="Untitled%202.png"></p><h3 id="使用連結分享的注意事項"><a href="#使用連結分享的注意事項" class="headerlink" title="使用連結分享的注意事項"></a>使用連結分享的注意事項</h3><ul><li>連結分享的內容是取得連結的當下狀態，如果之後還有更新Collection的話，要點擊 <code>Update Link</code> 才會更新。否則內容不會變動</li><li>連結是公開的，只要任何有連結的人都可以存取。如果有保密的考量，請勿使用此種方式分享</li></ul><h2 id="使用檔案分享"><a href="#使用檔案分享" class="headerlink" title="使用檔案分享"></a>使用檔案分享</h2><p>點擊collection旁邊的”…”按鈕，可以看到 <code>Export</code>的選項</p><p><img src="Untitled%203.png" alt="Untitled%203.png"></p><p>接著就會彈出一個視窗問你要以什麼格式匯出，基本上不用修改設定，就用最新的格式就好了</p><p><img src="Untitled%204.png" alt="Untitled%204.png"></p><p>點擊 <code>Export</code> 後，就會問你要儲存在哪裡，儲存好之後就可以看到檔案匯出完成囉。</p><p><img src="Untitled%205.png" alt="Untitled%205.png"></p><h1 id="匯入collection"><a href="#匯入collection" class="headerlink" title="匯入collection"></a>匯入collection</h1><p>在左上角的地方有 <code>import</code> 的按鈕</p><p><img src="Untitled%206.png" alt="Untitled%206.png"></p><p>點擊之後可以看到好多頁籤</p><h2 id="匯入檔案"><a href="#匯入檔案" class="headerlink" title="匯入檔案"></a>匯入檔案</h2><p>點擊 <code>File</code> 頁籤，點 <code>Upload Files</code> 按鈕即可匯入檔案，匯入之後就成功囉</p><p><img src="Untitled%207.png" alt="Untitled%207.png"></p><h2 id="匯入連結"><a href="#匯入連結" class="headerlink" title="匯入連結"></a>匯入連結</h2><p>點擊 <code>Link</code> 頁籤，可以看到輸入框，將URL貼上之後，點擊 <code>Continue</code> 之後，就匯入成功囉</p><p><img src="Untitled%208.png" alt="Untitled%208.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;DAY15-postman的分享與匯入&quot;&gt;&lt;a href=&quot;#DAY15-postman的分享與匯入&quot; class=&quot;headerlink&quot; title=&quot;DAY15-postman的分享與匯入&quot;&gt;&lt;/a&gt;DAY15-postman的分享與匯入&lt;/h1&gt;&lt;p&gt;po</summary>
+      
+    
+    
+    
+    
+    <category term="鐵人賽2020" scheme="https://tso1158687.github.io/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/"/>
+    
+    <category term="tool" scheme="https://tso1158687.github.io/blog/tags/tool/"/>
+    
+  </entry>
+  
+</feed>

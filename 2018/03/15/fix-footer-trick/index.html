@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>讓footer置底的奇技淫巧 | Jason's BLOG</title><meta name="description" content="讓footer置底的奇技淫巧 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">讓footer置底的奇技淫巧</h1><div class="post-info"><a></a>2018-03-15<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/css/">css</a></li></ul></div><div class="post-content"><h3 id="事件源起"><a href="#事件源起" class="headerlink" title="事件源起"></a>事件源起</h3><p>最近有一個 issue 是這樣的。因為 PM 大大很不滿現在 footer 的樣式，要我改一改。現在我們網站的 footer 樣式是這樣，網站的內容最小高度是 100vh，而 footer 的內容則在內容之後，也就是說，使用者如果想看到 footer 一定要滾動卷軸才看的到，即使該頁內容只有一點點，根本不用滾動卷軸，下方會有一大片空白，然後使用者還是要滾動卷軸之後，才看的到 footer。我記得當初 footer 使用絕對定位會把過長的內容蓋掉想出的權宜之計，總而言之，PM 對帳樣的設計還是很不滿意，要我趕快改成她滿意的樣式。於是我問她，她想要什麼樣式。她想要的樣式可以用以下這張圖表示:</p>
+<img src="/blog/2018/03/15/fix-footer-trick/sticky_footer.png" class="">
+
+<h3 id="footer-的兩種呈現方式"><a href="#footer-的兩種呈現方式" class="headerlink" title="footer 的兩種呈現方式"></a>footer 的兩種呈現方式</h3><p>總而言之，footer 可以分為兩種情形。第一種:內容小於螢幕高度的時候，footer 固定置底第二種:內容大於螢幕高度的時候，footer 則在內容後方</p>
+<p>好吧，聽到這個要求的時候，一開始我還真的想不到怎麼只用 CSS 做出這樣的效果，第一個反應是一定要用 javascript 去算內容的高度再給 footer 相對應的設定了。不過身為一個複製貼上的專家，當然能夠複製貼上，當然不會自己寫。於是 google 一下看看別人都怎麼做的。原本是想 google javascript 的程式碼，沒想到找到一篇文章只用 CSS 就可以達成這樣的效果，裡面有五種方法可以達成這樣的效果。當然要趕快來試試。</p>
+<p>###解決方法</p>
+<p>以下分享我試過成功的方法</p>
+<p>html 結構</p>
+<pre><code>&lt;div class=&quot;content&quot;&gt;
+  &lt;div class=&quot;content-inside&quot;&gt;
+  &lt;!-- 內容內容 --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;footer&quot;&gt;footer內容&lt;/div&gt;</code></pre><p>再來就是最重要的 CSS 設定啦</p>
+<pre><code>html, body &#123;
+margin: 0;
+padding: 0;
+height: 100%;
+&#125;
+.content &#123;
+min-height: 100vh;
+&#125;
+.content-inside &#123;
+padding-bottom: 50px; //x
+&#125;
+.footer &#123;
+height: 50px; //x=footer 高度
+margin-top: -50px; //x
+&#125;</code></pre><p>簡單解釋一下，就內容的最小高度也就是整個螢幕的高度。而 footer 就在內容後方，但是幫 footer 設定一個負值的 margin-top，跟 footer 的高度一樣，也就是說，footer 高度多高，他就會往上縮多高。可是這樣如果網頁內容的東西很多的時候，不就會遮住原本最重要的內容了嗎?因此只要再設定一個 padding-bottom 讓內容往內縮不就好了嗎?如此一來，大功告成!</p>
+<p>雖然不是很難的 CSS，但是只能說，很佩服想到可以這樣做的人，可以只用純 CSS 的方法，就達成這麼厲害的效果，就像隨便出招，就可以精準命中神秘大俠。</p>
+<p>以下附上原文<br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008516654">CSS 五种方式实现 Footer 置底</a></p>
+<p>本文使用的是第一種方法，不過高度的設定，那篇文章是 100%，而我是設定 100vh，有興趣的話可以試試另外四種方法。第二種方法我也有試過，原理跟第一種差不多，不過有一點麻煩。第三、第四、第五種蠻新鮮的，有空也會來試試看，不過要注意的是，這些方法可能都有相容性的問題，尤其是如果還要支援萬惡的 IE，建議還是使用第一種方法，是最安全最保險的方法。</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2018/03/19/ie-bomb/">prev</a><a class="next" href="/blog/2018/02/05/introduce-to-sass/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>bytes轉換KB、MB、GB等單位 - 一個解決方法的思考模式 | Jason's BLOG</title><meta name="description" content="bytes轉換KB、MB、GB等單位 - 一個解決方法的思考模式 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">bytes轉換KB、MB、GB等單位 - 一個解決方法的思考模式</h1><div class="post-info"><a></a>2020-06-06<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/javascript/">javascript</a></li></ul></div><div class="post-content"><h1 id="容量單位轉換的方法"><a href="#容量單位轉換的方法" class="headerlink" title="容量單位轉換的方法"></a>容量單位轉換的方法</h1><p>如何轉換電腦的容量單位？常見的容量單位有 bytes、KB、MB、GB、TB等單位。</p>
+<p>轉換的方法為逢1024進位，例如：1024bytes=1KB、1024KB=1MB，轉換的規則並不是很困難。</p>
+<p>而有一個需求是這樣的，後端會傳送某個裝置網路流量的使用量，單位是bytes，前端在顯示資料的時候，必須自動轉換為適當的單位，例如不能顯示1300MB這樣的結果，因為超過1024MB就必須進位到GB。所以像999MB就是可以被接受的</p>
+<p>要如何將bytes轉換成合適的單位就是本次所要討論的課題。</p>
+<p>第一個直覺想到最簡單的方法是用if…else if…else的方法來做轉換</p>
+<h1 id="基本方法-簡單的暴力轉換"><a href="#基本方法-簡單的暴力轉換" class="headerlink" title="基本方法:簡單的暴力轉換"></a>基本方法:簡單的暴力轉換</h1><pre><code>function transformUsageData(value) &#123; 
+  if (value &lt; 1024) &#123; 
+    return `$&#123;value&#125; bytes`; 
+  &#125; else if (value &lt; 1024 * 1024) &#123; 
+    return `$&#123;value&#125; KB`; 
+  &#125; else if (value &lt; 1024 * 1024 * 1024) &#123; 
+    return `$&#123;value&#125; MB`; 
+  &#125; else &#123; 
+    return `$&#123;value&#125; GB`; 
+  &#125; 
+&#125;
+</code></pre><p>這是一個簡單且粗暴的方法，但是缺點顯而易見就是<code>if else</code>太多，太多的特例判斷，而非使用<code>判斷的通則</code>。於是在stackoverflow找到一個很好的解法</p>
+<pre><code>const sizes = [&quot;Bytes&quot;, &quot;KB&quot;, &quot;MB&quot;, &quot;GB&quot;, &quot;TB&quot;]; 
+    if (bytes == 0) &#123; 
+      return &quot;0 Byte&quot;; 
+    &#125; 
+    const i = Math.floor(Math.log(bytes) / Math.log(1024)); 
+    return (bytes / Math.pow(1024, i)).toFixed(2) + &quot; &quot; + sizes[i];</code></pre><p>在這裡用到幾個數學方法:</p>
+<ul>
+<li>Math.floor():取得小於等於所給數字的最大整數，例如:Math.floor(5.1)=5</li>
+<li>Math.log():取得對數。範例中的 Math.log(bytes) / Math.log(1024) 代表取以1024為底的對數</li>
+<li>Math.pow():取得指數的結果，例如:Math.pow(2,10)，代表2的10次方，為1024</li>
+</ul>
+<p>這個方法做了這些動作:</p>
+<ul>
+<li>首先將需要使用到的單位放進陣列中</li>
+<li>如果是0的話，那也沒有必要轉換，就直接回傳0</li>
+<li>再來開始計算，資料的大小為1024的幾次方，相當於1024要乘以幾次，決定單位，然後取小於這個數字的最大整數</li>
+<li>最後在使用Math.pow方法，將算出來的指數乘上去，換算出轉換之後的單位。最後我個人加上toFixed()的方法，避免換算之後除不盡，將小數點最多固定在兩位數。</li>
+</ul>
+<p>如此一來就完成一個簡單的容量轉換的方法了，跟原本的方法比起來，清楚又清爽多了</p>
+<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><p>這個需求如同日常生活中所遇到的千千萬萬個需求一樣，不是特別難，有千百種方法可以達成。</p>
+<p>可以選擇徒法煉鋼的方法去完成：直接使用if…else判斷式，手動去判斷選擇，也可以試著找出通則去完成：只用指對數的方法，去判斷相對應單位。只要能完成需求的方法都是好方法。只不過如果要提升自己的能力的話，找出通則，並且使用通則，會是一個提升自己很好的機會。</p>
+<h1 id="範例程式碼"><a href="#範例程式碼" class="headerlink" title="範例程式碼"></a>範例程式碼</h1><p><a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-ivy-5ajmuj?file=src%2Fapp%2Ftransform-data-usage.pipe.ts">範例程式碼</a></p>
+<h1 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript">correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2020/08/04/pagevisibility-api/">prev</a><a class="next" href="/blog/2020/04/06/introduce-to-angular-elements/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

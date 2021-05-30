@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-28) Nestjs 中介層(Middleware)-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-28) Nestjs 中介層(Middleware)-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-28) Nestjs 中介層(Middleware)-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-14<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nestjs/">nestjs</a></li></ul></div><div class="post-content"><h1 id="什麼是中介層-Middleware"><a href="#什麼是中介層-Middleware" class="headerlink" title="什麼是中介層 (Middleware)"></a>什麼是中介層 (Middleware)</h1><p>中介層(Middleware)是在客戶端發出請求至控制器的路由之前的方法<br><img src="https://ithelp.ithome.com.tw/upload/images/20191014/20120107ZuYdkSXXHW.png" alt="https://ithelp.ithome.com.tw/upload/images/20191014/20120107ZuYdkSXXHW.png"></p>
+<p>中介層可以在控制器的路由收到請求之前，取得請求內容，對於請求內容做加工和修改。如果有使用過express的開發者一定對中介層不陌生，Nestjs的中間層完全等同於expres的中介層<br>如果沒有使用過express也不用擔心，以下是擷取於express官方網站對於中介層的介紹:</p>
+<blockquote>
+<ul>
+<li>執行任何程式</li>
+<li>對請求和回應做出修改</li>
+<li>結束請求和回應的生命週期</li>
+<li>如果中介層有多個的話，執行下一個中介層</li>
+</ul>
+</blockquote>
+<h1 id="建立中介層"><a href="#建立中介層" class="headerlink" title="建立中介層"></a>建立中介層</h1><p>使用Nestjs CLI 建立中介層</p>
+<pre><code>nest generate middleware &lt;middlewareName&gt;</code></pre><p>在此建立一個名為log的中介層</p>
+<pre><code>nest generage middleware log</code></pre><p>建立一個空白的中介層</p>
+<pre><code>import &#123; Injectable, NestMiddleware &#125; from &#39;@nestjs/common&#39;;
+
+@Injectable()
+export class LogMiddleware implements NestMiddleware &#123;
+  use(req: any, res: any, next: () =&gt; void) &#123;
+    next();
+  &#125;
+&#125;</code></pre><p>特別要提到的是，<code>next方法呼叫之後才會繼續執行</code>，如果呼叫next方法的話，所有的行為就會停在這裡</p>
+<h1 id="使用中介層"><a href="#使用中介層" class="headerlink" title="使用中介層"></a>使用中介層</h1><h2 id="設定中介層"><a href="#設定中介層" class="headerlink" title="設定中介層"></a>設定中介層</h2><p>建立完中介層之後，首先要先設定中介層，設定中介層使用在哪個模組<br>在這裡設定中介層使用在根模組<code>app.module.ts</code></p>
+<pre><code>export class AppModule implements NestModule &#123;
+  configure(consumer: MiddlewareConsumer) &#123;&#125;
+&#125;</code></pre><ul>
+<li>中介層使用方法跟其他的控制器、管道等等不一樣，使用<code>configure</code>‘ 方法去設定</li>
+<li>在AppModule裡面實作NestModule介面，可以讓Typescript檢查有沒有錯誤<br>在configure方法裡面可以設定使用哪個中介層並且套用在哪個控制器<pre><code>export class AppModule implements NestModule &#123;
+configure(consumer: MiddlewareConsumer) &#123;
+  consumer
+  .apply(LogMiddleware) // 使用LogMiddleware
+  .forRoutes(DocumentController); // 套用在DocumentController
+&#125;
+&#125;</code></pre></li>
+<li>使用apply方法指定使用哪個中介層</li>
+<li>使用forRoutes方法決定套用哪個控制器</li>
+</ul>
+<h2 id="修改中介層"><a href="#修改中介層" class="headerlink" title="修改中介層"></a>修改中介層</h2><p>對中介層做小小的修改，加入console看看回不會出現東西</p>
+<pre><code>export class LogMiddleware implements NestMiddleware &#123;
+  use(req: any, res: any, next: () =&gt; void) &#123;
+    console.log(&#39;通過中介層&#39;)
+    next();
+  &#125;
+&#125;</code></pre><p>在中介層之中可以做很多事情，例如假如有請求進來的話，就可以打另外的API，紀錄API的使用狀況。</p>
+<p>使用postman測試<br><img src="https://ithelp.ithome.com.tw/upload/images/20191014/20120107Dze73nKmPY.png" alt="https://ithelp.ithome.com.tw/upload/images/20191014/20120107Dze73nKmPY.png"></p>
+<h2 id="中介層的更多設定"><a href="#中介層的更多設定" class="headerlink" title="中介層的更多設定"></a>中介層的更多設定</h2><pre><code>export class AppModule implements NestModule &#123;
+  configure(consumer: MiddlewareConsumer) &#123;
+    consumer
+    .apply(LogMiddleware) // 使用LogMiddleware
+    .forRoutes(DocumentController); // 套用在DocumentController
+  &#125;
+&#125;</code></pre><p>中介層的<code>forRoutes</code>，不只有指定某個控制器，還有多種設定方法</p>
+<ul>
+<li>指定控制器，EX:<code>forRoutes(DocumentController)</code></li>
+<li>指定路由，EX:<code>forRoutes(&#39;document&#39;)</code></li>
+<li>指定路由與方法，EX:<code>forRoutes(&#123;path: &#39; document &#39;, method: RequestMethod.GET &#125;)</code></li>
+<li>使用萬用符號，EX:<code>forRoutes(&#123; path: &#39;do*nt&#39;, method: RequestMethod.ALL &#125;)</code>，這樣的話，不論是document、doant、doaaaant都會使用到<h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1>今天的範例內容可以github上面看到:<a target="_blank" rel="noopener" href="https://github.com/tso1158687/hello-nest-iron">範例內容</a></li>
+</ul>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>什麼是中介層</li>
+<li>如何使用中介層</li>
+<li>如何用不同的方法使用中介層</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/15/2019ithomeday29/">prev</a><a class="next" href="/blog/2019/10/13/2019ithomeday27/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

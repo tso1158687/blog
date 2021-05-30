@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>如何解決在IE使用中文字當作參數為亂碼的問題 | Jason's BLOG</title><meta name="description" content="如何解決在IE使用中文字當作參數為亂碼的問題 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">如何解決在IE使用中文字當作參數為亂碼的問題</h1><div class="post-info"><a></a>2018-12-31<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/javascript/">javascript</a></li><li><a class="post-tag" href="/blog/tags/ie/">ie</a></li></ul></div><div class="post-content"><p>最近又踩到一個IE的地雷，雖然不是很困難的問題，但是是一個非常容易誤觸的地方，記錄下來，避免之後又掉進一樣的地雷</p>
+<p>這是一個很簡單的autocomplete的程式，使用者打關鍵字之後，將關鍵字當作參數送出到後端，取得關鍵字搜尋之後的結果，更新覆寫下拉選單</p>
+<p>如附圖，當我打「走」，就會把 「走」字轉成參數送出去查詢，API就會回傳關鍵字的結果，並且將結果綁定到下拉選單上面，讓使用者選取。</p>
+<img src="/blog/2018/12/31/chinese-charcter-as-parameter-in-ie/ie-param1.jpg" class="">
+
+<p>因此這個程式基本上長這樣(已經省略掉與這次主題無關的內容)</p>
+<pre><code>// 關鍵字搜尋
+getAutoComplete(keyword) &#123;
+    return this.$http.get(this.endpoint + &#39;/search?keyword=&#39; + keyword)
+&#125;</code></pre><p>這樣的做法在chrome、firefox、edge上面都是可以正確執行的，但是在IE上面卻發生神奇的問題。<br>同樣是打「走」字，IE在送出參數的時候，送出去的參數變成亂碼。</p>
+<img src="/blog/2018/12/31/chinese-charcter-as-parameter-in-ie/ie-param2.jpg" class="">
+
+<p>為了縮小問題的範圍，確認是只要將字串當作參數傳送出去都會有問題，還是只有英文以外的字串當作參數才會有問題，因此輸入英文字串測試，發現英文字串是可以正確地傳送出去的，所以可以推定這個問題應該發生在英文以外的字串，讓IE 解析失敗。</p>
+<p>如果要避免中文字串成為亂碼的問題，必須將中文字串轉換成<code>UTF-8</code>，就可以解決這樣的問題。<br>因此就必須使用到javascript的 <code>encodeURIComponent()</code>方法，可以將字串轉換成UTF-8編碼</p>
+<p>使用 <code>encodeURIComponent()</code></p>
+<pre><code>// 關鍵字搜尋
+getAutoComplete(keyword) &#123;
+    // encoded keyword
+    let encodedKeyword = encodeURIComponent(keyword)
+    return this.$http.get(this.endpoint + &#39;/search?keyword=&#39; + encodedKeyword)
+&#125;</code></pre><p>加上新的方法之後再試一次，打「出」字，可以看到IE送出的不再是亂碼，而是轉換成UTF-8編碼的文字，也就可以正確地得到API回傳的結果囉</p>
+<img src="/blog/2018/12/31/chinese-charcter-as-parameter-in-ie/ie-param3.jpg" class=""></div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/01/03/ie-promise/">prev</a><a class="next" href="/blog/2018/12/17/javascript-float-trap/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

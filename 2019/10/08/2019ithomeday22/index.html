@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-22) 建立 Nestjs 環境與專案-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-22) 建立 Nestjs 環境與專案-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-22) 建立 Nestjs 環境與專案-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-08<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nestjs/">nestjs</a></li></ul></div><div class="post-content"><p>Nestjs 安裝環境非常簡單，就和Angular 一樣，擁有一套完整的CLI處理大小事，可以快速產生專案，並且設定好所有的配置，直接進入開發。</p>
+<p>如果之前已經有安裝過Angular，則當前的環境可以直接安裝Nestjs沒有問題。<br>如果不確定，請確認Nodejs的版本是不是大於8.9</p>
+<h1 id="安裝Nestjs-CLI"><a href="#安裝Nestjs-CLI" class="headerlink" title="安裝Nestjs CLI"></a>安裝Nestjs CLI</h1><pre><code>npm i @nestjs/cli -g</code></pre><h1 id="啟動Nestjs-專案"><a href="#啟動Nestjs-專案" class="headerlink" title="啟動Nestjs 專案"></a>啟動Nestjs 專案</h1><p>安裝完畢之後，使用CLI指令啟動新專案:</p>
+<pre><code>nest new &lt;project-name&gt; </code></pre><p>在此建立一個新專案，稱為hello-nest</p>
+<pre><code>nest new hello-nest</code></pre><p>專案建立完成之後，啟動Nestjs專案</p>
+<pre><code>cd hello-nest
+npm run start:dev</code></pre><p>後面多一個<code>:dev</code>代表啟動的是開發模式，開發模式就是只要專案內容有變更，就會自動重新打包並啟動最新內容，是開發的時候非常方便實用的指令 。<br><img src="https://ithelp.ithome.com.tw/upload/images/20191008/201201078vqXe4fba8.png" alt="https://ithelp.ithome.com.tw/upload/images/20191008/201201078vqXe4fba8.png"></p>
+<p>看到這串訊息就表示Nestjs成功啟動，為了確定是否成功，使用postman測試，輸入<code>localhost:3000</code>，看到回傳訊息：Hello World!<br>代表啟動成功囉!<br><img src="https://ithelp.ithome.com.tw/upload/images/20191008/20120107fH2HCZGLCv.png" alt="https://ithelp.ithome.com.tw/upload/images/20191008/20120107fH2HCZGLCv.png"></p>
+<p>如果想要看多更多啟動或打包等指令，可以到package.json看，專案已經有先預設好一些常用的指令，如果不喜歡可以在這邊調整或增減自己喜歡的指令</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20191008/20120107m5OQ8AyguQ.png" alt="https://ithelp.ithome.com.tw/upload/images/20191008/20120107m5OQ8AyguQ.png"></p>
+<h1 id="Nestjs-CLI-指令"><a href="#Nestjs-CLI-指令" class="headerlink" title="Nestjs CLI 指令"></a>Nestjs CLI 指令</h1><p>Nestjs簡單來說可以視為後端版本的Angular，不須擔心需要重新學習新的指令。在Angular篇章學習的概念和用法幾乎都可以套用在Nestjs。<br>就算是Nestjs CLI指令也幾乎和Angular CLI指令一模一樣，例如想要產生一個服務 (Service)</p>
+<p>Angular 的指令是這樣:</p>
+<pre><code>ng generate service xxx</code></pre><p>只要把代表Angular的前綴ng替換成nest就可以了</p>
+<pre><code>Nest generate service xxx</code></pre><h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>如何安裝Nestjs CLI</li>
+<li>如何啟動Nestjs專案</li>
+<li>如何使用Nestjs CLI 指令</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/09/2019ithomeday23/">prev</a><a class="next" href="/blog/2019/10/07/2019ithomeday21/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>使用Angular自訂元素製作通用的元件! Angular Elements使用教學與心得 | Jason's BLOG</title><meta name="description" content="使用Angular自訂元素製作通用的元件! Angular Elements使用教學與心得 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">使用Angular自訂元素製作通用的元件! Angular Elements使用教學與心得</h1><div class="post-info"><a></a>2020-04-06<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><h1 id="什麼是-angular-elements"><a href="#什麼是-angular-elements" class="headerlink" title="什麼是 angular elements?"></a>什麼是 angular elements?</h1><p>angular elements 可以將 angular 的元件內容打包成自訂元件-web components，能夠在脫離 angular 的框架，在其他的環境運作。目前 web components 支援<a target="_blank" rel="noopener" href="https://caniuse.com/#search=web%20components">大多數主流瀏覽器</a> (chrome、safari、opera 等等，新版 edge 也支援，但是 IE 不支援)</p>
+<h1 id="新增-Angular-elements-專案"><a href="#新增-Angular-elements-專案" class="headerlink" title="新增 Angular elements 專案"></a>新增 Angular elements 專案</h1><p>本文章使用目前 angular 最新的版本 9.1.0 示範(可以使用 angular 6 之後的任一個版本，操作差異不大。不過建議使用最新的 Angular 版本)</p>
+<p>新增一個全新的 angular 專案，命名為 hello-angular-elements</p>
+<pre><code>ng new hello-angular-elements</code></pre><p>建立完成之後，加入 angular elements 相關套件</p>
+<pre><code>ng add @angular/elements</code></pre><p><code>ng add</code>會自動幫處理好套件都各種修改，不用再去處理其他設定，非常方便。</p>
+<p>使用 angular material<br>為了明顯襯托出 angular elements 的優點，另外安裝依賴於 angular 的 angular material。最後預期在沒有 angular 的環境使用 angular elements 執行 angular material 的相關元件</p>
+<pre><code>ng add @angular/material</code></pre><p>在這裡分別建立三個 component，直接複製 angular material 官網上的範例</p>
+<ul>
+<li>HeaderComponent:使用 MatToolbarModule</li>
+<li>CardComponent:使用 MatCardModule、MatButtonModule</li>
+<li>PanelComponent:使用 MatExpansionModule</li>
+</ul>
+<h1 id="設定-angular-elemenets"><a href="#設定-angular-elemenets" class="headerlink" title="設定 angular elemenets"></a>設定 angular elemenets</h1><p>app.module.ts<br>在@NgModule 中有一個<code>bootstrap</code>屬性</p>
+<pre><code>@NgModule(&#123;
+  declarations: [...],
+  imports: [...],
+  providers: [...],
+  bootstrap: [AppComponent]
+&#125;)</code></pre><p>這是宣告 Angular 啟動的時候，app module 要將什麼元件插入到 index.html 作為根元件，一般來說 CLI 會預設 AppComponent 作為根元件。但是這裡不是製做一個有架構性的專案，而是製做可以共享的元件，因此移除 bootstrao 屬性。</p>
+<p>宣告自訂元素</p>
+<pre><code>export class AppModule &#123;
+  constructor(injector: Injector) &#123;
+    const customCard: any = createCustomElement(CardComponent, &#123; injector &#125;);
+    const customPanel: any = createCustomElement(PanelComponent, &#123; injector &#125;);
+    const customHeader: any = createCustomElement(HeaderComponent, &#123; injector &#125;);
+    customElements.define(&#39;custom-card&#39;, customCard);
+    customElements.define(&#39;custom-panel&#39;, customPanel);
+    customElements.define(&#39;custom-header&#39;, customHeader);
+  &#125;
+  ngDoBootstrap() &#123;&#125;
+&#125;</code></pre><p>在 app module 裡面宣告並且定義自訂元素，例如宣告一個自訂元素-custom-card，並且定義它對應到的元件是 cardComponent</p>
+<p>最後使用<code>ngDoBootstrap()</code>，手動呼叫 app module 啟動。</p>
+<p>為了檢視使用自訂元素的成果，修改 index.html</p>
+<pre><code>&lt;body&gt;
+  &lt;app-root&gt;&lt;/app-root&gt;
+&lt;/body&gt;</code></pre><p>將原本的 app-root 替換成我們的自訂元素</p>
+<pre><code>&lt;body&gt;
+  &lt;custom-header&gt;&lt;/custom-header&gt;
+  &lt;custom-card&gt;&lt;/custom-card&gt;
+  &lt;custom-panel&gt;&lt;/custom-panel&gt;
+&lt;/body&gt;</code></pre><img src="/blog/2020/04/06/introduce-to-angular-elements/image1.png" class="">
+
+<h1 id="打包及合併程式"><a href="#打包及合併程式" class="headerlink" title="打包及合併程式"></a>打包及合併程式</h1><h2 id="編譯檔案"><a href="#編譯檔案" class="headerlink" title="編譯檔案:"></a>編譯檔案:</h2><p>在這裡需要修改一下編譯成正式版本的設定，Angular CLI 編譯檔案的時候預設會加上 hash，避免新的檔案被快取住。但是對於製作 Angular Elements 來說，加上 hash 反而不方便，因此必須加上參數，避免在打包正是檔案的時候自動加上 hash</p>
+<pre><code>&quot;build&quot;: &quot;ng build --prod --output-hashing=none&quot;,</code></pre><h2 id="合併檔案"><a href="#合併檔案" class="headerlink" title="合併檔案:"></a>合併檔案:</h2><p>Angular CLI 在打包產生檔案的時候，最終會有三個個檔案，但是如果要給別的專案使用，一次交付三個專案則略顯麻煩。在此會將三個檔案合併成一個檔案</p>
+<pre><code>cat dist/hello-angular-elements/&#123;runtime-es2015,polyfills-es2015,main-es2015&#125;.js &gt; all.js</code></pre><p>在這邊有兩點要特別注意:</p>
+<ol>
+<li>Angular 8 之後，打包過後的檔案會分成 es5 和 es2015 兩種版本，在這之前的版本則是沒有這種差異，所以要確認一下自己最終生成的檔案內容。</li>
+<li>cat 的指令只適用於<code>mac</code>或<code>linux</code>系統，無法用在 windows 系統。如果 windows 系統要使用的話，可以打開<code>git bash</code>使用</li>
+</ol>
+<p>接下來可以開一個全新的頁面，只要將打包後的 all.js 引入之後，就可以使用自訂元素的內容了。<br>另外要注意的是，在此只有打包及合併 JS 檔案，如果有額外的樣式檔案(例如:angular material 的主題樣式，或自己而外自訂的樣式)，也要一併複製過去</p>
+<img src="/blog/2020/04/06/introduce-to-angular-elements/image2.png" class="">
+
+<p>index.html<br>在這裡為了顯示元件化的威力，稍微對調一下原本的顯示順序，感受一下變化</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;./styles.css&quot;&gt;
+    &lt;title&gt;全新的空白頁面&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;custom-header&gt;&lt;/custom-header&gt;
+    &lt;custom-panel&gt;&lt;/custom-panel&gt;
+    &lt;h1&gt;我是全新的頁面&lt;/h1&gt;
+    &lt;custom-card&gt;&lt;/custom-card&gt;
+    &lt;script src=&quot;./all.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><img src="/blog/2020/04/06/introduce-to-angular-elements/image3.png" class="">
+
+<h1 id="對於-Angular-Elements-使用場景的想像"><a href="#對於-Angular-Elements-使用場景的想像" class="headerlink" title="對於 Angular Elements 使用場景的想像:"></a>對於 Angular Elements 使用場景的想像:</h1><p>Angular Elements 可以將 Angular 元件成獨立運作的檔案，並且脫離 Angular 的環境獨立運行。這樣的作法讓我想像可以運用在以下這些場景:</p>
+<ul>
+<li>應用在老舊專案的維護上，例如使用 angularjs 或 jquery 的專案，可以使用這樣的方式漸漸替換，不必再繼續受到原有的框架限制，而難以維護。</li>
+<li>應用在其他的框架上面，例如將開發完成的內容打包後，移植到其他的框架(Vue、React 等等)使用，不必重新改寫。</li>
+</ul>
+<h1 id="進階議題-自訂元素的元件互動-Input、Output"><a href="#進階議題-自訂元素的元件互動-Input、Output" class="headerlink" title="進階議題:自訂元素的元件互動(Input、Output)"></a>進階議題:自訂元素的元件互動(Input、Output)</h1><p>Angular 的元件之間，可以透過 Input 和 Output 等方法向元件輸入資料、輸出方法等等，但是使用自訂元素之後，在沒有 Angular 的環境下，要如何讓元件之間進行互動呢?<br>首先先說結論:方法是差不多的，在自訂元素中，使用方法是一樣的；在使用自訂元素的頁面，僅需做一點小修改即可。</p>
+<h2 id="輸入資料至自訂元素"><a href="#輸入資料至自訂元素" class="headerlink" title="輸入資料至自訂元素:"></a>輸入資料至自訂元素:</h2><p>例如在深色的 header component 部分，標題要從外部輸入</p>
+<p>header.component.ts<br>使用原本的 input，如果沒有輸入任何值，就使用 hello angular 作為預設值，標準的 Angular 的 Input 使用方法</p>
+<pre><code>@Input() title: string = &#39;hello angular&#39;;</code></pre><p>header.component.html<br>將 title 的值綁定上去</p>
+<pre><code>&lt;mat-toolbar color=&quot;primary&quot;&gt;
+    &lt;mat-toolbar-row&gt;
+        &lt;span&gt;&#123;&#123;title&#125;&#125;&lt;/span&gt;
+    &lt;/mat-toolbar-row&gt;
+&lt;/mat-toolbar&gt;</code></pre><h2 id="自訂元素輸出資料"><a href="#自訂元素輸出資料" class="headerlink" title="自訂元素輸出資料:"></a>自訂元素輸出資料:</h2><p>在 card component 中，狗狗照片下方的按鈕，深色按鈕按下去之後，要輸出事件至使用自訂元素的頁面中</p>
+<p>card.component.ts<br>同樣是 Angular 的 Output 使用方法，如果點擊按鈕之後，就會觸發 triggerOutputEvent，並且將內容發送出去</p>
+<pre><code>@Output() triggerEvent = new EventEmitter();
+constructor() &#123;&#125;
+ngOnInit(): void &#123;&#125;
+triggerOutputEvent() &#123;
+  const message = &#39;click button and trigger output event&#39;;
+  this.triggerEvent.emit(message);
+&#125;</code></pre><p>card.component.html</p>
+<pre><code>&lt;mat-card class=&quot;example-card&quot;&gt;
+    &lt;mat-card-header&gt;
+       ...
+    &lt;/mat-card-header&gt;
+    &lt;img mat-card-image src=&quot;https://material.angular.io/assets/img/examples/shiba2.jpg&quot; alt=&quot;Photo of a Shiba Inu&quot;&gt;
+    &lt;mat-card-content&gt;
+       ...
+    &lt;/mat-card-content&gt;
+    &lt;mat-card-actions&gt;
+        &lt;button mat-flat-button color=&quot;primary&quot; (click)=&quot;triggerOutputEvent()&quot;&gt;觸發output&lt;/button&gt;
+        &lt;button mat-flat-button color=&quot;warn&quot;&gt;SHARE&lt;/button&gt;
+    &lt;/mat-card-actions&gt;
+&lt;/mat-card&gt;</code></pre><p>修改 index.html 取得自訂元素的輸入與輸出內容</p>
+<pre><code>&lt;body&gt;
+    &lt;custom-header title=&quot;我是從外部的自訂標題&quot;&gt;&lt;/custom-header&gt;
+    &lt;custom-panel&gt;&lt;/custom-panel&gt;
+    &lt;h1&gt;我是全新的頁面&lt;/h1&gt;
+    &lt;custom-card&gt;&lt;/custom-card&gt;
+    &lt;script src=&quot;./all.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+        const component = document.querySelector(&#39;custom-card&#39;);
+        component.addEventListener(&#39;triggerEvent&#39;, event =&gt; &#123;alert(event.detail)&#125;);
+    &lt;/script&gt;
+&lt;/body&gt;</code></pre><ul>
+<li>輸入資料: 從 custom-header 輸入標題資料時，直接使用 title=”xxx”的方式就可以輸入資料</li>
+<li>輸出資料: 使用原生的 javascript 去取得按鈕點擊下去發出的事件，首先使用 document.querySelector()取得自訂元素，再使用 addEventListener()去監聽 triggerEvent 事件</li>
+</ul>
+<p>在這裡要特別注意的是，要<code>注意JS載入的順序</code>，要 angular elements 的元素先載入之後，document.querySelector()才有辦法取得，如果不確定順序，可以將 script 放到最後載入或是包裝成獨立的檔案，使用<code>defer</code>的方法引入，確保可以讀取得到。</p>
+<p>重新整理頁面，看到從外部輸入的自訂標題</p>
+<img src="/blog/2020/04/06/introduce-to-angular-elements/image4.png" class="">
+
+<p>點擊按鈕，看到 addEventListener 監聽到 output 的事件</p>
+<img src="/blog/2020/04/06/introduce-to-angular-elements/image5.png" class="">
+
+<h1 id="範例檔案"><a href="#範例檔案" class="headerlink" title="範例檔案"></a>範例檔案</h1><p>範例檔案放在<a target="_blank" rel="noopener" href="https://github.com/tso1158687/hello-angular-elements.git">Github</a>上面，歡迎使用與討論</p>
+<h1 id="參考文章"><a href="#參考文章" class="headerlink" title="參考文章"></a>參考文章</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://angular.tw/guide/elements">Angular 官方文件</a></li>
+<li><a target="_blank" rel="noopener" href="https://wellwind.idv.tw/blog/2018/05/08/angular-advanced-angular-elements-intro/">[Angular 進階議題] Angular Elements 簡介 - 全端開發人員天梯</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.bitsrc.io/using-angular-elements-why-and-how-part-1-35f7fd4f0457">Using Angular Elements — Why and How? — Part 1</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.bitsrc.io/using-angular-elements-why-and-how-part-2-37d52e71b4f9">Using Angular Elements — Why and How? — Part 2</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2020/06/06/transform-data-usage-format/">prev</a><a class="next" href="/blog/2020/03/17/use-ngrok-to-access-localhost/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

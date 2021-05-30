@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-12) Angular-RXJS非同步事件的好幫手2-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-12) Angular-RXJS非同步事件的好幫手2-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-12) Angular-RXJS非同步事件的好幫手2-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-28<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>上一篇提到什麼是RXJS和RXJS的基本觀念，這一篇要來實際操作RXJS。</p>
+<p>在進入實際操作之前，還要來提RXJS方便的地方-<code>運算子(Operators)</code></p>
+<h1 id="什麼是運算子"><a href="#什麼是運算子" class="headerlink" title="什麼是運算子"></a>什麼是運算子</h1><p>針對可被觀察的對象(Observable)所要傳遞的內容再做進一步的處理，因為觀察不一定需要所有的資料，可以在到觀察者之前，預先做處理。</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20190928/20120107Opk5oytoti.png" alt="https://ithelp.ithome.com.tw/upload/images/20190928/20120107Opk5oytoti.png"></p>
+<p>以生活中的例子舉例：<br>假設感冒了去看醫生，在看到醫生之前。會有護理人員幫你預先做一些處置。假如發燒了，會先幫你量體溫;假如一直咳嗽，會先問你可多久了，有沒有痰之類的問題。<br>這樣一來，進去診療室，醫護人生可以直接告訴醫生狀況，醫生就可以很快速遞掌握病情，加快整個整療的速度。</p>
+<p>在這個例子中，可被觀察對象(Observable)就是病人。而護理人員就是運算子(Operators)預先做各種處置，篩選出重要的資訊。而醫生就是觀察對象(Observer)，可以直接得到他判斷病情所需要的關鍵資訊。</p>
+<p>以前兩天取得的英雄列表的API為例子：</p>
+<pre><code>&#123;
+  &quot;status&quot;: 200,
+  &quot;data&quot;: [
+    &#123;
+      &quot;name&quot;: &quot;兩津勘吉&quot;,
+      &quot;age&quot;: 35
+    &#125;,
+    &#123;
+      &quot;name&quot;: &quot;秋本麗子&quot;,
+      &quot;age&quot;: 25
+    &#125;,
+    &#123;
+      &quot;name&quot;: &quot;野比大雄&quot;,
+      &quot;age&quot;: 12
+    &#125;,
+    &#123;
+      &quot;name&quot;: &quot;江戶川柯南&quot;,
+      &quot;age&quot;: 8
+    &#125;
+  ]
+&#125;</code></pre><p>實際上，我們就像例子中的醫生一樣，並不需要所有的資訊。我們所需要的只有data裡面的英雄資料，這時候就可以使用運算子處理，將不必要的資料去掉，只留下需要的資料<br>匯入map運算子：</p>
+<pre><code>import &#123; map &#125; from &#39;rxjs/operators&#39;</code></pre><p>使用map運算子處理資料：</p>
+<pre><code>this.dataService
+  .getData()
+  .pipe(map(e =&gt; e.data)) // 使用map運算子
+  .subscribe(data =&gt; &#123;
+    this.heros = data; 
+  &#125;);</code></pre><p>在這裡使用<code>map</code>運算子，就和Javascript的map一樣，可以過濾掉不必要的資料。在這裡不再特別說明map的使用方法，只針對運算子的使用方法特別說明：</p>
+<ul>
+<li>所有的運算子都會包在pipe的方法之中，pipe可以想像成是一種管道，幫你做資料處理、轉換的管道</li>
+<li>Angular已經整合RXJS的主要功能，所以在使用RXJS的時候，不必特別匯入或設定。</li>
+<li>運算子一次不只能用一個，可以用好多個，自由的搭配</li>
+<li>使用運算子的時候要個別匯入想要使用的運算子。匯入的方法為：<pre><code>import &#123; 運算子名稱 &#125; from &#39;rxjs/operators&#39;</code></pre><h1 id="常用到的運算子"><a href="#常用到的運算子" class="headerlink" title="常用到的運算子"></a>常用到的運算子</h1>RXJS目前大約有一百個運算子。不過不用擔心，下圖是外國網友統計出大家常用的運算子，常用的運算子大約只有21個。<br><img src="https://ithelp.ithome.com.tw/upload/images/20190928/20120107Nv5FJ6UC6A.png" alt="https://ithelp.ithome.com.tw/upload/images/20190928/20120107Nv5FJ6UC6A.png"></li>
+</ul>
+<p>所以不必擔心一定要把一百多個運算子學完才能使用RXJS，就好像數學學了那麼多公式，最終最常用的只有加減乘除，忘記公式，還是可以運用加減乘除的各種組合，求得我們所需要的答案。記得公式只要讓你運算起來可以更快一點。</p>
+<p>今天的重點在範例內容，範例內容裡面有很多RXJS的運算子運用，可以試著把註解打開，看看右下角的console顯示的內容有沒有什麼變化</p>
+<ul>
+<li>take</li>
+<li>takeLast</li>
+<li>skip</li>
+<li>skipLast</li>
+<li>map</li>
+<li>mapTo</li>
+<li>filter</li>
+<li>Merge</li>
+</ul>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20190928/20120107CEUdu0Nsnb.png" alt="https://ithelp.ithome.com.tw/upload/images/20190928/20120107CEUdu0Nsnb.png"></p>
+<h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1><p>今天的範例內容可以在這裡看到:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-iron-jason-d12?file=src/app/app.component.ts">範例內容1（搭配運算子使用取得英雄列表）</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-kq19yh?file=src/app/rxjs/rxjs.component.ts">範例內容2（運算子使用的範例）</a></li>
+</ul>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>什麼是運算子</li>
+<li>如何使用運算子</li>
+<li>認識常用的運算子</li>
+</ul>
+<p>透過短短的兩篇介紹，快速介紹RXJS重要的基本觀念與使用方法，希望可以很快地好好地處理非同步事件。</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/29/2019ithomeday13/">prev</a><a class="next" href="/blog/2019/09/27/2019ithomeday11/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

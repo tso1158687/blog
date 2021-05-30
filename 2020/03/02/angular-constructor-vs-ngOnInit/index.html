@@ -1,0 +1,111 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>實驗探討angular中的constructor與ngOnInit有什麼差別 | Jason's BLOG</title><meta name="description" content="實驗探討angular中的constructor與ngOnInit有什麼差別 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">實驗探討angular中的constructor與ngOnInit有什麼差別</h1><div class="post-info"><a></a>2020-03-02<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>Angular中的元件(component)啟動的時候，分別會觸發兩個事件:</p>
+<ul>
+<li>constructor</li>
+<li>ngOnInit<br>constructor是javascript中<code>class</code>產生出來時候會執行的建構式<br>ngOnInit則是Angular眾多<code>生命週期</code>中的其中之一，會在元件(component)啟動的時候觸發，</li>
+</ul>
+<p>針對這兩個來做個簡單的實驗與比較。</p>
+<h2 id="比較一：元件啟動的時候，ngOnInit和constructor啟動順序"><a href="#比較一：元件啟動的時候，ngOnInit和constructor啟動順序" class="headerlink" title="比較一：元件啟動的時候，ngOnInit和constructor啟動順序"></a>比較一：元件啟動的時候，ngOnInit和constructor啟動順序</h2><p>分別對ngOnInit和constructor下console觀察兩者顯示的先後順序</p>
+<pre><code>import &#123; Component, OnInit &#125; from &#39;@angular/core&#39;;
+@Component(&#123;
+  selector: &#39;app-test&#39;,
+  templateUrl: &#39;./test.component.html&#39;,
+  styleUrls: [&#39;./test.component.css&#39;]
+&#125;)
+export class TestComponent implements OnInit &#123;
+  constructor() &#123;
+    console.log(&#39;constructor啟動了&#39;)
+   &#125;
+  ngOnInit() &#123;
+    console.log(&#39;ngOnInit啟動了&#39;)
+  &#125;
+&#125;</code></pre><p>看一下測試結果:</p>
+<img src="/blog/2020/03/02/angular-constructor-vs-ngOnInit/oninitvsconstructor1.png" class="">
+
+<h3 id="小結一"><a href="#小結一" class="headerlink" title="小結一"></a>小結一</h3><p>呼叫順序為constructor先再ngOnInit</p>
+<h2 id="比較二-分別在constructor和ngOnInit賦予變數值"><a href="#比較二-分別在constructor和ngOnInit賦予變數值" class="headerlink" title="比較二:分別在constructor和ngOnInit賦予變數值"></a>比較二:分別在constructor和ngOnInit賦予變數值</h2><p>先定義三個變數，分別都給予初始值文字”noValue”</p>
+<pre><code>normalValue=&#39;noValue&#39;
+constructorValue=&quot;noValue&quot;
+ngOnInitValue=&quot;noValue&quot;</code></pre><p>將三個變數顯示在頁面上面</p>
+<pre><code>normalValue的值:&#123;&#123;normalValue&#125;&#125;
+
+constructor的值:&#123;&#123;constructorValue&#125;&#125;
+
+ngOnInit的值:&#123;&#123;ngOnInitValue&#125;&#125;</code></pre><img src="/blog/2020/03/02/angular-constructor-vs-ngOnInit/oninitvsconstructor2.png" class="">
+
+<p>接下來，分別在不同階段賦予這三個變數其他文字，如果是從constructor賦值，顯示文字:「從constructor取值」；同樣地，如果從ngOnInit賦值，顯示文字:「從ngOnInit取值」</p>
+<pre><code>export class TestComponent implements OnInit &#123;
+  normalValue=&#39;noValue&#39;
+  constructorValue=&quot;noValue&quot;
+  ngOnInitValue=&quot;noValue&quot;
+  constructor() &#123;
+    console.log(&#39;constructor啟動了&#39;)
+    this.constructorValue=&#39;從constructor取值&#39;
+    this.normalValue=&#39;從constructor取值&#39;
+   &#125;
+  ngOnInit() &#123;
+    console.log(&#39;ngOnInit啟動了&#39;)
+    this.ngOnInitValue=&#39;從ngOnInit取值&#39;
+    this.normalValue=&#39;從ngOnInit取值&#39;
+  &#125;
+&#125;</code></pre><p>看一下結果:</p>
+<img src="/blog/2020/03/02/angular-constructor-vs-ngOnInit/oninitvsconstructor3.png" class="">
+
+<h3 id="小結二"><a href="#小結二" class="headerlink" title="小結二"></a>小結二</h3><p>不論在constructor或在ngOnInit賦值都是沒有問題的。<br>如果在constructor和ngOnInit連續賦值的話，就會依照小結一的結論照順序賦值，最後得到ngOnInit給予的值。</p>
+<h2 id="比較三-從外部輸入值到元件當中"><a href="#比較三-從外部輸入值到元件當中" class="headerlink" title="比較三:從外部輸入值到元件當中"></a>比較三:從外部輸入值到元件當中</h2><p>元件的值可以使用<code>@Input</code>方法，從外部輸入數值。<br>例如，從外部輸入變數name的值為「Angular」，分別在constructor和ngOnInit下console觀察變數name的狀態</p>
+<pre><code>export class ChildComponent implements OnInit,OnChanges &#123;
+  @Input() name
+  child
+  constructor() &#123;
+    console.log(this.name)
+   &#125;
+
+  ngOnInit() &#123;
+    console.log(this.name)
+  &#125;
+&#125;</code></pre><p>看一下結果:</p>
+<img src="/blog/2020/03/02/angular-constructor-vs-ngOnInit/oninitvsconstructor4.png" class="">
+
+<p>constructor取不到變數內容，是undefined；而ngOnInit正確取到輸入的內容。</p>
+<p>從這個比較可以推論出，因為元件的內容輸入的時機涉及Angular元件的設計，所以將納入Angular的生命週期裡面，但是constructor僅是class中的方法，不在Angular的掌控範圍之內，無法得到Angular生命週期的內容。</p>
+<h3 id="小結三"><a href="#小結三" class="headerlink" title="小結三"></a>小結三</h3><p>如果從外部輸入內容，因為牽涉到Angular的生命週期，內容必須在ngOnInit裡面取得，無法在constructor取得</p>
+<h2 id="比較四-從注入的服務取得服務資料"><a href="#比較四-從注入的服務取得服務資料" class="headerlink" title="比較四:從注入的服務取得服務資料"></a>比較四:從注入的服務取得服務資料</h2><p>元件的值也可以從<code>服務(service)</code>取得，於是建立一個服務，並且建立一個方法，會返回一串文字「get something from service」<br>在此建立兩個變數「serviceContentA」和「serviceContentB」，分別在constructor和ngOnInit呼叫服務並且賦值，觀察是否能正確取得值</p>
+<pre><code>export class ChildComponent implements OnInit,OnChanges &#123;
+  serviceContentA
+  serviceContentB
+  constructor(
+    private appService:AppService
+  ) &#123;
+    this.serviceContentA=appService.getSomethingFromService()
+    console.log(&#39;serviceContentInConstructor:&#39;,this.serviceContentA)
+   &#125;
+
+  ngOnInit() &#123;
+    this.serviceContentB=this.appService.getSomethingFromService()
+    console.log(&#39;serviceContentInngOnInit:&#39;,this.serviceContentB)
+  &#125;
+&#125;</code></pre><p>看一下結果</p>
+<img src="/blog/2020/03/02/angular-constructor-vs-ngOnInit/oninitvsconstructor5.png" class="">
+
+<h3 id="小結四"><a href="#小結四" class="headerlink" title="小結四"></a>小結四</h3><p>服務不論在constructor或ngOnInit賦值，都可以正確取得值</p>
+<p>結論:</p>
+<ul>
+<li>觸發順序為construcor再ngOnInit</li>
+<li>元件內部都操作，例如：在元件內部賦值或是從服務取值，不論在constructor或ngOnInit是沒有差別的</li>
+<li>元件外部輸入內部的操作，例如：使用<code>@Input</code>方法，只有ngOnInit可以正確取到值</li>
+</ul>
+<p>因此ngOnInit和constructor雖然都會在啟動時觸發，推薦各自最安全也最不會出問題的使用時機。</p>
+<ul>
+<li>ngOnInit:處理預設值與初始動作</li>
+<li>constructor:處理注入各種元件的工作，避免處理注入以外的工作。因為不在Angular生命週期裡面，Angular掌握不到。</li>
+</ul>
+<p>本次實驗的範例<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-ngoninit-vs-constructor?file=src%2Fapp%2Fchild%2Fchild.component.ts">程式碼</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2020/03/17/use-ngrok-to-access-localhost/">prev</a><a class="next" href="/blog/2020/02/12/remove-nodemodules/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

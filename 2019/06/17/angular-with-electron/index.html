@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Angular與Electron共舞 | Jason's BLOG</title><meta name="description" content="Angular與Electron共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Angular與Electron共舞</h1><div class="post-info"><a></a>2019-06-17<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li><li><a class="post-tag" href="/blog/tags/nodejs/">nodejs</a></li></ul></div><div class="post-content"><blockquote>
+<p>比你想像的更容易</p>
+</blockquote>
+<blockquote>
+<p>如果你有能力寫網站，就寫得出桌面應用程式。 Electron 是個用 JavaScript、HTML 及 CSS 等網頁技術開發原生應用程式的框架。鳥事它都包了，專注在你的核心功能吧。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://electronjs.org/">Electron</a>官網簡單明瞭寫下框架的威力，開發桌面應用程式，你只需要專注在網頁三大巨頭<code>JavaScript</code>、<code>HTML</code>、<code>CSS</code>，其他的 Electron 都包了。因此在此就示範如何使用 Angular 搭配 Electron 快速建立一個簡單的桌面應用程式吧!</p>
+<p>1.首先先建立 angular 專案</p>
+<pre><code>ng new angularWithElectron</code></pre><p>2.建立完之後，輸入:</p>
+<pre><code>ng serve --open</code></pre><p>如果很懶的話也可以輸入懶人版指令:</p>
+<pre><code>ng s -o</code></pre><img src="/blog/2019/06/17/angular-with-electron/awe1.png" class="">
+
+<p>看到這個畫面表示 angular 專案已經建立起來囉!<br>接著加入 electron 套件</p>
+<p>3.安裝 electron</p>
+<pre><code>npm install --save-dev electron</code></pre><p>4.在專案最外層，新增 <code>main.js</code>，當作 electron 進入點</p>
+<img src="/blog/2019/06/17/angular-with-electron/awe2.png" class="">
+
+<p>5.<code>main.js</code> 當中，貼上 electron 啟動所需要的基本設定</p>
+<pre><code>const &#123; app, BrowserWindow &#125; = require(&#39;electron&#39;)
+
+// Keep a global reference of the window object, if you don&#39;t, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let win
+
+function createWindow () &#123;
+// 建立瀏覽器視窗。
+win = new BrowserWindow(&#123;
+width: 800,
+height: 600,
+webPreferences: &#123;
+nodeIntegration: true
+&#125;
+&#125;)
+
+// and load the index.html of the app.
+win.loadFile(&#39;index.html&#39;)
+
+// Open the DevTools.
+win.webContents.openDevTools()
+
+// 視窗關閉時會觸發。
+win.on(&#39;closed&#39;, () =&gt; &#123;
+// 拿掉 window 物件的參照。如果你的應用程式支援多個視窗，
+// 你可能會將它們存成陣列，現在該是時候清除相關的物件了。
+win = null
+&#125;)
+&#125;
+
+// 當 Electron 完成初始化，並且準備好建立瀏覽器視窗時
+// 會呼叫這的方法
+// 有些 API 只能在這個事件發生後才能用。
+app.on(&#39;ready&#39;, createWindow)
+
+// 在所有視窗都關閉時結束程式。
+app.on(&#39;window-all-closed&#39;, () =&gt; &#123;
+// 在 macOS 中，一般會讓應用程式及選單列繼續留著，
+// 除非使用者按了 Cmd + Q 確定終止它們
+if (process.platform !== &#39;darwin&#39;) &#123;
+app.quit()
+&#125;
+&#125;)
+
+app.on(&#39;activate&#39;, () =&gt; &#123;
+// 在 macOS 中，一般會在使用者按了 Dock 圖示
+// 且沒有其他視窗開啟的情況下，
+// 重新在應用程式裡建立視窗。
+if (win === null) &#123;
+createWindow()
+&#125;
+&#125;)
+
+// 你可以在這個檔案中繼續寫應用程式主程序要執行的程式碼。
+// 你也可以將它們放在別的檔案裡，再由這裡 require 進來。</code></pre><p>6.修改 <code>main.js</code> 讀取檔案的路徑，electron 預設是 <code>index.html</code>。但是 angular 最終生成打包好的檔案在 <code>dist</code> 下面，所以要修改路徑<code>dist/&lt;專案名稱&gt;/index.html</code><br>以本專案叫作 angularWithElectron 為例子，路徑就要修改為<code>dist/angularWithElectron</code></p>
+<img src="/blog/2019/06/17/angular-with-electron/awe3.png" class="">
+
+<p>7.修改 index.html 的路徑，將根路徑的絕對路徑修改為相對路徑</p>
+<pre><code> &lt;base href=&quot;/&quot;&gt;</code></pre><p>修改為:</p>
+<pre><code> &lt;base href=&quot;./&quot;&gt;</code></pre><img src="/blog/2019/06/17/angular-with-electron/awe4.png" class="">
+
+<p>8.在 <code>package.json</code> 加上 electron 的進入點(如果沒有加上這個指令的話，預設會去找 index.js)</p>
+<pre><code>&quot;main&quot;:&quot;main.js&quot;</code></pre><img src="/blog/2019/06/17/angular-with-electron/awe5.png" class="">
+
+<p>9.(非必須)最後加上快速的指令，可以一鍵打包 angular 檔案，並且打開 electron 吧!</p>
+<p>在 scripts 裡面加上</p>
+<img src="/blog/2019/06/17/angular-with-electron/awe6.png" class="">
+
+<pre><code>&quot;electron&quot;: &quot;ng build &amp;&amp; electron .&quot;</code></pre><p>10.大功告成!馬上輸入 <code>npm run electron</code> 就可以看到使用 angular 框架的 electron 應用程式囉</p>
+<p>接下來就是使用你最熟悉的方式開發 angular 囉，其他的，electron 都幫你處理掉了!</p>
+<img src="/blog/2019/06/17/angular-with-electron/awe7.png" class="">
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/08/19/use-nvm-to-manage-nodejs/">prev</a><a class="next" href="/blog/2019/06/17/what-is-v8-engine/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

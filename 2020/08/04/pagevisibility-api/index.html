@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Page Visibility API - 監聽頁面是否使用的最佳解 | Jason's BLOG</title><meta name="description" content="Page Visibility API - 監聽頁面是否使用的最佳解 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Page Visibility API - 監聽頁面是否使用的最佳解</h1><div class="post-info"><a></a>2020-08-04<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/javascript/">javascript</a></li></ul></div><div class="post-content"><h1 id="為何需要知道頁面是否在使用"><a href="#為何需要知道頁面是否在使用" class="headerlink" title="為何需要知道頁面是否在使用?"></a>為何需要知道頁面是否在使用?</h1><p>在影音網站或是資料即使更新的管理系統，會不斷頻繁發出請求向伺服器</p>
+<h1 id="如果要監聽頁面是否在使用應該要怎麼做"><a href="#如果要監聽頁面是否在使用應該要怎麼做" class="headerlink" title="如果要監聽頁面是否在使用應該要怎麼做?"></a>如果要監聽頁面是否在使用應該要怎麼做?</h1><p>在以前會此用focus和blur去判斷頁面是否正在使用。可是這樣的方法有兩個缺點:</p>
+<ol>
+<li>使用方法不直覺，有沒有焦點跟判斷是否有在使用無法直接連結</li>
+<li>方法還是有缺點，失去頁面焦點並不代表不在使用。例如將畫面分割為兩個視窗:一個視窗工作一個視窗聽音樂，會將焦點放在工作的視窗，但不代表失去焦點的音樂視窗不在使用。</li>
+</ol>
+<h1 id="Page-Visibility-API"><a href="#Page-Visibility-API" class="headerlink" title="Page Visibility API"></a>Page Visibility API</h1><p>為了解決這個問題，w3c制定了Page Visibility API，來對頁面的變化做監聽。目前此API對於瀏覽器的支援度不錯，幾乎支援所有瀏覽器。連IE都在支援範圍之內</p>
+<h2 id="document-visibilityState"><a href="#document-visibilityState" class="headerlink" title="document.visibilityState"></a>document.visibilityState</h2><ul>
+<li>visible:當前頁面正在使用可見</li>
+<li>hidden:也就是當前頁面並沒有在使用，情況可能是:視窗已經縮小或瀏覽器的頁籤並未在使用</li>
+</ul>
+<p>因此如果要知道頁面是否正在使用，即可透過此API去查詢。</p>
+<h2 id="visibilitychange"><a href="#visibilitychange" class="headerlink" title="visibilitychange"></a>visibilitychange</h2><p>此事件為得知頁面使用狀態變化的事件，如果document.visibilityState發生變化，便會觸發visibilitychange事件。<br>如果要使用visibilitychange事件的話</p>
+<pre><code>document.addEventListener(&#39;visibilitychange&#39;, () =&gt; &#123; 
+    if (document.visibilityState === &#39;visible&#39;) &#123; 
+        // 做某些事情 
+    &#125; else &#123; 
+        // 做某些事情 
+    &#125; 
+&#125;);</code></pre><p>要特別注意的是，當第一次頁面載入的時候，不論使用者是否正在使用頁面，都不會觸發visibilitychange事件，要和第一次的狀態不一樣之後，才會觸發該事件。</p>
+<p>另外，如果要和RXJS結合的話，也可以使用fromEvent搭配去監聽各種事件，並做各種組合變化</p>
+<pre><code>const pageVisibilityChange$ = fromEvent(document, &quot;visibilitychange&quot;); 
+pageVisibilityChange$.subscribe(e =&gt; &#123; 
+  const pageStatus = document.visibilityState; 
+  console.log(&quot;頁面狀態變換&quot;); 
+  console.log(pageStatus); 
+&#125;);</code></pre><h2 id="RXJS範例"><a href="#RXJS範例" class="headerlink" title="RXJS範例"></a><a target="_blank" rel="noopener" href="https://stackblitz.com/edit/rxjs-hv5hhy">RXJS範例</a></h2><h1 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h1><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API">MDN-Page Visibility API</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2018/10/page_visibility_api.html">阮一峰的网络日志-Page Visibility API 教程</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed1/">prev</a><a class="next" href="/blog/2020/06/06/transform-data-usage-format/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>使用ngrok快速讓外部網路連接本機localhost | Jason's BLOG</title><meta name="description" content="使用ngrok快速讓外部網路連接本機localhost - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">使用ngrok快速讓外部網路連接本機localhost</h1><div class="post-info"><a></a>2020-03-17<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/tools/">tools</a></li></ul></div><div class="post-content"><p>身為一名前端開發人員，雖然主要工作是支援桌面系統可以正常運行，但同時間也要兼顧行動裝置的支援。chrome的開發工具可以幫助開發者模擬手機或平板的使用狀況。但是模擬終究是模擬，若是沒有實際拿手機或平板來使用一下，總會有點疙瘩，不敢保證使用一定正常。</p>
+<p>如果要讓行動裝置連上目前正在開發中的內容，有兩種辦法</p>
+<ol>
+<li>將要測試的內容部屬至測試機，用行動裝置連接到測試機測試</li>
+<li>讓外部網路可以連接到自己的本機環境</li>
+</ol>
+<p>兩種都是可行的辦法，但是第一種辦法有很明顯的缺點:</p>
+<ul>
+<li>不一定有測試機的部屬權限</li>
+<li>就算有權限，部屬需要時間，如果發現問題，修改之後還要再部屬，會耗費很多時間在等在部屬<br>如果使用第二種辦法，就可以避免掉這兩個問題。第一，不會有權限的問題；第二，發現問題即時修改可以即時反應，不必等待。<br>唯一的問題是:如何讓外部的網路連接到本機的localhost?<br>在這裡推薦一個很方便的工具:ngrok</li>
+</ul>
+<h1 id="ngrok下載方法"><a href="#ngrok下載方法" class="headerlink" title="ngrok下載方法"></a>ngrok下載方法</h1><p>到<a target="_blank" rel="noopener" href="https://ngrok.com/download">官網</a>下載<br>解壓縮之後，點擊應用程式就可以直接使用了</p>
+<h1 id="ngrok使用方法"><a href="#ngrok使用方法" class="headerlink" title="ngrok使用方法"></a>ngrok使用方法</h1><img src="/blog/2020/03/17/use-ngrok-to-access-localhost/ngrok1.png" class="">
+
+<p>例如現在有一個port 4200的頁面要測試</p>
+<img src="/blog/2020/03/17/use-ngrok-to-access-localhost/ngrok2.png" class="">
+
+<p>ngrok的指令為:</p>
+<pre><code>ngrok http &lt;你的port&gt; -host-header=&quot;localhost:&lt;你的port&gt;&quot;</code></pre><p>所以如果現在要使用4200的port，輸入:</p>
+<pre><code>ngrok http 4200 -host-header=&quot;localhost:4200&quot;</code></pre><p>ngrok就會建立一個網址，使用這個網址就會幫我們導向本機的4200</p>
+<img src="/blog/2020/03/17/use-ngrok-to-access-localhost/ngrok3.png" class="">
+
+<p>打開手機使用這個網址測試，使用4G行動網路順利連接到本機的內容</p>
+<img src="/blog/2020/03/17/use-ngrok-to-access-localhost/ngrok4.png" class="">
+
+
+<p>不過由於這個是免費方案，所以這個網址是隨機分配的，只要把ngrok的程式關掉之後，這個網址就會失效了。<br>如果要固定網址的話，就必須使用付費方案。</p>
+<p>以上的做法只是以一個前端開發者想要用其他裝置連接到本機的應用來撰寫，ngrok還有更多廣泛的應用，例如讓外部網路連進本機測試資料庫、API等等。這就不是前端的守備範圍，所以更詳細的用途可以參考Alan大大的教學文章:</p>
+<p><a target="_blank" rel="noopener" href="https://blog.alantsai.net/posts/2018/04/devtooltips-5-ngrok-allow-public-to-access-localhost-website-and-sql-server">[開發工具小技巧][05]ngrok讓外部能夠連到localhost的網站及服務</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2020/04/06/introduce-to-angular-elements/">prev</a><a class="next" href="/blog/2020/03/02/angular-constructor-vs-ngOnInit/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

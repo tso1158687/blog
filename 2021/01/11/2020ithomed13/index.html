@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY13-前端測試API的利器-postman | Jason's BLOG</title><meta name="description" content="DAY13-前端測試API的利器-postman - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY13-前端測試API的利器-postman</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/tool/">tool</a></li></ul></div><div class="post-content"><h1 id="DAY13-前端測試API的利器-postman"><a href="#DAY13-前端測試API的利器-postman" class="headerlink" title="DAY13-前端測試API的利器-postman"></a>DAY13-前端測試API的利器-postman</h1><h1 id="什麼是postman"><a href="#什麼是postman" class="headerlink" title="什麼是postman"></a>什麼是postman</h1><p><img src="Untitled.png" alt="Untitled.png"></p>
+<p>postman是一個測試API的工具。前端不論要取得或是傳送資料是，都必須頻繁地不斷透過API作為更通的橋樑。而將API串起來讓網頁可以順利運行是前端很重要的工作之一。</p>
+<h1 id="安裝postman"><a href="#安裝postman" class="headerlink" title="安裝postman"></a>安裝postman</h1><p>postman有兩種方法可以安裝，一種是安裝chrome的擴充套件；一種是安裝桌面版。根據使用經驗，擴充套件的版本有時候會鈍鈍的，桌面板使用比較順暢，推薦下載安裝桌面版本</p>
+<p><a target="_blank" rel="noopener" href="https://www.postman.com/downloads/">postman下載網址</a></p>
+<p>安裝過程很和一般安裝程式的流程一樣，一直按下一步就安裝完了。</p>
+<h1 id="註冊postman帳號-非必要"><a href="#註冊postman帳號-非必要" class="headerlink" title="註冊postman帳號(非必要)"></a>註冊postman帳號(非必要)</h1><p>postman不需要註冊也可以直接使用，但是如果註冊，它會將資料同步到雲端，使用不同電腦，只要登入帳號後，就會將資料同步回來，非常推薦!</p>
+<h1 id="使用postman"><a href="#使用postman" class="headerlink" title="使用postman"></a>使用postman</h1><h2 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h2><p>Collection是一堆API request的集合，可以看作是存放一堆API request的資料夾。</p>
+<p>通常會依專案來區分Collection</p>
+<h3 id="建立collection"><a href="#建立collection" class="headerlink" title="建立collection"></a>建立collection</h3><p>點New Collection按鈕建立新的collection，輸入名稱和敘述</p>
+<p><img src="Untitled%201.png" alt="Untitled%201.png"></p>
+<p>建立好後，可以看到collection是空白的。來建立第一個request，點擊Add requests，一樣輸入名稱和敘述</p>
+<p><img src="Untitled%202.png" alt="Untitled%202.png"></p>
+<h1 id="Request建立與使用"><a href="#Request建立與使用" class="headerlink" title="Request建立與使用"></a>Request建立與使用</h1><p><img src="Untitled%203.png" alt="Untitled%203.png"></p>
+<p>操作區域主要可以分為三區</p>
+<ol>
+<li>網址方法區</li>
+<li>參數區</li>
+<li>回應區</li>
+</ol>
+<h2 id="網址方法區"><a href="#網址方法區" class="headerlink" title="網址方法區"></a>網址方法區</h2><p>輸入API的位置，和API請求的方法。同一個API位置，會因為不同的請求方法而有不同的回應。</p>
+<p>常見的請求方法</p>
+<ul>
+<li>get:從API取得資料</li>
+<li>put:傳送資料去更新資料庫的資料</li>
+<li>post:傳送資料去建立資料庫的資料</li>
+</ul>
+<p>以上這些方法的解釋只是一般的使用習慣，並無硬性規定，實務上也有人使用post方法去更新資料或是取得資料，端看API如何設計</p>
+<h2 id="參數區"><a href="#參數區" class="headerlink" title="參數區"></a>參數區</h2><p>這裡是加上API 使用的附加資訊，例如查詢參數、授權資料、傳送的資料等等都可以在這邊填寫</p>
+<h2 id="回應區"><a href="#回應區" class="headerlink" title="回應區"></a>回應區</h2><p>資料填寫好之後，按下Send按鈕，就可以看到API的回應結果。</p>
+<p>除了回應結果，還可以看見回應的狀態碼、回應時間多久等資訊</p>
+<p>以下示範幾種方法的操作</p>
+<h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2><p>純粹取得資料，輸入API位置之後，直接按Send，看見API回應</p>
+<p><img src="Untitled%204.png" alt="Untitled%204.png"></p>
+<h2 id="get-with-parameters"><a href="#get-with-parameters" class="headerlink" title="get with parameters"></a>get with parameters</h2><p>加上查詢參數，像是 <code>?xxx=yyy</code> 等方法，在Params的頁籤加上查詢參數</p>
+<p>可以看到API的回應結果，有收到查詢的參數age等於24</p>
+<p><img src="Untitled%205.png" alt="Untitled%205.png"></p>
+<h2 id="post"><a href="#post" class="headerlink" title="post"></a>post</h2><p>post方法通常會加上傳送資料，傳送資料通常包在body資訊裡面。因此切換到body頁籤，可以看到不同的傳送資料的方法。依API的設計有不同的方法。目前大部分json格式都選擇 <code>x-www-form-urlencoded</code> 格式，填好資料傳送出去，可以從回應結果看到正確傳送資料到後端</p>
+<p><img src="Untitled%206.png" alt="Untitled%206.png"></p>
+<h2 id="常見的http狀態碼"><a href="#常見的http狀態碼" class="headerlink" title="常見的http狀態碼"></a>常見的http狀態碼</h2><p>以下附上常見的http狀態碼</p>
+<ul>
+<li>200 : 成功</li>
+<li>201 : 建立成功，常用在post和put方法</li>
+<li>204 : 無內容</li>
+<li>400 : 處理的內容錯誤，可能傳送的東西不符合格式的要求</li>
+<li>401 : 未授權，API需要授權，需要戴上授權資訊</li>
+<li>404 : 找不到，指定的API網址不存在</li>
+<li>409 : 衝突，常發生在post和put方法，裡面的資料和資料庫有衝突</li>
+<li>500 : 伺服器內部錯誤，雖然大部分可能是後端沒有處理好，但是也有可能是前端送了錯誤的資料，讓伺服器無法處理</li>
+</ul>
+<p>完整的http狀態碼，請詳見<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Status">MDN</a></p>
+<p>參考資料</p>
+<p><a target="_blank" rel="noopener" href="https://tw.alphacamp.co/blog/postman-api-tutorial-for-beginners">https://tw.alphacamp.co/blog/postman-api-tutorial-for-beginners</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed14/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed12/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

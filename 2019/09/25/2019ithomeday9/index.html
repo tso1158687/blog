@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-9) Angular的服務(Service)-存取資料的好幫手-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-9) Angular的服務(Service)-存取資料的好幫手-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-9) Angular的服務(Service)-存取資料的好幫手-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-25<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>在前幾篇，一直在討論元件(component)的各種應用。元件顯示資料的各種方法，以及最後討論到元件的資料要如何輸入與輸出。元件的討論在此告一段落，這一篇要來討論不一樣的主題-<code>服務(Service)</code></p>
+<h1 id="為什麼需要服務"><a href="#為什麼需要服務" class="headerlink" title="為什麼需要服務"></a>為什麼需要服務</h1><p>試著回想前幾篇在討論元件的時候，我們討論了什麼?</p>
+<ul>
+<li>使用花括號顯示綁定的資料</li>
+<li>使用<code>ngFor</code>顯示多筆大量的資料</li>
+<li>使用<code>ngIf</code>控制資料顯示與否</li>
+<li>使用<code>ngSwitch</code>控制不同情境資料顯示的不同方式</li>
+<li>使用括號<code>()</code>綁定畫面上的事件</li>
+<li>使用<code>@Input</code> 與<code>@Output</code>控制資料在元件的進出<br>有沒有發現，當我們在討論元件的時候，都只有討論到要如何要如何顯示資料，顯示資料的各種方法與如何觸發事件去改變顯示的資料。<code>完全沒有討論到如何取得資料</code>，因為本來就不應該這麼做。</li>
+</ul>
+<p>沒有討論到如何取得資料的原因是，<code>元件的職責本來就應該聚焦在如何顯示資料</code>。元件不應該直接取得資料或儲存任何資料，如果要取得或儲存資料，應該將這項工作交給專門做這件事情的<code>服務(Service)</code></p>
+<h1 id="如何建立服務"><a href="#如何建立服務" class="headerlink" title="如何建立服務"></a>如何建立服務</h1><p>建立服務和建立元件的指令非常類似，只要將component替換成service就好了</p>
+<pre><code>ng generate service &lt;serviceName&gt;</code></pre><h1 id="服務介紹"><a href="#服務介紹" class="headerlink" title="服務介紹"></a>服務介紹</h1><p>一個空白的服務建立起來，會長這樣。在這裡建立一個稱為data的服務</p>
+<pre><code>import &#123; Injectable &#125; from &#39;@angular/core&#39;;
+
+@Injectable(&#123; providedIn: &#39;root&#39;,&#125;)
+export class DataService &#123;
+  constructor() &#123; &#125;
+&#125;</code></pre><p>看起來和空白的元件非常相似，有一點不一樣的差別之處在於:</p>
+<ul>
+<li><code>@Injectable(&#123; providedIn: &#39;root&#39;,&#125;)</code> 多了這個裝飾器。意思就是這個服務是可以在任何地方地方使用的，不論哪一個元件都可以使用這個服務。這個裝飾器是一個很重要的宣告，不過一開始先不必太過在意。</li>
+<li>少了元件<code>OnInit</code>等生命週期。因為服務不是負責顯示畫面的，自然不會有畫面顯示需要的生命週期。<h1 id="如何讓元件-component-取得服務-service-的資料"><a href="#如何讓元件-component-取得服務-service-的資料" class="headerlink" title="如何讓元件(component)取得服務(service)的資料"></a>如何讓元件(component)取得服務(service)的資料</h1></li>
+</ul>
+<p>直接繼續使用英雄的資料作為示範。</p>
+<pre><code>  heros = [
+    &#123; name: ‘兩津勘吉&#39;, age: 35 &#125;,
+    &#123; name: &#39;秋本麗子&#39;, age: 25 &#125;,
+    &#123; name: &#39;野比大雄&#39;, age: 12 &#125;,
+    &#123; name: &#39;江戶川柯南&#39;, age: 8 &#125;
+  ];</code></pre><p>原本這些都是寫在component裡面的資料，現在了解元件的職責之後，我們應該將這些資料移到服務存放，讓元件透過服務去取得資料。</p>
+<h2 id="建立服務與回傳資料的方法"><a href="#建立服務與回傳資料的方法" class="headerlink" title="建立服務與回傳資料的方法"></a>建立服務與回傳資料的方法</h2><p>建立一個DataService去存放英雄資料:</p>
+<p><code>data.service.ts</code></p>
+<pre><code>import &#123; Injectable &#125; from &#39;@angular/core&#39;;
+
+@Injectable(&#123; providedIn: &#39;root&#39;,&#125;)
+export class DataService &#123;
+  heros = [
+    &#123; name: &#39;兩斤勘吉&#39;, age: 35 &#125;,
+    &#123; name: &#39;秋本麗子&#39;, age: 25 &#125;,
+    &#123; name: &#39;野比大雄&#39;, age: 12 &#125;,
+    &#123; name: &#39;江戶川柯南&#39;, age: 8 &#125; //宣告英雄的資料
+  ];
+  constructor() &#123;&#125;
+  getData()&#123;
+    return this.heros; //呼叫getData的方法的時候，回傳英雄的資料
+  &#125;
+&#125;</code></pre><p>一樣先定義英雄的資料，並且新增一個方法-<code>getData()</code>，如果有人呼叫這個方法，就會回傳英雄的資料。</p>
+<h2 id="在元件裡宣告服務並取得資料"><a href="#在元件裡宣告服務並取得資料" class="headerlink" title="在元件裡宣告服務並取得資料"></a>在元件裡宣告服務並取得資料</h2><p><code>app.component.ts</code><br>首先將dataService匯入</p>
+<pre><code>import &#123; DataService &#125; from &#39;./data.service&#39;</code></pre><p>再來將服務注入元件之中</p>
+<pre><code>export class AppComponent  implements OnInit &#123;
+  constructor(
+    private dataService:DataService //在class載入時，呼叫建構式跟他說我會用到dataService
+  )&#123;&#125;
+  newHero = &#123; name: &#39;漩渦鳴人&#39;, age: 15 &#125;
+  heros
+
+  ngOnInit() &#123;
+   this.heros = this.dataService.getData()
+  &#125;
+  getNewHeroFromAnotherComponent(newHero)&#123;
+    console.log(&#39;app component&#39;)
+    console.log(newHero)
+    this.heros.push(newHero)
+  &#125;
+&#125;</code></pre><ol>
+<li>在class載入時，呼叫建構式跟他說我會用到dataService，因此將dataservice的內容載入進來。前面有一個private，這是一個修飾子，表示只個這個元件可以存取這個服務</li>
+<li>同樣宣告heros的變數</li>
+<li>在元件啟動的時候，呼叫服務的getData()方法取得資料<br>如此一來，就順利從dataService取得英雄的資料了!</li>
+</ol>
+<h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1><p>今天的範例內容可以在這裡看到:<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-iron-jason-d9?file=src%2Fapp%2Fdata.service.ts">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>為什麼需要服務</li>
+<li>如何建立服務</li>
+<li>如何讓元件透過服務取得資料</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/26/2019ithomeday10/">prev</a><a class="next" href="/blog/2019/09/24/2019ithomeday8/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

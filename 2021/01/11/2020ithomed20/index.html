@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle) | Jason's BLOG</title><meta name="description" content="DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle) - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle)</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/solid/">solid</a></li></ul></div><div class="post-content"><h1 id="DAY20-SOLID原則-依賴反向原則-Dependency-Inversion-Principle"><a href="#DAY20-SOLID原則-依賴反向原則-Dependency-Inversion-Principle" class="headerlink" title="DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle )"></a>DAY20-SOLID原則-依賴反向原則(Dependency Inversion Principle )</h1><h1 id="什麼是依賴反向原則"><a href="#什麼是依賴反向原則" class="headerlink" title="什麼是依賴反向原則"></a>什麼是依賴反向原則</h1><blockquote>
+<p>高層模組不應依賴低層模組，它們都應依賴於抽象介面。</p>
+</blockquote>
+<blockquote>
+<p>抽象介面不應該依賴於具體實作，具體實作應依賴抽象介面。</p>
+</blockquote>
+<h1 id="依賴反向原則的例子"><a href="#依賴反向原則的例子" class="headerlink" title="依賴反向原則的例子"></a>依賴反向原則的例子</h1><h2 id="要如何從台北到板橋"><a href="#要如何從台北到板橋" class="headerlink" title="要如何從台北到板橋"></a>要如何從台北到板橋</h2><p><img src="Untitled.png" alt="Untitled.png"></p>
+<p>根據google map的建議，從台北到板橋站可以搭乘台北捷運板南線。</p>
+<h2 id="從台北到板橋有幾種方法"><a href="#從台北到板橋有幾種方法" class="headerlink" title="從台北到板橋有幾種方法"></a>從台北到板橋有幾種方法</h2><p>但是從台北到板橋只有搭捷運一種方法嗎?</p>
+<p>看看台北地區軌道路網圖，從台北到板橋不只有搭捷運一種方法而已。除了搭捷運外，還可以搭乘台鐵、高鐵</p>
+<p><img src="Untitled%201.png" alt="Untitled%201.png"></p>
+<pre><code class="tsx">class Mrt &#123;
+  destination;
+  constructor(destination) &#123;
+    this.destination = destination;
+  &#125;
+  getStationList() &#123;
+    let stationList = [&quot;西門&quot;, &quot;龍山寺&quot;, &quot;江子翠&quot;, &quot;新埔&quot;, &quot;板橋&quot;];
+    console.log(`我要去$&#123;this.destination&#125;,沿途經過:`);
+    stationList.forEach(station =&gt; &#123;
+      console.log(station);
+    &#125;);
+  &#125;
+&#125;</code></pre>
+<pre><code class="tsx">class Passenger &#123;
+  goTostation() &#123;
+    console.log(&quot;去車站&quot;);
+  &#125;
+  getOnTheTrain() &#123;
+    let station = new Mrt(&quot;板橋&quot;);
+    console.log(station.getStationList());
+  &#125;
+&#125;</code></pre>
+<p>這樣的關係就是 <em>乘客依賴著捷運</em>，乘客是高層模組，捷運是低層模組</p>
+<p>假設有一名乘客要搭車從台北到板橋</p>
+<pre><code class="tsx">let passenger1 = new Passenger();
+console.log(passenger1.getOnTheTrain()); 
+// 我要去板橋,沿途經過:
+// 西門
+// 龍山寺
+// 江子翠
+// 新埔
+// 板橋</code></pre>
+<p>可是如果有一名乘客他趕時間，他只是想從台北到板橋，不一定要搭捷運，只要能到板橋的方法都好，他選擇票價最貴但是最快的高鐵</p>
+<p>高鐵也是交通工具和捷運有一樣的功能，所以直接繼承捷運的類別</p>
+<pre><code class="tsx">class Hsr extends Mrt &#123;
+
+  getStationList()&#123;
+    super.getStationList()
+    console.log(&#39;不好意思我們沒有停西門、龍山寺、江子翠、新埔&#39;)
+  &#125;
+&#125;</code></pre>
+<p>同樣台鐵也是交通工具，也直接繼承捷運的類別</p>
+<pre><code class="tsx">class tra extends Mrt &#123;
+
+  getStationList()&#123;
+    super.getStationList()
+    console.log(&#39;不好意思我們沒有停西門、龍山寺、江子翠、新埔，我們還另外停了萬華&#39;)
+  &#125;
+&#125;</code></pre>
+<p>可以看到繼承越來越多，不能通用的例子也越來越多，繼承並沒有輕鬆許多，反而要去處理更多的例外。</p>
+<p>看出問題在哪裡了嗎?</p>
+<h2 id="怎麼從台北到板橋最好"><a href="#怎麼從台北到板橋最好" class="headerlink" title="怎麼從台北到板橋最好"></a>怎麼從台北到板橋最好</h2><p>乘客想要的就只是從板橋到台北，至於怎麼從板橋到台北則不是重點，只要能到就好。</p>
+<p>換句話說，乘客所依賴的應該是抽象的交通工具，而並非實際的捷運。只要是交通工具，不論是高鐵、台鐵、捷運都好。</p>
+<pre><code class="tsx">class Transportation &#123;
+  destination;
+  stationList;
+  constructor(destination, stationList) &#123;
+    this.destination = destination;
+    this.stationList = stationList;
+  &#125;
+  goTostation() &#123;
+    console.log(&quot;去車站&quot;);
+  &#125;
+  getOnTheTrain() &#123;
+    this.stationList.forEach(station=&gt;&#123;
+    console.log(station);
+    &#125;)
+  &#125;
+&#125;</code></pre>
+<p>把抽象的細節做好，再讓細節去實作抽象的內容，這樣的話，只要遵守抽象的內容，細節隨時可以抽換</p>
+<h1 id="依賴反向原則的優點"><a href="#依賴反向原則的優點" class="headerlink" title="依賴反向原則的優點"></a>依賴反向原則的優點</h1><p>從依賴細節到改依賴抽象的好處就是，只要符合抽象的原則，細節隨時可以替換，增加高層模組和低層模組之間的彈性</p>
+<p>實際的例子像是<a target="_blank" rel="noopener" href="https://www.wikiwand.com/zh-tw/%E5%AF%B9%E8%B1%A1%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84">ORM</a>套件上面，我要對資料庫的任何操作，假設我要求增加某項資料，我並沒有限定一定要哪種資料庫，我就只是想要「增加」這件事情。但是如果我把這個功能依賴在mySql上面，就會導致我的功能就只能在mySql上面實現，如果哪天我要使用msSql的話，這個功能就無用了。因此orm就是幫助我們對於指令的轉換多做一層抽象的工作，讓依賴可以反轉，不依賴實體而去依賴抽象，讓我要在哪個資料庫下增加的指令都不會有問題</p>
+<p><a target="_blank" rel="noopener" href="https://stackblitz.com/edit/typescript-eeb7et">https://stackblitz.com/edit/typescript-eeb7et</a></p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed21/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed19/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

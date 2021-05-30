@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>如何把angular專案建成並快速推到github pages | Jason's BLOG</title><meta name="description" content="如何把angular專案建成並快速推到github pages - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">如何把angular專案建成並快速推到github pages</h1><div class="post-info"><a></a>2018-06-13<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li><li><a class="post-tag" href="/blog/tags/github/">github</a></li></ul></div><div class="post-content"><p>因為參加六角學院的鐵人賽，所以要把寫好的專案build起來再放到github的page上面的時候，遇到一些困難，所以記錄下來提醒自己，也希望看到這篇文章的人可以避掉這個困難</p>
+<p>當你在本地端的angular專案開發完畢之後，準備編譯成最終完成品的時候，有一個很容易忽略，但卻非常重要的小陷阱(至少本人踩到這個雷花了很久的時間在找答案)</p>
+<p>這個非常小非常小的陷阱在<code>index.html</code>中的</p>
+<pre><code>&lt;base href=&quot;/&quot;&gt;</code></pre><p>這是告訴angular，這個專案的跟目錄的位置在什麼地方，預設是在跟目錄，但是我們放在github page上面的檔案不一定會建立在跟目錄下面，例如我就開了一個f2e-w1的repo放第一個禮拜挑戰的內容，因此我的github page的網址就會是<a href="https://tso1158687.github.io/f2e-w1/">https://tso1158687.github.io/f2e-w1/</a></p>
+<p>這個就是問題了，我的github page的網站跟angular專案設定的網址不一致，因此將angular專案部屬到github上面之後，畫面會一片空白，打開開發者模式會看到一堆錯誤，都是angular找不到檔案的錯誤，所以沒有內容可以顯示</p>
+<img src="/blog/2018/06/13/deploy-angular-to-github-pages/angular-github-error.jpg" class="">
+
+<p>為了避免這樣的情形發生，在build專案的時候，只要將base href設定一下，改為自己要部屬的網站的網址就不會有這樣的錯誤了</p>
+<pre><code>ng build --prod --base-href &quot;網址&quot;</code></pre><p>以我的專案為例，就是輸入</p>
+<pre><code>ng build --prod --base-href &quot;https://tso1158687.github.io/f2e-w1/&quot; </code></pre><p>另外還有一個要介紹很方便的功能是<code>angular-cli-ghpages</code>，可以快速將build好的專案快速推到github page上面，可以節省很多手動推送和眼殘點錯檔案的風險</p>
+<p>安裝<a target="_blank" rel="noopener" href="https://github.com/angular-schule/angular-cli-ghpages">angular-cli-ghpages</a>的方法很簡單，只要輸入指令就安裝完畢了</p>
+<pre><code>npm i -g angular-cli-ghpages</code></pre><p>當專案build完之後，輸入</p>
+<pre><code>ngh --dir dist/專案名稱 --repo=git@github.com:帳號/專案名稱.git --no-silent</code></pre><p>同樣再以我的例子為例，就是</p>
+<pre><code>ngh --dir dist/f2e-w1 --repo=git@github.com:tso1158687/f2e-w1.git --no-silent</code></pre><p>他就會自動幫你建立<code>gh-pages</code>的分支，並將編譯好的結果推上去，這個分支是<code>孤兒分支(orphan branch)</code>，所以也不用擔心影響到主分支的檔案喔</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2018/06/26/new-date-bomb/">prev</a><a class="next" href="/blog/2018/05/15/scripts/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

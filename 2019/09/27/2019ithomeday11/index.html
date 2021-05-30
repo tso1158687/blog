@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-11) Angular-RXJS非同步事件的好幫手-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-11) Angular-RXJS非同步事件的好幫手-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-11) Angular-RXJS非同步事件的好幫手-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-27<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>在上一篇，使用httpClient取得API資料的時候，看到一段陌生的程式碼</p>
+<pre><code>  ngOnInit() &#123;
+  //  this.heros = this.dataService.getData()
+    this.dataService.getData().subscribe(res =&gt; &#123;
+      console.log(res) //可以打開console看看資料室什麼
+      this.heros = res.data
+
+    &#125;)
+  &#125;</code></pre><p>在上一篇提到<code>subscribe</code>是RXJS處理非同步事件的語法，必須要有訂閱(subscribe)才會處理非同步事件。</p>
+<p>在這一篇，我們要來討論上一篇提到的。<br><code>呼叫API取得資料</code>就會將事情變得比較複雜。就得面對然後處理以下兩件事情:</p>
+<ol>
+<li>處理AJAX行為</li>
+<li>處理非同步事件</li>
+</ol>
+<p>第二點，要如何好好地處理非同步事件。再好好地處理非同步事件之前，就先必須了解什麼是RXJS。</p>
+<h1 id="什麼是RXJS"><a href="#什麼是RXJS" class="headerlink" title="什麼是RXJS?"></a>什麼是RXJS?</h1><p>先來看看官網如何介紹RXJS:</p>
+<blockquote>
+<p>An API for asynchronous programming with observable streams</p>
+</blockquote>
+<p>在這裡可以看到幾個關鍵字：<code>asynchronous</code>、<code>observable</code>、<code>streams</code>，將會從這幾個關鍵字，簡單快速介紹RXJS</p>
+<h2 id="asynchronous-非同步、異步"><a href="#asynchronous-非同步、異步" class="headerlink" title="asynchronous (非同步、異步)"></a>asynchronous (非同步、異步)</h2><p>在真實的前端世界，要取得任何資料或是資訊的動作都是非同步(Asynchronous)。比如說我們希望拿到一個檔案，要先發送一個請求，然後必須等到檔案回來，再執行對這個檔案的操作。這就是一個非同步的行為，而隨著網頁需求的複雜化，我們所寫的 JavaScript 就有各種針對非同步行為的寫法，例如使用 callback 或是 Promise 物件甚至是新的語法糖 async/await —— 但隨著應用需求愈來愈複雜，撰寫非同步的程式碼仍然非常困難。</p>
+<h2 id="streams-資料流"><a href="#streams-資料流" class="headerlink" title="streams (資料流)"></a>streams (資料流)</h2><p>什麼是資料流，來看看維基百科對於資料流的定義:</p>
+<blockquote>
+<p>A stream is a sequence of data elements made available over time. A stream can be thought of as items on a conveyor belt being processed one at a time rather than in large batches. — Wikipedia</p>
+</blockquote>
+<p>也就是說，資料流就是<code>時間序列上的一連串資料事件</code>(資料會依照時間先後順序排序，而非直接當作一整大包資料處理)</p>
+<p>資料的先後順序是一件很重要的事情<br>先後順序非常重要，不可以插隊</p>
+<p>將資料流的觀念套到前端，如何獲得資料流?</p>
+<ul>
+<li>來自一筆或多筆資料</li>
+<li>來自陣列的資料</li>
+<li>來自事件(ex:點擊事件)</li>
+<li>來自Promise</li>
+<li>…….更多</li>
+</ul>
+<h2 id="observable-觀察者"><a href="#observable-觀察者" class="headerlink" title="observable (觀察者)"></a>observable (觀察者)</h2><p>什麼是觀察者，就必須先提到<code>觀察者模式(Observable Pattern)</code><br>觀察者模式就是:<br><code>當Observable（可被觀察的對象）發生事情，Observer(觀察者）就可以做出反應。</code></p>
+<p>所以觀察者模式一定要有可被觀察對象。當有人(稱為觀察者)想要呼叫可被觀察對象，這個動作就會稱為<code>訂閱(Subsribe)</code></p>
+<p>如果以生活中的例子舉例:</p>
+<ul>
+<li>我想要看報紙，要先跟報社訂報紙才會收到報紙</li>
+<li>訂閱或按讚某個粉絲團，當粉絲團有新消息才會通知我</li>
+</ul>
+<p>在兩個例子中，誰是可被觀察對象(Observable)?誰是觀察者(Observer)?如果想通了，就可以掌握觀察者模式的概念了。</p>
+<p>再次將觀察者模式的觀念套用到前端，前端如何實行觀察者模式?</p>
+<h3 id="可被觀察對象-Observable"><a href="#可被觀察對象-Observable" class="headerlink" title="可被觀察對象 (Observable)"></a>可被觀察對象 (Observable)</h3><p>當變數或資源發生變動時，由變數或資源自動告訴我發生變動了</p>
+<ul>
+<li>當發生變動 =&gt; 非同步：不知道什麼時候發生變動，反正就是發生變動跟我說</li>
+<li>由變數自動告知我 =&gt; 不必煩惱要如何告訴我程式碼變動</li>
+</ul>
+<h3 id="觀察者-Observer"><a href="#觀察者-Observer" class="headerlink" title="觀察者 (Observer)"></a>觀察者 (Observer)</h3><p>當Observable發生變動，觀察者可以做的事情:</p>
+<ul>
+<li>next=&gt;成功的時候做什麼</li>
+<li>error=&gt;失敗的時候做什麼</li>
+<li>completed=&gt;不論成功或失敗，都要做什麼</li>
+</ul>
+<h3 id="訂閱-subscribe"><a href="#訂閱-subscribe" class="headerlink" title="訂閱 (subscribe)"></a>訂閱 (subscribe)</h3><p>監聽Observable的動作稱為訂閱 (subscribe)，有可被觀察對象，要有觀察者訂閱才會產生動作<br>例如:一個乏人問津的粉絲團，沒有人按讚或沒有人訂閱，自然不會有人收到粉絲團的最新消息。</p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>什麼是RXJS</li>
+<li>什麼是asynchronous (非同步、異步)</li>
+<li>什麼是streams (資料流)</li>
+<li>什麼是observable (觀察者)</li>
+</ul>
+<p>明天將進入RXJS實際應用</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/28/2019ithomeday12/">prev</a><a class="next" href="/blog/2019/09/26/2019ithomeday10/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

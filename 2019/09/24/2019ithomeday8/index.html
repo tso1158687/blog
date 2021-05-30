@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-8) Angular元件的互動-元件的輸入與輸出@Input, @Output-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-8) Angular元件的互動-元件的輸入與輸出@Input, @Output-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-8) Angular元件的互動-元件的輸入與輸出@Input, @Output-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-09-24<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li></ul></div><div class="post-content"><p>在第二篇，為什麼選擇選擇Angular的文章提到，Angular的其中之一個優點是高度模組化，可以像樂高一樣，高度與其他元件結合與抽離。而高度模組化的訣竅在於，每一個元件都是一個獨立的個體，可以決定有什麼元件的資料可以輸入:同樣地，也可以決定有什麼元件的資料或方法可以輸出。</p>
+<p>如何設計元件的輸入與輸出，將會影響到元件的模組化的實用性與可維護性，因此本篇將要來探討如何設計元件的輸入與輸出。</p>
+<h1 id="準備新的元件"><a href="#準備新的元件" class="headerlink" title="準備新的元件"></a>準備新的元件</h1><p>本篇的教學例子還是使用英雄的例子為例繼續：</p>
+<pre><code>  heros = [
+    &#123; name: ‘兩津勘吉&#39;, age: 35 &#125;,
+    &#123; name: &#39;秋本麗子&#39;, age: 25 &#125;,
+    &#123; name: &#39;野比大雄&#39;, age: 12 &#125;,
+    &#123; name: &#39;江戶川柯南&#39;, age: 8 &#125;
+  ];</code></pre><p>在先前的例子當中，都將所有的內容寫在<code>app.component之中</code><br><img src="https://ithelp.ithome.com.tw/upload/images/20190924/20120107Z6Fff4AZRA.png" alt="https://ithelp.ithome.com.tw/upload/images/20190924/20120107Z6Fff4AZRA.png"></p>
+<p>這個頁面可以分為兩個部分，一個是輸入英雄資料、加入英雄的部分，如上圖圖片紅色線條框起來的部分;另外一個部分是下方顯示英雄的部分。<br>現在要將紅色框起來的部分，也就是輸入英雄、加入英雄的部分獨立出來到新的元件，我們稱這個元件為<code>hero component</code><br><img src="https://ithelp.ithome.com.tw/upload/images/20190924/20120107epX6fSweC7.png" alt="https://ithelp.ithome.com.tw/upload/images/20190924/20120107epX6fSweC7.png"></p>
+<blockquote>
+<p>PS:還記得如何產生元件嗎？</p>
+</blockquote>
+<pre><code>ng generate component hero</code></pre><p>再來將加入英雄部分的html程式碼貼到hero.component.html上面<br>為了方便辨識，將原本的newHero的物件，更名為inputDefaultHero<br><code>hero.component.html</code></p>
+<pre><code>&lt;p&gt;加入新的英雄：&lt;/p&gt;
+姓名：&lt;input type=&quot;text&quot; [(ngModel)]=&#39;inputDefaultHero.name&#39;&gt;
+年齡：&lt;input type=&quot;text&quot; [(ngModel)]=&#39;inputDefaultHero.age&#39;&gt;
+&lt;button (click)=&quot;addHero()&quot;&gt;加入英雄&lt;/button&gt;</code></pre><p>最後將hero component放在app component裡面<br><code>app.component.html</code></p>
+<pre><code>&lt;h1&gt;
+    使用ngFor顯示陣列內容
+&lt;/h1&gt;
+&lt;app-hero&gt;&lt;/app-hero&gt; 
+&lt;div *ngFor=&quot;let hero of heros&quot;&gt;
+    &lt;div&gt;
+        名字:
+        &lt;span [ngSwitch]=&quot;hero.age&quot;&gt;
+            &lt;span *ngSwitchCase=&quot;12&quot;&gt;
+                小英雄
+            &lt;/span&gt;
+            &lt;span *ngSwitchCase=&quot;8&quot;&gt;
+                小小英雄
+            &lt;/span&gt;
+            &lt;span *ngSwitchDefault&gt;
+                &#123;&#123;hero.name&#125;&#125;
+            &lt;/span&gt;
+        &lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        年齡: &#123;&#123;hero.age&#125;&#125;
+    &lt;/div&gt;
+    ===========
+&lt;/div&gt;</code></pre><p>這樣就完成準備動作，成功地將原本的元件內容分離開來，放到新的元件裡面，讓整個畫面看起來和原本的一模一樣。只不過現在元件之間，並沒有溝通的方式，所以沒有辦法將hero component新增的內容傳送出去給app component。同樣也沒有辦法從app component將資料輸入到hero component。</p>
+<h1 id="將資料輸入元件"><a href="#將資料輸入元件" class="headerlink" title="將資料輸入元件"></a>將資料輸入元件</h1><p>要讓外部元件的內容輸入到元件裡面，Angular有一個稱為<code>@Input的裝飾器</code>，可以讓你從外部輸入到資料到元間裡面</p>
+<blockquote>
+<p>如果沒有聽過裝飾器的人也不用太多擔心，先能用再說，之後再知道它是什麼也不遲，可以想像是一個function，幫我們處理了一些事情</p>
+</blockquote>
+<p>首先先在<code>hero.component.ts</code>匯入Input</p>
+<pre><code>import &#123; Component, OnInit, Input &#125; from &#39;@angular/core’; // 匯入Input</code></pre><p>在元件裡面寫了輸入的資料，在本元件裡面要如何稱呼，在這裡為了方便觀察變化，將輸入的資料稱為inputDefaultData</p>
+<pre><code>export class HeroComponent implements OnInit &#123;
+    @Input() inputDefaultHero //@Input() 裝飾器表示資料從外部輸入
+
+    constructor() &#123; &#125;
+
+    ngOnInit() &#123;
+        console.log(&#39;取得從外部元件的資料&#39;)
+        console.log(this.inputDefaultHero)
+    &#125;
+&#125;</code></pre><p>為了方便檢視資料的狀態，還另外在<code>ngOnInit</code>，也就是元件啟動時下了兩個console，給大家看看資料的狀態。</p>
+<p>接著回到app component<br>在<code>app.component.ts</code>裡面，先定義好一組新的英雄</p>
+<pre><code>newHero = &#123; name: &#39;漩渦鳴人&#39;, age: 15 &#125;</code></pre><p>再來到<code>app.component.html</code>設定要輸入什麼資料，在這裡要輸入的資料是newHero這個物件</p>
+<pre><code>&lt;app-hero [inputDefaultHero]=&quot;newHero&quot;&gt;&lt;/app-hero&gt; //輸出newHero物件到hero component之中</code></pre><p>將newHero物件輸入到hero component之中，而hero component將由inputdefaultHero的屬性去接收到newHero物件的資料。</p>
+<p>這麼一來就可以看到newHero物件輸入到hero component成功囉</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20190924/20120107ZaByJcITjE.png" alt="https://ithelp.ithome.com.tw/upload/images/20190924/20120107ZaByJcITjE.png"></p>
+<h1 id="將資料輸出元件"><a href="#將資料輸出元件" class="headerlink" title="將資料輸出元件"></a>將資料輸出元件</h1><p>在hero component裡面輸入要新加入的英雄資料之後，要輸出到app component接收資料，並且新增到英雄列表當中。<br>和input相對就是output<br>同樣要先在<code>hero.component.ts</code> 匯入output相關功能</p>
+<pre><code>import &#123; Component, OnInit, Input, Output, EventEmitter &#125; from &#39;@angular/core&#39;; //匯入Output 和 EventEmitter</code></pre><p>有沒有注意到，除了匯入Output還匯入了一個稱為EventEmitter的東西。因為Angular的設計，將元件的東西匯出都當成一個事件來處理，因此我們需要匯入EventEmitter幫我們處理匯出的事件。<br>因此定義了一個 <code>outputAddHero</code> 的事件，並且讓它等於一個要輸出的事件</p>
+<pre><code>export class HeroComponent implements OnInit &#123;
+  @Output() outputAddHero = new EventEmitter&lt;any&gt;() // @Output()裝飾器 表示這是一個要輸出的事件
+  @Input() inputDefaultHero
+
+  constructor() &#123; &#125;
+
+  ngOnInit() &#123;
+    console.log(&#39;取得從外部元件的資料&#39;)
+    console.log(this.inputDefaultHero)
+  &#125;
+  addHero() &#123;
+    console.log(&#39;將元件的資料output傳送出去&#39;)
+    this.outpuftAddHero.emit(this.inputDefaultHero)
+    this.inputDefaultHero = &#123; name: &#39;&#39;, age: &#39;&#39; &#125;
+  &#125;
+&#125;</code></pre><p>在點擊<code>加入英雄</code>的按鈕後，會觸發addHero的function，這時將新英雄的資料<code>inputDefaultHero</code>當成事件的參數傳遞出去。</p>
+<p>接著回到app component<br>在<code>app.component.ts</code>，元件的資料以事件的形式傳送出來，因此同樣也要以事件的形式來接收傳送出來的資料，將接收的事件稱為<code>getNewHeroFromAnotherComponent</code></p>
+<pre><code>  getNewHeroFromAnotherComponent(newHero)&#123; // 資料以參數的形式傳送出來，同樣也要以參數的形式接住
+    console.log(&#39;app component&#39;)
+    console.log(newHero)
+    this.heros.push(newHero)
+  &#125;</code></pre><p>資料以參數的形式傳送出來，同樣也要以參數的形式接住，因此newHero的參數，就可以順利接受到新英雄的資料，而將新英雄的資料推到英雄陣列當中，並且顯示出來。</p>
+<p>回到<code>app.component.html</code>，同樣要設定好，發送出來的事件要由誰接收。</p>
+<pre><code>&lt;app-hero [inputDefaultHero]=&quot;newHero&quot; (outputAddHero)=&quot;getNewHeroFromAnotherComponent($event)&quot;&gt;&lt;/app-hero&gt; //別忘了$event參數，不然接收不到傳送出來的資料</code></pre><p>hero component的outputAddHero的事件傳送出來後，會由我們剛剛定義的 getNewHeroFromAnotherComponent的事件接收到資料</p>
+<p>最後就來試試看加入英雄的功能有沒有將新英雄加入到列表當中吧<br><img src="https://ithelp.ithome.com.tw/upload/images/20190924/20120107UtcsskJahx.png" alt="https://ithelp.ithome.com.tw/upload/images/20190924/20120107UtcsskJahx.png"></p>
+<h1 id="線上範例"><a href="#線上範例" class="headerlink" title="線上範例"></a>線上範例</h1><p>今天的範例內容可以在這裡看到:<a target="_blank" rel="noopener" href="https://stackblitz.com/edit/angular-iron-jason-d8?file=src/app/app.component.ts">範例內容</a><br>本篇範例寫了一些console.log可以讓大家看看元件之間的互動狀況，可以點選下面的小箭頭看看console的內容<br><img src="https://ithelp.ithome.com.tw/upload/images/20190924/20120107QfKpT4v2Zk.png" alt="https://ithelp.ithome.com.tw/upload/images/20190924/20120107QfKpT4v2Zk.png"></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>為何需要元件的互動</li>
+<li>如何使用＠Input將資料輸入元件</li>
+<li>如何使用@Output搭配EventEmitter將元件的資料發送出去</li>
+<li>實際應用元件的輸入與輸出的功能</li>
+</ul>
+<p>元件的內容就在這邊告一段落，明天將會進入新的章節</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/25/2019ithomeday9/">prev</a><a class="next" href="/blog/2019/09/23/2019ithomeday7/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

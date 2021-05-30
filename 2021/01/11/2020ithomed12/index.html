@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY12-用Verdaccio自己建一個私有的NPM | Jason's BLOG</title><meta name="description" content="DAY12-用Verdaccio自己建一個私有的NPM - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY12-用Verdaccio自己建一個私有的NPM</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/npm/">npm</a></li></ul></div><div class="post-content"><h1 id="DAY12-用-Verdaccio-自己建一個私有的-NPM"><a href="#DAY12-用-Verdaccio-自己建一個私有的-NPM" class="headerlink" title="DAY12-用 Verdaccio 自己建一個私有的 NPM"></a>DAY12-用 Verdaccio 自己建一個私有的 NPM</h1><p>NPM (Node Package Manager)是 Javascript 的套件管理平台，任何人都可以將自己製作的套件發布在 NPM 上面讓任何人去下載使用。</p>
+<p>但是很多企業開發的套件只供內部使用，並沒有開源開放使用。因此我們必須自己架設一個私有的 NPM，去存放僅供內部使用的套件。</p>
+<h1 id="Verdaccio"><a href="#Verdaccio" class="headerlink" title="Verdaccio"></a>Verdaccio</h1><h2 id="安裝-Verdaccio"><a href="#安裝-Verdaccio" class="headerlink" title="安裝 Verdaccio"></a>安裝 Verdaccio</h2><pre><code>npm install --global verdaccio</code></pre><h2 id="啟動-Verdaccio"><a href="#啟動-Verdaccio" class="headerlink" title="啟動 Verdaccio"></a>啟動 Verdaccio</h2><pre><code>verdaccio</code></pre><p><img src="Untitled.png" alt="Untitled.png"></p>
+<p>輸入完就會看到 Verdaccio</p>
+<h2 id="打開-Verdaccio"><a href="#打開-Verdaccio" class="headerlink" title="打開 Verdaccio"></a>打開 Verdaccio</h2><p>輸入網址打開 Verdaccio</p>
+<pre><code>http://localhost:4873/</code></pre><p><img src="Untitled%201.png" alt="Untitled%201.png"></p>
+<p>這樣就完成私有的 NPM 架設了！</p>
+<h2 id="設定管理員帳號"><a href="#設定管理員帳號" class="headerlink" title="設定管理員帳號"></a>設定管理員帳號</h2><pre><code>npm adduser --registry  http://localhost:4873</code></pre><p>接下來會詢問你要設定什麼帳號、密碼、信箱，設定完之後，就可以用這組帳號登入囉</p>
+<h1 id="製作第一個套件"><a href="#製作第一個套件" class="headerlink" title="製作第一個套件"></a>製作第一個套件</h1><p>接下來來測試發布一個簡單的套件到自己的 NPM 上</p>
+<ol>
+<li>建立一個套件名為 <code>test-package</code></li>
+</ol>
+<pre><code>npm init</code></pre><p>接下來 npm 會詢問一些套件的基本資訊，輸入完之後的結果如下</p>
+<pre><code class="json">&#123;
+  &quot;name&quot;: &quot;test-package&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;test for private npm&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: &#123;
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  &#125;,
+  &quot;author&quot;: &quot;jason&quot;,
+  &quot;license&quot;: &quot;ISC&quot;
+&#125;</code></pre>
+<p>第一個套件製做完畢</p>
+<h1 id="發布第一個套件"><a href="#發布第一個套件" class="headerlink" title="發布第一個套件"></a>發布第一個套件</h1><p>接下來將剛剛製做的 <code>test-package</code> 發布到自己的 npm 上</p>
+<pre><code>npm publish --registry http://localhost:4873</code></pre><p><img src="Untitled%202.png" alt="Untitled%202.png"></p>
+<p>發布成功後，重新整理一下網頁看看結果</p>
+<p><img src="Untitled%203.png" alt="Untitled%203.png"></p>
+<p>點進去就可以看到套件的詳細資訊和使用資訊</p>
+<p><img src="Untitled%204.png" alt="Untitled%204.png"></p>
+<h1 id="搬移-NPM-套件"><a href="#搬移-NPM-套件" class="headerlink" title="搬移 NPM 套件"></a>搬移 NPM 套件</h1><p>因為這個是新架起來的，可能需要從別的地方搬移舊的套件過來。</p>
+<p>在這裡推薦一個套件 <code>npm copy</code> 可以搬移 NPM 套件到自己的 NPM 上。</p>
+<p>以下有兩種版本</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/goodeggs/npm-copy">npm copy 原版</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/tso1158687/npm-copy">npm copy 筆者修改的版本</a></li>
+</ul>
+<p>兩種版本的差異在於，原版只能從公有的 NPM 搬移到私有的 NPM，但是因為筆者想從私有的 NPM 搬移到另一個私有的 NPM，所以小小的修改了一下讓它支援私有 NPM 之間的搬移。</p>
+<h1 id="推廣一下中文版"><a href="#推廣一下中文版" class="headerlink" title="推廣一下中文版"></a>推廣一下中文版</h1><p><img src="Untitled%205.png" alt="Untitled%205.png"></p>
+<p>Verdaccio 內建多國語言，包含台灣人用的正體中文。這個版本是筆者使用後覺得非常好用，發現有多國語言版本，但是沒有正體中文的版本。所以自己翻譯請他們的開發團隊合併回去的。全部都是依字一句自己翻譯的，推薦大家使用</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed13/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed11/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

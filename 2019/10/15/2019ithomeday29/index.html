@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-29) Angular 與 Nestjs 前後端合體技-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-29) Angular 與 Nestjs 前後端合體技-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-29) Angular 與 Nestjs 前後端合體技-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-15<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nestjs/">nestjs</a></li></ul></div><div class="post-content"><p>瞭解了這麼多Angular與Nestjs的相關知識之後，再來要想辦法將一個前端與一個後端融合在一起。</p>
+<h1 id="如何融合"><a href="#如何融合" class="headerlink" title="如何融合"></a>如何融合</h1><p>要如何融合在一起呢?預計要做以下幾件事情</p>
+<ul>
+<li>Angular可以使用HttpClient去呼叫API取得所有書籍的資料</li>
+<li>Nestjs可以獲得Angular發送過來的請求，將書籍的資料返回</li>
+<li>Angular接受到Nestjs返回的資料</li>
+<li>Angular綁定返回的資料，使用<code>ngFor</code>顯示所有書籍的資料<h1 id="Nestjs-設定"><a href="#Nestjs-設定" class="headerlink" title="Nestjs 設定"></a>Nestjs 設定</h1>Nestjs有一個<code>Serve Static</code>可以讓Nestjs去讀取像Angular、React、Vue 這樣的<code>SPA(Single Page Application)</code>頁面</li>
+</ul>
+<h2 id="安裝Serve-Static"><a href="#安裝Serve-Static" class="headerlink" title="安裝Serve Static"></a>安裝Serve Static</h2><pre><code>npm install --save @nestjs/serve-static</code></pre><h2 id="使用Serve-Static"><a href="#使用Serve-Static" class="headerlink" title="使用Serve Static"></a>使用Serve Static</h2><p>安裝完之後，到AppModule設定相關設定</p>
+<pre><code>import &#123; Module &#125; from &#39;@nestjs/common&#39;;
+import &#123; AppController &#125; from &#39;./app.controller&#39;;
+import &#123; AppService &#125; from &#39;./app.service&#39;;
+import &#123; ServeStaticModule &#125; from &#39;@nestjs/serve-static&#39;; //匯入ServeStaticModule
+import &#123; join &#125; from &#39;path&#39;; //匯入nodejs相關功能
+
+@Module(&#123;
+  imports: [
+    ServeStaticModule.forRoot(&#123;
+      rootPath: join(__dirname, &#39;..&#39;, &#39;client&#39;),
+    &#125;),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+&#125;)
+export class AppModule &#123;&#125;</code></pre><p>在<code>@Module</code>裝飾器裡面匯入ServeStaticModule，裡面的語法的意思簡單來說就是:取得頁面的位置，頁面所在的資料夾為client</p>
+<p>再來至<code>main.ts</code><br>因為這樣的設定等於前端和後端都在同一個專案啟動，為了避免前端與後端混在一起，所以加上<code>api</code>的前綴來區分後端</p>
+<pre><code>async function bootstrap() &#123;
+  const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix(&#39;api&#39;); // 幫後端的API加上前綴
+  await app.listen(3000);
+&#125;</code></pre><h2 id="設定Angular"><a href="#設定Angular" class="headerlink" title="設定Angular"></a>設定Angular</h2><p>首先先設定服務，取得資料</p>
+<pre><code>export class DataService &#123;
+
+  constructor(
+    private http: HttpClient
+  ) &#123; &#125;
+  getData() &#123;
+    const url = &#39;api/document&#39;
+    return this.http.get(url)
+  &#125;
+&#125;</code></pre><p>因為已經設定前綴，所以記得加上api</p>
+<p>再來到取得資料的元件<code>document.component.ts</code></p>
+<pre><code>ngOnInit() &#123;
+    this.dataService.getData().subscribe(e =&gt; &#123;
+        console.log(&#39;從nestjs取得api資料囉&#39;)
+        console.log(e)
+        this.data = e
+    &#125;)
+&#125;</code></pre><p>元件啟動的時候，從服務取得資料<br><code>document.component.html</code></p>
+<pre><code>&lt;p&gt;
+  書籍清單
+&lt;/p&gt;
+&lt;ul &gt;
+  &lt;li *ngFor=&quot;let doc of data&quot;&gt;
+    書籍:&#123;&#123;doc.name&#125;&#125;。作者:&#123;&#123;doc.author&#125;&#125;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre><p>最後將取得的資料顯示在頁面上<br>寫完前端的檔案，別忘了輸入以下指令</p>
+<pre><code>ng build --prod</code></pre><p>將正式的檔案編譯出來，並且將編譯的檔案放到client的資料夾當中</p>
+<h1 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h1><p>啟動Nestjs測試，是否取得資料<br><img src="https://ithelp.ithome.com.tw/upload/images/20191015/20120107NYATJBNq5y.png" alt="https://ithelp.ithome.com.tw/upload/images/20191015/20120107NYATJBNq5y.png"></p>
+<p>可以看到服務(service)成功取得資料<br>再來切換到netwrok頁籤，來看看API的路徑，的確就是Nestjs設定的路徑</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20191015/20120107H61w3JLMXI.png" alt="https://ithelp.ithome.com.tw/upload/images/20191015/20120107H61w3JLMXI.png"></p>
+<h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><p>今天的範例內容可以github上面看到:<a target="_blank" rel="noopener" href="https://github.com/tso1158687/hello-nest-iron">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>如何結合Angular與Nestjs</li>
+<li>使用Nestjs的 Serve Static取得前端頁面</li>
+<li>如何使用Angular取得Nestjs資料</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/16/2019ithomeday30/">prev</a><a class="next" href="/blog/2019/10/14/2019ithomeday28/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

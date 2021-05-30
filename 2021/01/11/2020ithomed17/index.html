@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Day17-SOLID原則-開閉原則(Open–closed Principle) | Jason's BLOG</title><meta name="description" content="Day17-SOLID原則-開閉原則(Open–closed Principle) - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Day17-SOLID原則-開閉原則(Open–closed Principle)</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/solid/">solid</a></li></ul></div><div class="post-content"><h1 id="Day17-SOLID原則-開閉原則-Open–closed-Principle"><a href="#Day17-SOLID原則-開閉原則-Open–closed-Principle" class="headerlink" title="Day17-SOLID原則-開閉原則(Open–closed Principle)"></a>Day17-SOLID原則-開閉原則(Open–closed Principle)</h1><h1 id="什麼是開閉原則"><a href="#什麼是開閉原則" class="headerlink" title="什麼是開閉原則"></a>什麼是開閉原則</h1><blockquote>
+<p>軟體實體應該對擴展開放，對修改關閉</p>
+</blockquote>
+<p>開閉原則的解釋就是這麼簡單。</p>
+<p>以現實中遇到實現開閉原則的例子為例: Chrome 和 VS Code都是實現開閉原則的最好例子。</p>
+<p>Chrome 和 VS Code都有新增擴充套件(extension)的功能，安裝擴充套件可以新增一些功能。</p>
+<p>Chrome 和 VS Code允許新增套件增加新功能，但是不會修改到原本的功能，讓原本的功能因為加了新功能之後壞掉，這個就是開閉原則。</p>
+<h1 id="開閉原則的例子"><a href="#開閉原則的例子" class="headerlink" title="開閉原則的例子"></a>開閉原則的例子</h1><p>假設有一個取得使用者資料的功能</p>
+<pre><code class="jsx">function getUserData() &#123;
+    this.userService.getUserData().then(userLists =&gt; &#123;
+        this.userLists = parseUserLists(userLists)
+    &#125;)
+&#125;</code></pre>
+<p>這個功能也就是從API取得使用者資料後，將使用者資料解析成前端可以使用的格式。</p>
+<p>但是假設，有一天後端API要新增一種使用者資料的格式，所以前端要新增一個方法去解析新的資料格式。</p>
+<pre><code class="jsx">function getUserData(newDataType) &#123; // 新增一個參數去判斷使用何種方法解析資料
+    this.userService.getUserData().then(userLists =&gt; &#123;
+        // 使用條件式決定要使用哪種方法解析資料
+        if (newDataType) &#123;
+            this.userLists = parseNewTypeUserLists(userLists)
+        &#125; else &#123;
+            this.userLists = parseUserLists(userLists)
+
+        &#125;
+    &#125;)
+&#125;</code></pre>
+<p>使用最簡單的解法，傳入一個參數，再用條件式去判斷要使用何種方法去解析使用者的資料。</p>
+<p>這樣的解法固然是一種可以滿足需求的方法。可是以開閉原則的角度來看，卻不是一種太好的做法。</p>
+<p>根據開閉原則，新增方法不應該去修改到原本的方法，影響到原本的功能。對內修改應該要封閉，對外應該要開放。</p>
+<p>所以根據開閉原則，不該去更新原本解析資料的方法，而是應該去修改 <code>pareUserLists</code> 這個方法，例如:</p>
+<pre><code class="jsx">function parseUserLists(userLists, dataType) &#123;
+    return userLists = dataType ? parseNewTypeUserList() : pareOldTypeUserList();
+&#125;</code></pre>
+<p>這樣一來就可以實現解析不同格式的資料，同時不會更改到原本已經寫好的功能</p>
+<h1 id="開閉原則的優點"><a href="#開閉原則的優點" class="headerlink" title="開閉原則的優點"></a>開閉原則的優點</h1><ol>
+<li>確保原本的方法不會更動到，可以確保運作過程與之前一致</li>
+<li>切分職責更加清楚，也更有彈性，之後會更好維護</li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed18/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed16/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

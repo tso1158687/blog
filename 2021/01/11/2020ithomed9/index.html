@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>DAY9-git在commit的時候，到底commit了什麼(原理篇) | Jason's BLOG</title><meta name="description" content="DAY9-git在commit的時候，到底commit了什麼(原理篇) - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">DAY9-git在commit的時候，到底commit了什麼(原理篇)</h1><div class="post-info"><a></a>2021-01-11<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/%E9%90%B5%E4%BA%BA%E8%B3%BD2020/">鐵人賽2020</a></li><li><a class="post-tag" href="/blog/tags/git/">git</a></li></ul></div><div class="post-content"><h1 id="DAY9-git在commit的時候，到底commit了什麼-原理篇"><a href="#DAY9-git在commit的時候，到底commit了什麼-原理篇" class="headerlink" title="DAY9-git在commit的時候，到底commit了什麼(原理篇)"></a>DAY9-git在commit的時候，到底commit了什麼(原理篇)</h1><p>git已經是現代軟體開發不可或缺的重要工具了，尤其是團隊合作開發git提供各種不同功能可以讓團隊的如</p>
+<h1 id="git紀錄了什麼"><a href="#git紀錄了什麼" class="headerlink" title="git紀錄了什麼"></a>git紀錄了什麼</h1><p>當每次git在commit的時候，有想過git到底紀錄了什麼嗎?它怎麼可以知道你修改了那些檔案、修改的內容是什麼、在什麼分支、在哪一個點做了修改?</p>
+<p>git在commit的時候，以物件的形式分別記錄下這幾樣東西的</p>
+<ul>
+<li>blob:紀錄檔案的內容</li>
+<li>tree:紀錄檔案的名稱</li>
+<li>commit:紀錄版本的內容</li>
+<li>tag:紀錄標籤的內容</li>
+</ul>
+<p>git紀錄下這四種東西，形成所謂的一個commit</p>
+<h1 id="git-commit-ID是如何產生的"><a href="#git-commit-ID是如何產生的" class="headerlink" title="git commit ID是如何產生的"></a>git commit ID是如何產生的</h1><p>例如有一個文字檔的內容如下:</p>
+<pre><code>今天是星期天，天氣好好，我的心情也很好</code></pre><p>git就會根據這段內容計算出一個hash值，假設是 <code>AAAAA</code></p>
+<p>如果今天我修改了檔案內容:</p>
+<pre><code>今天是星期六，天氣好好，我的心情也很好</code></pre><p>將內文的星期日改為星期六，因為內容不一樣，所以絕對不會有相同的hash值，假設是 <code>AAABB</code></p>
+<p>因此假設你想切換到上一個版本，git就會根據hash值AAAAA反推回去還原檔案的內容，如果想要回復現在的版本，同樣會根據hash值AAABB反推回去回復現在的版本內容。</p>
+<p>這樣的機制讓不同的檔案的有一個獨立的id，不會發生不同的檔案有相同的id的問題，讓git的版控有一個堅強的基礎</p>
+<p>在了解這個機制之後，同樣以剛剛的例子延續，如果又將內容改為一開始的內容後commit</p>
+<pre><code>今天是星期天，天氣好好，我的心情也很好</code></pre><p>那麼這個最新的內容hash值會是什麼呢?</p>
+<p>雖然這一個版本和一開始的版本內容一樣，但是commit的時間不一樣，這樣hash值會不會一樣呢?</p>
+<p>答案是: <code>會</code></p>
+<p>前文說到hash值是由檔案的內容決定，完全沒有提到時間的問題，hash值是不考慮時間因素的，所以不管什麼時候commit，只要內容一樣，hash值就會一樣，因此這題的答案就AAABB</p>
+<h1 id="如何查看commit的內容"><a href="#如何查看commit的內容" class="headerlink" title="如何查看commit的內容"></a>如何查看commit的內容</h1><h3 id="查看物件內容"><a href="#查看物件內容" class="headerlink" title="查看物件內容"></a>查看物件內容</h3><pre><code class="jsx">git cat-file -p &lt;commitId&gt;</code></pre>
+<h3 id="查看物件類型"><a href="#查看物件類型" class="headerlink" title="查看物件類型"></a>查看物件類型</h3><pre><code class="jsx">git cat-file -t &lt;commitId&gt;</code></pre>
+<h3 id="查看物件大小"><a href="#查看物件大小" class="headerlink" title="查看物件大小"></a>查看物件大小</h3><pre><code class="jsx">git cat-file -s &lt;commitId&gt;</code></pre>
+<img src="/blog/2021/01/11/2020ithomed9/1.png" class="">
+
+<h1 id="git檔案存在哪"><a href="#git檔案存在哪" class="headerlink" title="git檔案存在哪"></a>git檔案存在哪</h1><p>當你執行 <code>git init</code> 的時候，等同於幫你建立一個預設隱藏起來的 <code>.git</code> 資料夾，記錄所有跟git有關的資訊。</p>
+<img src="/blog/2021/01/11/2020ithomed9/2.png" class="">
+
+<p>也就是說，只要有了這個 <code>.git</code> 的檔案，你就算把資料夾下面所有的檔案刪光光，也可以透過git馬上全部恢復回來。</p>
+<p>反過來說，如果把 <code>.git</code> 檔案刪掉的話，也就等同於失去所有版本控制的紀錄，就會變成一般的資料夾而已。</p>
+<h1 id="git三大區域"><a href="#git三大區域" class="headerlink" title="git三大區域"></a>git三大區域</h1><img src="/blog/2021/01/11/2020ithomed9/3.png" class="">
+
+<h2 id="工作區"><a href="#工作區" class="headerlink" title="工作區"></a>工作區</h2><p>顧名思義就是工作的區域，可以自由地任意修改。尚未要進入git紀錄的地方</p>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>索引為用來保存所有要進儲存庫之前的所有檔案狀態</p>
+<h2 id="儲存庫"><a href="#儲存庫" class="headerlink" title="儲存庫"></a>儲存庫</h2><p>真正進入git紀錄的地方，不論git的抓取或推送，都是以這個區域的紀錄為準</p>
+<h1 id="git-reset的幾種方法"><a href="#git-reset的幾種方法" class="headerlink" title="git reset的幾種方法"></a>git reset的幾種方法</h1><h2 id="退回到上一個版本"><a href="#退回到上一個版本" class="headerlink" title="退回到上一個版本"></a>退回到上一個版本</h2><p>如果只是想回去上一個版本</p>
+<pre><code class="jsx">git reset head ~</code></pre>
+<h2 id="退回至特定的版本"><a href="#退回至特定的版本" class="headerlink" title="退回至特定的版本"></a>退回至特定的版本</h2><pre><code class="jsx">git reset &lt;commitId&gt;</code></pre>
+<p>如果想要退回特定的版本，可以直接輸入commit的id直接退回。</p>
+<h2 id="回復時可選擇的參數"><a href="#回復時可選擇的參數" class="headerlink" title="回復時可選擇的參數"></a>回復時可選擇的參數</h2><ul>
+<li>-hard:commit,index,working tree都退回去</li>
+<li>-mixed:commit、index回去，working tree不變</li>
+<li>-soft:commit回去，index、working tree不變</li>
+</ul>
+<h3 id="查看所有的版本紀錄"><a href="#查看所有的版本紀錄" class="headerlink" title="查看所有的版本紀錄"></a>查看所有的版本紀錄</h3><p>如果不知道想要回去的版本commit，可以使用這個指令</p>
+<pre><code class="jsx">git reflog</code></pre>
+<p>查看所有版本紀錄的意思就，就算將分支刪除了，你已經圖表或是log看不到那個點了，還是可以透過這個指令查出所有曾經commit過的東西。</p>
+<p>git刪除分支或是刪除某個點的概念是這樣的。例如有個分支叫作test，刪除test分支的時候，git只是做紀錄說:以後這些點跟test無關囉，不可以再叫test了。並沒有真正刪除你commit過的任何東西。</p>
+<p>換句話說，凡是曾經commit過的東西，永遠不會消失。就算已經把分支刪除或合併，一定都可以找的回來。</p>
+<img src="/blog/2021/01/11/2020ithomed9/4.png" class="">
+
+<p>所以只要有壞味道的感覺，不論是程式碼快要寫壞了或是電腦快要當機了，甚至是地震來了，只要commit下去，就不必怕東西不見。</p>
+<h1 id="git設定"><a href="#git設定" class="headerlink" title="git設定"></a>git設定</h1><p>git基本上不太需要設定，只需要設定好自己的個人資料就好。但是git有一個問題，就是遇到中文常常會有亂碼，如果不想要看到中文亂碼的話，可以稍微設定一下</p>
+<p>打開command line，輸入</p>
+<pre><code class="jsx">npx @willh/git-setup</code></pre>
+<p>這個是由will保哥所提供的設定工具。</p>
+<p>詳細的設定內容可以看<a target="_blank" rel="noopener" href="https://github.com/doggy8088/git-setup">這裡</a></p>
+<h1 id="該不該使用GUI工具"><a href="#該不該使用GUI工具" class="headerlink" title="該不該使用GUI工具"></a>該不該使用GUI工具</h1><p>使用git的人可以分成兩派，一派是指令派；一派是工具派。</p>
+<p>有人認為git一定要輸入指令比較精確，因為你才會知道你在執行什麼指令。</p>
+<p>有人認為git要使用工具比較好，因為快速方便，只要能達成目的，不必太在乎做了什麼指令。</p>
+<p>所以到底該不該使用GUI工具呢?</p>
+<p>答案是:都可以，用得舒服就好。</p>
+<p>像筆者本人打字速度不快，又容易打錯字。因此對我來說，使用GUI工具是比較快速的方法。</p>
+<p>GUI工具的本質還是指令，GUI只是幫你用圖像化的方式執行指令，所以只要懂GIT基本原理不管要打指令或GUI都可以很順利地使用</p>
+<p>所以如果選擇使用GUI工具的朋友們在使用的時候不彷在操作的時候先停下來一下，想想看你知道這個按鈕幫你執行了什麼git的指令嗎?如果知道，代表對git的認識是足夠的。如果不知道可以試著用用看如何用指令解決這個問題。</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/01/11/2020ithomed10/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed8/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

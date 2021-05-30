@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>script到底要放哪裡? | Jason's BLOG</title><meta name="description" content="script到底要放哪裡? - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">script到底要放哪裡?</h1><div class="post-info"><a></a>2018-05-15<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/html/">html</a></li></ul></div><div class="post-content"><h2 id="script到底要放哪裡"><a href="#script到底要放哪裡" class="headerlink" title="script到底要放哪裡?"></a>script到底要放哪裡?</h2><p>一開始學網頁的時候，都會說script一定要放在head裡面，因為head裡面是宣告這個網頁各種資訊，和載入一切所有要用到的資源的地方，這樣才能讓body裡面的內容順利解析。到後來從新手變成比較不新的新手之後，就看到網路上很多文章都寫，盡量把script放在body最後面，這樣對使用者來說，瀏覽網站的體驗會比較好。雖然不知道為什麼、也感覺不出來哪裡比較好，不過看起來一樣能動，這樣也比較潮的樣子，所以就照做了。</p>
+<h2 id="瀏覽器如何解析網頁"><a href="#瀏覽器如何解析網頁" class="headerlink" title="瀏覽器如何解析網頁"></a>瀏覽器如何解析網頁</h2><p>過了幾年之後，又遇到一樣的問題，這個問題可躲不掉了，得好好研究一下。所以在重述一次題目，script到底要放在哪裡?<br>要回答這個問題，就必須先瞭解瀏覽器如何解析網頁。<br>以下有一個範例網頁</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;hello，你好&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>瀏覽器會從上而下依序讀取下來</p>
+<ol>
+<li>!DOCTYPE html 知道這是一個html</li>
+<li>html lang=”en” html的內容開始了</li>
+<li>head 依序讀取標頭檔的內容</li>
+<li>解析到有javscript，開始讀取javascript的內容</li>
+<li>讀取body的內容，讀到h1裡面有hello，你好</li>
+<li>顯示hello，你好</li>
+</ol>
+<p>看出來問題出在哪裡了嗎?問題在第四點，要先讀取完javascript的內容，才會開始解析body裡面的內容，在javascript還沒解析完之前，所看到的網頁就會是一片空白，因為還沒開始解析內容。<br>如果javascript的檔案很小的話，這中間的時間差不會有明顯差異。但是如果像現在大量使用javscript控制網頁內容，檔案必定不會很太小，解析需要一點時間，中間就會有一段完全空白的時間，這樣對使用者來說，鐵定是非常差的，說不定以為網頁壞掉了，就直接關掉，開發者辛苦的內容完全沒有被看到<br>因此才會說把script放在body最後方，就算javascript內容再大，使用者的網頁還是會先顯示出內容，再開始載入javascript的內容，這樣使用者也不會有中間不知道要幹什麼的空白時間</p>
+<p>這就是為什麼script要放在body最後方<br>但是還沒結束，現在你有更好的做法，html5新增兩個script的屬性async和defer</p>
+<h3 id="async-異步載入"><a href="#async-異步載入" class="headerlink" title="async 異步載入"></a>async 異步載入</h3><p>html解析和script解析同步進行，script解析完要執行的時候，html解析會停下來等script執行完後再繼續</p>
+<h3 id="defer-延緩載入"><a href="#defer-延緩載入" class="headerlink" title="defer 延緩載入"></a>defer 延緩載入</h3><p>html解析和script解析同步進行，等html解析完，script才開始執行</p>
+<p>只有文字的描述說不定很難體會，我在<a target="_blank" rel="noopener" href="http://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html">growingwiththeweb</a>找到這張圖片，看了圖片就會明白了</p>
+<img src="/blog/2018/05/15/scripts/script.jpg" class="">
+
+<p>至於使用和async和defer的時機，這個網站有很明確的說明:</p>
+<ul>
+<li><p>async:如果script是模組化且<code>不依賴其他的script</code>可以執行的話，使用async</p>
+</li>
+<li><p>defer:如果script是<code>依賴其他script</code>才能執行的話，使用defer(想想這很合理，當然要等到主要的script執行完畢才有辦法執行，所以要放到最後，才能保證可以執行)</p>
+</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2018/06/13/deploy-angular-to-github-pages/">prev</a><a class="next" href="/blog/2018/04/29/gtag/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

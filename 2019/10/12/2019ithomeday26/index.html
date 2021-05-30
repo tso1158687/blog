@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-26) Nestjs 管道(Pipe) 2- 轉換資料-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-26) Nestjs 管道(Pipe) 2- 轉換資料-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-26) Nestjs 管道(Pipe) 2- 轉換資料-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-12<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nestjs/">nestjs</a></li></ul></div><div class="post-content"><p>上一篇提到使用管道來驗證資料，在傳送資料進入到控制器之前，先驗證資料是否正確，以前做無謂的功或者避免因為缺少資料讓後面的流程爆炸。<br>管道除了用來驗證資料以外，也可以用來轉換資料。</p>
+<h1 id="什麼時候會用到管道來轉換資料"><a href="#什麼時候會用到管道來轉換資料" class="headerlink" title="什麼時候會用到管道來轉換資料"></a>什麼時候會用到管道來轉換資料</h1><p>管道在轉換的時候，可以完全覆蓋原本傳送過來的值。就可以想像到一種使用情境：例如從客戶端傳送過來的參數，可能不甚準確、或有遺漏，導致無法使用參數獲得想要的結果。為了不讓參數變得毫無作用，可以使用管道將參數轉換成合法且可以使用的型態，<code>填補了客戶端和伺服器端之間的空白</code></p>
+<h1 id="建立轉換的管道"><a href="#建立轉換的管道" class="headerlink" title="建立轉換的管道"></a>建立轉換的管道</h1><h2 id="建立管道"><a href="#建立管道" class="headerlink" title="建立管道"></a>建立管道</h2><p>本次要來建立一個轉換整數的管道，名為：parseInt</p>
+<pre><code>nest generate pipe parseInt</code></pre><h2 id="使用管道轉換資料"><a href="#使用管道轉換資料" class="headerlink" title="使用管道轉換資料"></a>使用管道轉換資料</h2><pre><code>export class ParseIntPipe implements PipeTransform&lt;string&gt; &#123;
+  async transform(value: string, metadata: ArgumentMetadata) &#123;
+    const val = parseInt(value, 10);
+    if (isNaN(val)) &#123;
+      throw new BadRequestException(&#39;Validation failed&#39;);
+    &#125;
+    return val;
+  &#125;
+&#125;</code></pre><p>這是一個很簡單的轉換，將輸入的值轉換，使用 <code>parseInt</code>的方法。將輸入的內容轉換成十進位的整數，如果輸入的內容不能轉換成十進位的整數，就拋出錯誤</p>
+<h1 id="在控制器使用管道"><a href="#在控制器使用管道" class="headerlink" title="在控制器使用管道"></a>在控制器使用管道</h1><p>修改取得指定文件編號的方法</p>
+<pre><code>@Get(&#39;/:id&#39;)
+getDocument(@Param(&#39;id&#39;, new ParseIntPipe()) id, @Response() res) &#123;
+    this.documentService.getDocumentData().subscribe(data =&gt; &#123;
+        let resData = data.filter(data =&gt; data.id === id)
+        res.status(HttpStatus.OK).json(resData);
+    &#125;)
+&#125;</code></pre><p>其中修改的部分</p>
+<pre><code>@Param(&#39;id&#39;, new ParseIntPipe()) id</code></pre><p>這一段的意思是，取得參數id，也就是取得特定文件的編號。並且使用管道- ParseIntPipe轉換資料，而且給予這個參數名稱同樣叫作id<br>如此一來，當getDocument方法啟動取得參數之前，就會先被管道轉換成我們要的資料，而不再是從客戶端直接傳送過來的資料。</p>
+<p>最明顯的證據可以看到這一行</p>
+<pre><code> let resData = data.filter(data =&gt; data.id === id)</code></pre><p>還記得在控制器的篇章怎麼寫的嗎?</p>
+<pre><code> let resData = data.filter(data =&gt; data.id === Number(param.id))</code></pre><p>因為從客戶端傳過來的參數一定會被轉換成字串，所以要在控制器自行轉成數字的型態才能比較。<br>使用管道轉換資料之後，因為管道已經幫我們轉換成數字，所以不必再轉換成數字，可以直接使用</p>
+<p>使用postman測試<br>以下使用三組參數來測試</p>
+<ul>
+<li>2.000</li>
+<li>2.14159</li>
+<li>aaa</li>
+</ul>
+<p>前兩組的測試結果應該要正確顯示萊布尼茲的單子論，最後一組的結果應該出現錯誤</p>
+<p>參數輸入2.000<br><img src="https://ithelp.ithome.com.tw/upload/images/20191012/20120107oQfdQqJa2E.png" alt="https://ithelp.ithome.com.tw/upload/images/20191012/20120107oQfdQqJa2E.png"></p>
+<p>參數輸入2.14159<br><img src="https://ithelp.ithome.com.tw/upload/images/20191012/20120107FvQQgIXzJX.png" alt="https://ithelp.ithome.com.tw/upload/images/20191012/20120107FvQQgIXzJX.png"></p>
+<p>參數輸入aaa<br><img src="https://ithelp.ithome.com.tw/upload/images/20191012/20120107GX55FldIML.png" alt="https://ithelp.ithome.com.tw/upload/images/20191012/20120107GX55FldIML.png"></p>
+<h1 id="使用情境"><a href="#使用情境" class="headerlink" title="使用情境"></a>使用情境</h1><p>有時候客戶端和伺服器端的溝通總會出現許多不明意外的錯誤，例如明明要傳1，傳過來會變成1.00，這樣導致花了很多時間除錯，所以為了避免這種意外，理論上客戶端和伺服器端都要有這種防錯的措施，就可以避免很多這種非預期的意外<br>(對! IE我就是說你，有時候頁面送出整數偏偏要給我偷加成小數)</p>
+<h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><p>今天的範例內容可以github上面看到:<a target="_blank" rel="noopener" href="https://github.com/tso1158687/hello-nest-iron">範例內容</a></p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>什麼時候會用到管道來轉換資料</li>
+<li>如何使用管道轉換資料</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/13/2019ithomeday27/">prev</a><a class="next" href="/blog/2019/10/11/2019ithomeday25/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

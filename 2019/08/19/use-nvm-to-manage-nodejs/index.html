@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>使用nvm來管理nodejs吧! | Jason's BLOG</title><meta name="description" content="使用nvm來管理nodejs吧! - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">使用nvm來管理nodejs吧!</h1><div class="post-info"><a></a>2019-08-19<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/nodejs/">nodejs</a></li></ul></div><div class="post-content"><h1 id="為何使用-NVM"><a href="#為何使用-NVM" class="headerlink" title="為何使用 NVM:"></a>為何使用 NVM:</h1><p>nodejs 已經是前端開發必備工具，例如:啟動本機伺服器、許多框架或套件的依賴等等。但是最大的問題是，每個框架或套件對於 nodejs 的版本要求不同。以目前遇到的困難來說，目前同時維護 angularjs 和 angular 兩種不同的框架，兩種框架在啟動本機伺服器的要求分別是 nodejs 8.x 和 nodejs 10.x。</p>
+<p>這樣造成的困擾是:一台電腦只能安裝一種版本的 nodejs，假如我安裝 nodejs 8.x 在我的電腦上，我只能啟動 angularjs 專案，如果我要啟動 angular 專案，我就必須移除 nodejs 8.x 之後，再安裝 nodejs 10.x，反之亦然。這樣反反覆覆的動作花費不少時間，因此便產生一個疑問，有辦法快速切換 nodejs 的版本嗎?</p>
+<p>有的，使用 nvm 吧!</p>
+<h1 id="安裝-NVM"><a href="#安裝-NVM" class="headerlink" title="安裝 NVM:"></a>安裝 NVM:</h1><p>node version manager 簡稱 nvm，是個管理 nodejs 版本的工具，可以使用指令快速切換不同版本的 nodejs。</p>
+<h2 id="step1"><a href="#step1" class="headerlink" title="step1:"></a>step1:</h2><p><a target="_blank" rel="noopener" href="https://github.com/coreybutler/nvm-windows/releases">下載 nvm</a></p>
+<h2 id="step2"><a href="#step2" class="headerlink" title="step2:"></a>step2:</h2><p>安裝 nvm，安裝步驟和一般應用程式一樣，不過需要特別注意的是，這個程式有一個特別的 bug，就是<code>不可以安裝在有空格的路徑</code>。以我一開始安裝的路徑為例:</p>
+<pre><code>C:\Users\jason desk</code></pre><p>安裝路徑有一個空白，在使用的時候就會出錯，所以一定要特別注意，要安裝在沒有空白的路徑。</p>
+<h2 id="step3"><a href="#step3" class="headerlink" title="step3:"></a>step3:</h2><p>安裝完畢之後開始使用 nvm。nvm 會取代原本有安裝的 nodejs，所以已經安裝過的 nodejs 要重新安裝一次，安裝指令非常簡單，只要輸入:</p>
+<pre><code>nvm install &lt;version&gt;</code></pre><p>因此假設我要安裝 nodejs 10.16.3 的版本，就輸入指令就會開始安裝</p>
+<pre><code>nvm install 10.16.3</code></pre><img src="/blog/2019/08/19/use-nvm-to-manage-nodejs/nvm1.png" class="">
+<p>step4:<br>安裝完畢之後，只要輸入:</p>
+<pre><code>nvm use &lt;version&gt;</code></pre><p>這樣就可以切換版本，因此輸入</p>
+<pre><code>nvm use 10.16.3</code></pre><p>輸入之後，就可以使用指定版本的 nodejs，為了驗證是否有切換成功，可以輸入</p>
+<pre><code>node --version</code></pre><p>來看看目前使用的版本是否一致</p>
+<img src="/blog/2019/08/19/use-nvm-to-manage-nodejs/nvm2.png" class="">
+
+<p>同理而言，如果要使用別的版本的 nodejs，只要重複照上述步驟再安裝一次後，就可以使用 <code>nvm use</code> 的指令去切換囉</p>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/09/17/2019ithomeday1/">prev</a><a class="next" href="/blog/2019/06/17/angular-with-electron/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

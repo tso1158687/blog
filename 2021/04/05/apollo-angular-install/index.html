@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>graphql安裝與設定 apollo-angular篇 | Jason's BLOG</title><meta name="description" content="graphql安裝與設定 apollo-angular篇 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">graphql安裝與設定 apollo-angular篇</h1><div class="post-info"><a></a>2021-04-05<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/angular/">angular</a></li><li><a class="post-tag" href="/blog/tags/graphql/">graphql</a></li></ul></div><div class="post-content"><h1 id="安裝apollo-angular"><a href="#安裝apollo-angular" class="headerlink" title="安裝apollo-angular"></a>安裝apollo-angular</h1><p>基本上安裝方法依照<a target="_blank" rel="noopener" href="https://apollo-angular.com/docs/get-started">apollo angular教學</a>上面指示的方法安裝。官方有提供兩種安裝方法，一種是透過 <code>ng add</code> 的方式自動化安裝，一種是手動安裝。</p>
+<h2 id="使用ng-add安裝"><a href="#使用ng-add安裝" class="headerlink" title="使用ng add安裝"></a>使用ng add安裝</h2><p>輸入:</p>
+<pre><code>ng add apollo-angular</code></pre><p>Angular Schematics 就會處理好所有安裝和設定步驟，就可以直接使用了</p>
+<h2 id="手動安裝"><a href="#手動安裝" class="headerlink" title="手動安裝"></a>手動安裝</h2><h3 id="安裝apollo-angular-1"><a href="#安裝apollo-angular-1" class="headerlink" title="安裝apollo-angular"></a>安裝apollo-angular</h3><p>但是在安裝的時候，發現官方提供的schematics在最新版本的angular使用會有問題，會發生錯誤之後就直接結束了，沒有辦法安裝下去，所以在等待官方修復之前，只能手動進行安裝</p>
+<p>安裝apollo angular相關套件</p>
+<pre><code>npm install apollo-angular @apollo/client graphql</code></pre><p>因為graphql需要用到 <code>AsyncIterable</code> 的功能，所以要去 <code>tsconfig</code> 設定，讓typescript在編譯的時候可以支援這個功能。</p>
+<p>以angular 10為例，修改 <code>tsconfig.base.json</code> ，就可以修改整個專案的編譯選項</p>
+<pre><code class="json">&#123;
+  &quot;compilerOptions&quot;: &#123;
+    // ...
+    &quot;lib&quot;: [
+      &quot;es2017&quot;,
+      &quot;dom&quot;,
+      &quot;esnext.asynciterable&quot;
+    ]
+  &#125;
+&#125;</code></pre>
+<p>這樣就安裝完apollo-angular，接下來就只要設定就好了</p>
+<h3 id="設定apollo-angular"><a href="#設定apollo-angular" class="headerlink" title="設定apollo-angular"></a>設定apollo-angular</h3><p>按照官方的教學，他會在 <code>app.module</code> 裡面去設定相關連線的選項，不過因為只是簡易的使用教學，在此設定並無問題。但是建議建立一個graphql module去統一管理與graphql有關的東西會比較好</p>
+<p>建立graphql module</p>
+<pre><code class="json">ng g m graphql</code></pre>
+<p>建立完之後，在graphql module設定連線選項</p>
+<pre><code class="js">import &#123; NgModule &#125; from &#39;@angular/core&#39;;
+import &#123; CommonModule &#125; from &#39;@angular/common&#39;;
+import &#123; APOLLO_OPTIONS &#125; from &#39;apollo-angular&#39;;
+import &#123; HttpLink &#125; from &#39;apollo-angular/http&#39;;
+import &#123; InMemoryCache &#125; from &#39;@apollo/client/core&#39;;
+
+@NgModule(&#123;
+  declarations: [],
+  imports: [CommonModule],
+  providers: [
+    &#123;
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink) =&gt; &#123;
+        return &#123;
+          cache: new InMemoryCache(),
+          link: httpLink.create(&#123;
+                        // 輸入graphql位置，此為官方提供的範例位置
+            uri: &#39;https://48p1r2roz4.sse.codesandbox.io/&#39;, 
+          &#125;),
+        &#125;;
+      &#125;,
+      deps: [HttpLink],
+    &#125;,
+  ],
+&#125;)
+export class GraphqlModule &#123;&#125;</code></pre>
+<p>設定完之後，在app module匯入graph module就完成了</p>
+<pre><code class="js">@NgModule(&#123;
+    declarations: [AppComponent],
+    imports: [
+      ...
+      GraphqlModule,
+    ],
+    bootstrap: [AppComponent],
+  &#125;)
+export class AppModule &#123;&#125;</code></pre>
+<h1 id="設定Subscription"><a href="#設定Subscription" class="headerlink" title="設定Subscription"></a>設定Subscription</h1><p>graphql除了查詢(query)和變更(mutation)以外，還允許使用雙向連線websocket的方法去建立。</p>
+<p>如果要使用websocket的方式連線，還需要安裝<a target="_blank" rel="noopener" href="https://github.com/apollographql/subscriptions-transport-ws">subscription-transport-ws</a></p>
+<pre><code class="js">npm install --save subscriptions-transport-ws</code></pre>
+<h3 id="修改graphql-module支援websocket的連線方式"><a href="#修改graphql-module支援websocket的連線方式" class="headerlink" title="修改graphql module支援websocket的連線方式"></a>修改graphql module支援websocket的連線方式</h3><p>現在graphql有http和websocket兩種連線方式，因此需要個別設定不同連線的參數，並且設定何時要使用http去請求資料，何時使用websocket去請求資料。</p>
+<pre><code class="js">import &#123; NgModule &#125; from &#39;@angular/core&#39;;
+import &#123; APOLLO_OPTIONS &#125; from &#39;apollo-angular&#39;;
+import &#123; HttpLink &#125; from &#39;apollo-angular/http&#39;;
+import &#123; InMemoryCache &#125; from &#39;@apollo/client/core&#39;;
+import &#123; split &#125; from &#39;@apollo/client/core&#39;;
+import &#123; WebSocketLink &#125; from &#39;@apollo/client/link/ws&#39;;
+import &#123; getMainDefinition &#125; from &#39;@apollo/client/utilities&#39;;
+
+@NgModule(&#123;
+  declarations: [],
+  imports: [],
+  providers: [
+    &#123;
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink) =&gt; &#123;
+        const http = httpLink.create(&#123;
+          uri: `http://xxxxxxxx`,
+        &#125;);
+
+        const ws = new WebSocketLink(&#123;
+          uri: `ws://xxxxxxxxxxxxx`,
+          options: &#123;
+            reconnect: true,
+            lazy: true,
+            connectionParams: &#123;
+                Authorization:&#39;yyyyyy&#39;
+            &#125;,
+          &#125;,
+        &#125;);
+
+        // using the ability to split links, you can send data to each link
+        // depending on what kind of operation is being sent
+        const link = split(
+          // split based on operation type
+          (&#123; query &#125;) =&gt; &#123;
+            const definition = getMainDefinition(query);
+            return (
+              definition.kind === &#39;OperationDefinition&#39; &amp;&amp;
+              definition.operation === &#39;subscription&#39;
+            );
+          &#125;,
+          ws,
+          http
+        );
+
+        return &#123;
+          cache: new InMemoryCache(),
+          link,
+        &#125;;
+      &#125;,
+      deps: [HttpLink],
+    &#125;,
+  ],
+&#125;)
+export class GraphqlModule &#123;&#125;</code></pre>
+<p>在websocket連線設定的地方有幾個參數</p>
+<pre><code class="js">const ws = new WebSocketLink(&#123;
+    uri: `ws://xxxxxxxxxxxxx`,
+    options: &#123;
+        reconnect: true,
+        lazy: true,
+        connectionParams: &#123;
+            Authorization: &quot;yyyyyy&quot;,
+        &#125;,
+    &#125;,
+&#125;);</code></pre>
+<ul>
+<li>reconnect:如果斷線的話，會自動重新連線</li>
+<li>lazy:不會在頁面啟動的時候就發起連線，而是在請求第一個websocket連線的時候，才會開始連線</li>
+<li>connectionParams:連線時的參數，如果連線需要帶驗證資訊，就可以加在這裡，附帶驗證資訊</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2021/05/14/depoly-nestjs-to-heroku/">prev</a><a class="next" href="/blog/2021/01/11/2020ithomed30/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>

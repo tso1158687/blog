@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>(DAY-20) Typescript 介紹-型別(Type)與介面(Interface)-Angular 與 Nestjs 共舞 | Jason's BLOG</title><meta name="description" content="(DAY-20) Typescript 介紹-型別(Type)與介面(Interface)-Angular 與 Nestjs 共舞 - Jason Zheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/blog/favicon.png"><link rel="stylesheet" href="/blog/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/blog/atom.xml" title="Jason's BLOG"><meta name="generator" content="Hexo 5.2.0"><link rel="alternate" href="/blog/atom.xml" title="Jason's BLOG" type="application/atom+xml">
+</head><body><div class="wrap"><header><h1 class="branding"><a href="/blog/" title="Jason's BLOG"><img class="logo-image" src="/blog/logo.png" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link" href="/blog/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/archives/" target="_self">ARCHIVES</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/tags/" target="_self">TAGS</a></li><li class="nav-list-item"><a class="nav-list-link" href="/blog/atom.xml" target="_self">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">(DAY-20) Typescript 介紹-型別(Type)與介面(Interface)-Angular 與 Nestjs 共舞</h1><div class="post-info"><a></a>2019-10-06<span class="categories"></span><ul class="tags"><li><a class="post-tag" href="/blog/tags/typescript/">typescript</a></li></ul></div><div class="post-content"><p>Angular的介紹到此告一段落了。Angular與Typescript有非常深度的整合。因此Typescript也是必須要認識的相關基礎。現在要來介紹- Typescript</p>
+<h1 id="什麼是Typescript"><a href="#什麼是Typescript" class="headerlink" title="什麼是Typescript?"></a>什麼是Typescript?</h1><p>Typescript官方的定義是：</p>
+<blockquote>
+<p>TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. Any browser. Any host. Any OS. Open source.</p>
+</blockquote>
+<p>簡單翻譯成中文就是：<code>Typescript是Jacascript的超集合且可以編譯成純粹的Javascript，可以運行在任何瀏覽器、伺服器、系統，是一個開源專案</code></p>
+<p>也就是說Typescript的基礎建構在Javascript之上，完全相容於Javascript，並且延伸擴展了一些東西。<br>現在就要來介紹Typescript闊展了什麼和基本觀念。</p>
+<h1 id="型別"><a href="#型別" class="headerlink" title="型別"></a>型別</h1><p>Typescript的每項屬性都必須宣告型別，宣告型別有助於開發者兩者屬性的樣子，也可以讓編譯器在編譯的時候，確認屬性在使用的時候，是否和宣告時的類別一致，減少錯誤發生的可能性。</p>
+<h2 id="布林-boolean"><a href="#布林-boolean" class="headerlink" title="布林:boolean"></a>布林:boolean</h2><pre><code>let success: boolean = true;</code></pre><h2 id="數字-number"><a href="#數字-number" class="headerlink" title="數字:number"></a>數字:number</h2><pre><code>let count: number = 20;</code></pre><h2 id="字串-string"><a href="#字串-string" class="headerlink" title="字串:string"></a>字串:string</h2><pre><code>let message: string = &quot;Hello world&quot;;</code></pre><h2 id="陣列-array"><a href="#陣列-array" class="headerlink" title="陣列:array"></a>陣列:array</h2><p>以下兩種都是宣告陣列的方法</p>
+<pre><code>let ages: number[] = [31, 20, 65];
+let ages: Array&lt;number&gt; = [31, 20, 65];</code></pre><h2 id="tuple-這個不知道中文該怎麼稱呼，或許稱為陣列組"><a href="#tuple-這個不知道中文該怎麼稱呼，或許稱為陣列組" class="headerlink" title="tuple(這個不知道中文該怎麼稱呼，或許稱為陣列組)"></a>tuple(這個不知道中文該怎麼稱呼，或許稱為陣列組)</h2><pre><code>let x: [string, number];
+x = [&quot;age&quot;, 40]; // ok
+x = [40, &quot;age&quot;] ; // error</code></pre><h2 id="任意-any"><a href="#任意-any" class="headerlink" title="任意:any"></a>任意:any</h2><pre><code>let some: any = &quot;some&quot;;
+some = 10000;
+some = false;
+let success: boolean = some;
+let count: number = some;
+let message: string = some;</code></pre><p>any就是現在javascript的變數型別，也就是說變數的型別可以任意轉換，可以一下子是字串、一下子是數字。這樣的好處是在開發的時候可以加快開發的速度，因為可以不必在意變數的型別，隨意轉換也不會有問題；但是以長遠的角度來說，不果不規範變數的型別，讓變數可以任意轉換，很容易在非常細微看不出來的地方轉換失敗或是意外的結果，反而要花更多時間去除錯，因此非常不推薦使用any。</p>
+<h2 id="空值-void"><a href="#空值-void" class="headerlink" title="空值:void"></a>空值:void</h2><pre><code>function doSomething(): void &#123;
+ // 做些事情
+&#125;</code></pre><p>最常用在function裡面，表示這個function執行完並不會return任何東西</p>
+<h2 id="Nullable"><a href="#Nullable" class="headerlink" title="Nullable"></a>Nullable</h2><p>使用 null 和 undefined 來定義型別</p>
+<pre><code>let u: undefined = undefined;
+let n: null = null;</code></pre><p><code>undefined</code> 和 <code>null</code> 是<code>所有類別的子型別</code>。</p>
+<pre><code>let x: string = &#39;foo&#39;; 
+x = null; // error 
+let y: string | null = &#39;foo&#39;; 
+y = null; // ok</code></pre><h2 id="任意型別推導"><a href="#任意型別推導" class="headerlink" title="任意型別推導"></a>任意型別推導</h2><p>如果在宣告的時候沒有特別指定型別，那麼Typescript會自動推導出型別（除非指定型別為any）</p>
+<pre><code>let food = &#39;apple&#39;
+apple = 7
+// Type &#39;number&#39; is not assignable to type &#39;string&#39; </code></pre><p>因為在宣告food變數的時候，實際上等同於</p>
+<pre><code>let food:string = &#39;apple&#39;</code></pre><p>會自動依照宣告的類型推導出宣告的內容為字串型別。</p>
+<h1 id="介面-Interface"><a href="#介面-Interface" class="headerlink" title="介面(Interface)"></a>介面(Interface)</h1><h2 id="什麼是介面"><a href="#什麼是介面" class="headerlink" title="什麼是介面"></a>什麼是介面</h2><p>介面(Interface)是定義一個物件的類別。也就是說一個物件在實作的時候，應該要長得怎麼樣。這樣說可能有一點抽象，舉一個生活一點的例子：<br>假設定一個人的臉部，一定要有：眼睛、鼻子、嘴巴、耳朵。<br>如果在生成一個人的臉部的時候，就會檢查臉部的介面，如果沒有眼睛、鼻子、嘴巴、耳朵，就不可以稱為臉部，這個就是介面的作用。</p>
+<h2 id="使用介面"><a href="#使用介面" class="headerlink" title="使用介面"></a>使用介面</h2><p>一個簡單的介面的例子：</p>
+<pre><code>interface Person &#123;
+    name: string;
+    age: number;
+&#125;
+
+
+let jason: Person = &#123;
+    name: &#39;jason&#39;,
+    age: 25
+&#125;;</code></pre><p>訂立一個稱為Person的介面。在定義jason的物件的時候，參考Person的定義，必須要有為字串型別的name與數字型別的age。<br>因此如果如果宣告的時候少了任一個就會報錯</p>
+<pre><code>let eric: Person = &#123;
+    name: &#39;eric&#39;,
+&#125;;
+// Property &#39;age&#39; is missing in type &#39;&#123; name: string; &#125;&#39;.</code></pre><h3 id="非必填的屬性"><a href="#非必填的屬性" class="headerlink" title="非必填的屬性"></a>非必填的屬性</h3><p>可能不是所有的物件對於某個屬性都是必須擁有的，就可以使用<code>問號</code>表示非必填的屬性。<br>意思就是：沒有這個屬性沒有關係，但是如果有的話就會檢查。</p>
+<pre><code>interface Person &#123;
+    name: string;
+    age?: number;
+&#125;</code></pre><p>如此一來，age對屬性就變成非必填，這樣上方的物件eric就可以通過檢查，不會報錯了。</p>
+<h1 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h1><p>今天學到的事情有：</p>
+<ul>
+<li>什麼是Typescript</li>
+<li>Typescript的型別</li>
+<li>Typescript的介面</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a class="prev" href="/blog/2019/10/07/2019ithomeday21/">prev</a><a class="next" href="/blog/2019/10/05/2019ithomeday19/">next</a></div><div class="copyright"><p>&copy; 2021 <a href="https://tso1158687.github.io/blog">Jason Zheng</a>.<br>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/yuugou727/hexo-theme-artemis-night" target="_blank">Artemis Night</a>.</p></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5114057-4']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();</script></body></html>
