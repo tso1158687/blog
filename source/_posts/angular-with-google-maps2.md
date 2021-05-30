@@ -242,3 +242,6 @@ function addGoogleMapApiKeyByEnvironment() {
 `main.ts` 是angular啟動之前所執行的檔案，也就是說，我的作法是，在angular啟動之前，就先依照環境的不同，讀取不同的金鑰，然後直接寫入 `index.html` 當中，就和一開始直接在index.html直接寫死金鑰有同樣的效果，只不過多了一個環境變數作為判斷。
 
 如此一來，就能保證金鑰只被載入一次，不會有上述重複載入的問題，更有環境判斷的效果了
+
+# 參考
+[github原始碼](https://github.com/tso1158687/angular-google-maps-component-demo)
